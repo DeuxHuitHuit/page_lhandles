@@ -32,7 +32,7 @@ Thank you all other Symphony Extensions developers for your work and contributio
 
 2. Enable it as usual on the 'Extensions' page (Select 'Page LHandles' and choose 'Enable' from the 'With Selected' dropdown menu, then click 'Apply').
 
-3. Create / edit a page. You'll see
+3. The saga will continue ...
 
 
 ### Attention
