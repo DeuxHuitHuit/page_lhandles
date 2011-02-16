@@ -26,7 +26,7 @@ Thank you all other Symphony Extensions developers for your inspirational work.
 3. Fill the available localisation fields. Every Localised URL Handle filled will become accessible from the browser. The empty ones will redirect to 404 (Page Not Found).
 4. Add the "Page LHandles" DataSource to your page.
 
-Example:
+### Example:
 
 For a Page with Title "The Company" and
 
