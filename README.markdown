@@ -21,11 +21,26 @@ Thank you all other Symphony Extensions developers for your inspirational work.
 
 ## Usage
 
-0. Make sure that Language Redirect extension is Enabled. Fill some language codes under System -> Preferences.
-1. Go to Blueprints -> Pages. Create a new page or edit an existing one.
-2. Fill the available localisation fields. Every Localised URL Handle filled will become accessible from the browser. The empty ones will redirect to 404 (Page Not Found).
-3. Add the "Page LHandles" DataSource to your page.
+1. Make sure that Language Redirect extension is Enabled. Fill some language codes under System -> Preferences.
+2. Go to Blueprints -> Pages. Create a new page or edit an existing one.
+3. Fill the available localisation fields. Every Localised URL Handle filled will become accessible from the browser. The empty ones will redirect to 404 (Page Not Found).
+4. Add the "Page LHandles" DataSource to your page.
+
+Eg:
+
+For a Page with Title "The Company" and
+
+- URL Handle = "the-company"
+- RO Handle = "companie"
+- EN Handle = "company"
+- FR Handle = "entreprise"
+
+all these 3 URLs will request "The Comapany" Page:
+
+- www.mydomain.com/ro/companie
+- www.mydomain.com/en/company
+- www.mydomain.com/fr/enterprise
 
 ### Attention
 
-Localised Page Handles has not yet been used in a production environment. (use at your own risk!)
+Localised Page Handles has not **yet** been used in a production environment. (use at your own risk!)
