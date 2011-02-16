@@ -22,7 +22,7 @@ Offers multilingual support for localised page handle in browser URL.
 	- Symphony 2.2 or above
 	- Extension Language Redirect by Jonas Coch (<http://github.com/klaftertief/language_redirect>)
 
-- Based on Multilingual Field extension by Guillem I. https://github.com/6ui11em/multilingual_field
+- Based on Multilingual Field extension by Guillem Lorman. https://github.com/6ui11em/multilingual_field
 
 Thank you all other Symphony Extensions developers for your work and contribution.
 

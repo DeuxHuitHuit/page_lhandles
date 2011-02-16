@@ -1,0 +1,46 @@
+div.page_lhandles label {
+	display: block;
+}
+
+div.page_lhandles ul.tabs {
+	float: left;
+	margin: 0;
+	width: 100%;
+	border-bottom: 1px solid #E4E4DE;
+}
+
+div.page_lhandles ul.tabs li {
+	color: #aaaa99;
+	cursor: pointer;
+	text-decoration: none;
+	float: left;
+	display: block;
+	padding: 2px 8px;
+	margin: 0px 3px -1px 0px;
+	border: 1px solid #E4E4DE;
+	-webkit-border-top-left-radius: 3px;
+	-webkit-border-top-right-radius: 3px;
+	-moz-border-radius-topleft: 3px;
+	-moz-border-radius-topright: 3px;
+	background-color: #F9F9F9;
+}
+
+div.page_lhandles ul.tabs li:hover {
+	color: #444;
+}
+
+div.page_lhandles ul.tabs li.active {
+	border-bottom: 1px solid #F5F5F3;
+	background-color: #F5F5F3;
+	color: #888;
+	cursor: default;
+}
+
+div.page_lhandles .tab-panel {
+	padding: 10px;
+	background-color: #F5F5F3;
+	border: 1px solid #E4E4DE;
+	border-top: 0;
+	overflow: auto;
+	clear: both;
+}
