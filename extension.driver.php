@@ -2,7 +2,7 @@
 
 	class Extension_page_lhandles extends Extension {
 		
-		public $_lang = array(						// [English name]
+		private $_lang = array(						// [English name]
 			'ab' => 'аҧсуа бызшәа',					// Abkhazian
 			'af' => 'Afrikaans',					// Afrikaans
 			'sq' => 'shqip',						// Albanian
@@ -24,19 +24,19 @@
 			'ar-ae' => 'العربية (U.A.E.)',			// Arabic
 			'ar-ye' => 'العربية (Yemen)',			// Arabic
 			'ar' => 'العربية',						// Arabic
-			'hy' => 'Հայերեն',						// Armenian
-			'as' => 'অসমীয়া',							// Assamese
+			'hy' => 'Հայերեն',							// Armenian
+			'as' => 'অসমীয়া',								// Assamese
 			'az' => 'azərbaycan',					// Azeri
 			'eu' => 'euskera',						// Basque
 			'be' => 'Беларуская',					// Belarusian
-			'bn' => 'বাংলা',							// Bengali
+			'bn' => 'বাংলা',								// Bengali
 			'bg' => 'Български',					// Bulgarian
 			'ca' => 'Català',						// Catalan
-			'zh-cn' => '简体中文 (China)',			// Chinese simplified script
-			'zh-hk' => '繁體中文 (Hong Kong SAR)',	// Chinese traditional script
-			'zh-mo' => '繁體中文 (Macau SAR)',		// Chinese traditional script
-			'zh-sg' => '简体中文 (Singapore)',		// Chinese simplified script
-			'zh-tw' => '繁體中文 (Taiwan)',			// Chinese traditional script
+			'zh-cn' => '简体中文 (China)',					// Chinese simplified script
+			'zh-hk' => '繁體中文 (Hong Kong SAR)',			// Chinese traditional script
+			'zh-mo' => '繁體中文 (Macau SAR)',				// Chinese traditional script
+			'zh-sg' => '简体中文 (Singapore)',				// Chinese simplified script
+			'zh-tw' => '繁體中文 (Taiwan)',				// Chinese traditional script
 			'zh' => '中文',							// Chinese
 			'hr' => 'Hrvatski',						// Croatian
 			'cs' => 'čeština',						// Czech
@@ -73,7 +73,7 @@
 			'gd' => 'Gàidhlig',						// Gaelic (Scottish)
 			'ga' => 'Gaeilge',						// Gaelic (Irish)
 			'gv' => 'Gaelg',						// Gaelic (Manx) (Isle of Man)
-			'ka' => 'ქართული ენა',					// Georgian
+			'ka' => 'ქართული ენა',						// Georgian
 			'de-at' => 'Deutsch (Austria)',			// German
 			'de-li' => 'Deutsch (Liechtenstein)',	// German
 			'de-lu' => 'Deutsch (Luxembourg)',		// German
@@ -90,18 +90,18 @@
 			'it-ch' => 'italiano (Switzerland)',	// Italian
 			'it' => 'Italiano',						// Italian
 			'ja' => '日本語',							// Japanese
-			'kn' => 'ಕನ್ನಡ',						// Kannada
+			'kn' => 'ಕನ್ನಡ',							// Kannada
 			'kk' => 'Қазақ',						// Kazakh
 			'rw' => 'Kinyarwanda',					// Kinyarwanda
 			'kok' => 'कोंकणी',							// Konkani
-			'ko' => '한국어/조선말',					// Korean
+			'ko' => '한국어/조선말',							// Korean
 			'kz' => 'Кыргыз',						// Kyrgyz
 			'lv' => 'Latviešu',						// Latvian
 			'lt' => 'Lietuviškai',					// Lithuanian
 			'luo'=> 'Dholuo',						// Luo
 			'ms' => 'Bahasa Melayu',				// Malay
 			'mk' => 'Македонски',					// Macedonian
-			'ml' => 'മലയാളം',							// Malayalam
+			'ml' => 'മലയാളം',								// Malayalam
 			'mt' => 'Malti',						// Maltese
 			'mr' => 'मराठी',							// Marathi
 			'mn' => 'Монгол',						// Mongolian  (Cyrillic)
@@ -111,8 +111,8 @@
 			'nn-no' => 'Norsk nynorsk',				// Norwegian Nynorsk
 			'nn' => 'Norsk nynorsk',				// Norwegian Nynorsk
 			'no' => 'Norsk',						// Norwegian
-			'or' => 'ଓଡ଼ିଆ',							// Oriya
-			'ps' => 'پښتو',						// Pashto
+			'or' => 'ଓଡ଼ିଆ',								// Oriya
+			'ps' => 'پښتو',							// Pashto
 			'pl' => 'polski',						// Polish
 			'pt-br' => 'português brasileiro',		// Portuguese (Brasil)
 			'pt' => 'português',					// Portuguese
@@ -168,7 +168,7 @@
 			'tn' => 'Setswana',						// Tswana
 			'tr' => 'Türkçe',						// Turkish
 			'tk' => 'Түркмен',						// Turkmen
-			'ug' => 'ئۇيغۇرچە‎/Uyƣurqə/Уйғурчә',	// Uighur, Uyghur
+			'ug' => 'ئۇيغۇرچە‎/Uyƣurqə/Уйғурчә',		// Uighur, Uyghur
 			'uk' => 'Українська',					// Ukrainian
 			'ur' => 'اردو',							// Urdu
 			'uz' => 'o\'zbek',						// Uzbek
@@ -183,12 +183,23 @@
 			'zu' => 'isiZulu',						// Zulu
 		);
 		
-		/**
-		 * Boolean to pass only once through "frontendPrePageResolve".
-		 */
-		private $_firstPass = 1;
-		private $_languageRedirect = 'on';
-		private $_installation = 0;
+		//Boolean to pass only once through "frontendPrePageResolve".
+		private $_firstPass;
+		
+		//Boolean to check if Language Redirect is enabled
+		private $_languageRedirect;
+		
+		//To check if state of call is from the install() function
+		private $_installation;
+
+		
+		public function __construct($args) {
+			$this->_Parent = $args['parent'];
+			
+			$this->_firstPass = 1;
+			$this->_languageRedirect = 'on';
+			$this->_installation = 0;
+		}
 		
 		public function about() {
 			return array(
@@ -202,7 +213,8 @@
 				'description'	=> __('Allows localisation of page\'s handle.')
 	 		);
 		}
-		
+
+	
 		public function getSubscribedDelegates() {
 			return array(
 				array(
@@ -243,9 +255,9 @@
 			if ($page->_context[0] == 'new' || $page->_context[0] == 'edit' || $page->_context[0] == 'template') {
 				$form = $context['form'];
 
-				$languageCodes = $this->_getSupportedLanguageCodes();
+				$languageCodes = self::getSupportedLanguageCodes();
 				$languageCodesH = $languageCodes; 
-				$this->_replaceDashes($languageCodesH);
+				self::replaceDashes($languageCodesH);
 				
 				$fieldset = new XMLElement('fieldset');
 				$fieldset->setAttribute('class', 'settings');
@@ -256,9 +268,6 @@
 
 				$column = new XMLElement('div');
 				$column->setAttribute('class', 'page_lhandles');
-				
-				$label = Widget::Label(__('Localisation for URL Handle'));
-				$column->appendChild($label);
 				
 				/* Tabs */
 				
@@ -274,16 +283,49 @@
 				}
 				
 				$column->appendChild($ul);
-						
-				/* Inputs */
+				
+				/* Localised Title */
 				
 				$page_id = $page->_context[1];
 				
 				$qselect = '';
 				foreach($languageCodesH as $language) {
-					$qselect .= "p.page_lhandles_".$language.",";
+					$qselect .= "p.page_lhandles_t_".$language.",";
 				}
-				$this->_removeEndComma($qselect);
+				self::removeEndComma($qselect);
+				
+				$page_lhandles_values = Symphony::Database()->fetch("
+					SELECT 
+						{$qselect}
+					FROM
+						`tbl_pages` AS p
+					WHERE
+						id = '{$page_id}'
+					LIMIT 1
+				");
+				
+				foreach($languageCodes as $key => $language) {
+					$panel = Widget::Label(__('Localised Title'));
+					$panel->setAttribute('class', 'tab-panel tab-'.$language);
+					
+					$input = Widget::Input(
+						"fields[page_lhandles_t_".$languageCodesH[$key]."]", $page_lhandles_values[0][ 'page_lhandles_t_'.$languageCodesH[$key] ]
+					);
+					$input->setAttribute('length', '30');
+					
+					$panel->appendChild($input);
+					$column->appendChild($panel);
+				}
+				
+				/* Localised URL Handle */
+				
+				$page_id = $page->_context[1];
+				
+				$qselect = '';
+				foreach($languageCodesH as $language) {
+					$qselect .= "p.page_lhandles_h_".$language.",";
+				}
+				self::removeEndComma($qselect);
 				
 				$page_lhandles_values = Symphony::Database()->fetch("
 					SELECT 
@@ -296,11 +338,11 @@
 				");						
 				
 				foreach($languageCodes as $key => $language) {
-					$panel = Widget::Label();
+					$panel = Widget::Label(__('Localised URL Handle'));
 					$panel->setAttribute('class', 'tab-panel tab-'.$language);
 					
 					$input = Widget::Input(
-						"fields[page_lhandles_".$languageCodesH[$key]."]", $page_lhandles_values[0][ 'page_lhandles_'.$languageCodesH[$key] ]
+						"fields[page_lhandles_h_".$languageCodesH[$key]."]", $page_lhandles_values[0][ 'page_lhandles_h_'.$languageCodesH[$key] ]
 					);
 					$input->setAttribute('length', '30');
 					
@@ -319,10 +361,12 @@
 		 * @param $context - see delegate description
 		 */
 		public function frontendPrePageResolve($context) {
-			//checks to see if the page is resolved for the first time. 
-			//If yes, then is the requested URL in browser, if no, it is probably a "page not found 404" page redirect.
-			//Used to prevent an endless loop
-			if ( $this->_firstPass == 1 && $this->_languageRedirect == 'on') {
+
+			if (   $this->_firstPass == 1 			//1. to prevent an endless loop if called after the 404 is generated 
+				&& $this->_languageRedirect == 'on'	//2. well ... duhh :)
+				&& !empty($context['page'])			//3. "== empty" means that www.mydomain.com was accessed. No substitution needed.
+				&& $context['page'] != '//'	) {		//4. "== '//'" becomes after default index page has been retrieved. (After 3.)
+
 				$this->_firstPass = 0;
 				$oldPage = explode('/', $context['page'],3);
 				$lhandle = $oldPage[1];
@@ -330,7 +374,7 @@
 				$urlLanguage = $_GET['language'];
 				$urlRegion = $_GET['region'];
 				
-				$lfield = 'page_lhandles_' . $urlLanguage . (!empty($urlRegion) ? '_'.$urlRegion : '');
+				$lfield = 'page_lhandles_h_' . $urlLanguage . (!empty($urlRegion) ? '_'.$urlRegion : '');
 				
 				try {
 					$result = Symphony::Database()->fetch("
@@ -370,8 +414,8 @@
 		 */
 		public function savePreferences($context) {
 			$savedLanguages = explode(',',$context['settings']['language_redirect']['language_codes']);
-			$this->_cleanLanguageCodes($savedLanguages);
-			$storedLanguages = $this->_getSupportedLanguageCodes();
+			self::_cleanLanguageCodes($savedLanguages);
+			$storedLanguages = self::getSupportedLanguageCodes();
 			
 			$toCheckLanguages = array_diff($savedLanguages, $storedLanguages);
 			if ( !empty($toCheckLanguages) ) {
@@ -410,6 +454,7 @@
 				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/page_lhandles/assets/page_lhandles.blueprintspages.css', "screen");
 			}
 		}
+
 		
 		public function install(){
 			$this->_installation = 1;
@@ -424,14 +469,14 @@
 			
 			for ($i = 0; $i < $fieldsCount; $i++) {
 				$fieldName = $fields[$i]['Field'];
-				$isPageLHandle = strpos($fieldName, 'page_lhandle');
+				$isPageLHandle = strpos($fieldName, 'page_lhandles');
 				
 				if ( $isPageLHandle !== false )
 					$queryFields.= "\nDROP `$fieldName`,";
 			}
 			
 			if ( !empty($queryFields) ) {
-				$this->_removeEndComma($queryFields);
+				self::removeEndComma($queryFields);
 				$query = "ALTER TABLE `tbl_pages` ".$queryFields;
 				return (boolean)Symphony::Database()->query($query);
 			}
@@ -442,14 +487,15 @@
 		public function enable() {
 			return (boolean)$this->_addColumnsPageTable();
 		}
-		
+
+	
 		/**
 		 * Adds columns to tbl_pages table, depending on language codes from Language Redirect.
 		 * ex: page_lhandles_ro, page_lhandles_en-us, page_lhandles_fr ...
 		 */
 		private function _addColumnsPageTable($toCheckLanguages = null) {
 			if ( empty($toCheckLanguages) ) {
-				$toCheckLanguages = $this->_getSupportedLanguageCodes();
+				$toCheckLanguages = self::getSupportedLanguageCodes();
 				
 				if ( empty($toCheckLanguages) ) {
 					//means there are no language codes in Configuration file
@@ -457,14 +503,15 @@
 				}
 			}
 			
-			$this->_replaceDashes($toCheckLanguages);
+			self::replaceDashes($toCheckLanguages);
 			
 			$queryFields = ""; 
 
 			if ( $this->_installation == 1 ) {
 				//if called from install(), then just add all the fields
 				foreach ($toCheckLanguages as $language) {
-					$queryFields .= "\nADD `page_lhandles_{$language}` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,";
+					$queryFields .= "\nADD `page_lhandles_t_{$language}` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,";
+					$queryFields .= "\nADD `page_lhandles_h_{$language}` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,";
 				}
 				$this->_installation = 0;
 			}
@@ -477,43 +524,44 @@
 				}
 
 				foreach ($toCheckLanguages as $language) {
-					$fieldName = "page_lhandles_".$language;
+					$fieldName = "page_lhandles_t_".$language;
 					if ( !in_array($fieldName, $fieldArray) ) {
-						$queryFields .= "\nADD `$fieldName` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,";
+						$queryFields .= "\nADD `page_lhandles_t_{$language}` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,";
+						$queryFields .= "\nADD `page_lhandles_h_{$language}` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,";
 					}
 				}
 			}
 			
 			if ( !empty($queryFields) ) {
-				$this->_removeEndComma($queryFields);
+				self::removeEndComma($queryFields);
 				$query = "ALTER TABLE `tbl_pages` ".$queryFields;
 				return (boolean)Symphony::Database()->query($query);
 			}
 			
 			return true;
 		}
-
-		private function _getSupportedLanguageCodes() {
-			$supportedLanguageCodes = explode(',', General::Sanitize(Symphony::Engine()->Configuration->get('language_codes', 'language_redirect')));
-			$this->_cleanLanguageCodes($supportedLanguageCodes);
-			
-			return $supportedLanguageCodes;
-		}
 		
-		private function _cleanLanguageCodes(&$languageCodes) {
-			$languageCodes = array_map('trim', $languageCodes);
-			$languageCodes = array_filter($languageCodes);
-		}
 		
-		private function _removeEndComma(&$string) {
-			$string = substr($string, 0, strlen($string)-1);
-		}
-		
-		private function _replaceDashes(&$languageCodes) {
+		public static function replaceDashes(&$languageCodes) {
 			foreach ($languageCodes as $key => $language) {
 				$languageCodes[$key] = str_replace('-', '_', $language);
 			}
 		}
-	
+
+		public static function removeEndComma(&$string) {
+			$string = substr($string, 0, strlen($string)-1);
+		}
+		
+		public static function getSupportedLanguageCodes() {
+			$supportedLanguageCodes = explode(',', General::Sanitize(Symphony::Configuration()->get('language_codes', 'language_redirect')));
+			self::_cleanLanguageCodes($supportedLanguageCodes);
+			
+			return $supportedLanguageCodes;
+		}
+		
+		private static function _cleanLanguageCodes(&$languageCodes) {
+			$languageCodes = array_map('trim', $languageCodes);
+			$languageCodes = array_filter($languageCodes);
+		}
 	}
 ?>
