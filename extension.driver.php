@@ -210,7 +210,7 @@
 					'name'			=> 'Vlad Ghita',
 					'email'			=> 'vlad_micutul@yahoo.com'
 				),
-				'description'	=> __('Allows localisation of page\'s handle.')
+				'description'	=> 'Allows localisation of page\'s handle.'
 	 		);
 		}
 
