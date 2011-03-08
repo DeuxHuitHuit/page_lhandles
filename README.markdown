@@ -20,17 +20,17 @@ Thank you all other Symphony Extensions developers for your inspirational work.
 
 Old XML for a navigation Datasource:
 
-<page handle="_HandleHere_" id="_IDhere_">
-	<name>_TitleHere_</name>
+\<page handle="\_HandleHere\_" id="\_IDhere\_"\>
+	\<name\>\_TitleHere\_\</name\>
 	...
-</page>
+\</page\>
 
 New XML supplies handle and title for the current page according to current-language:
 
-<page handle="_HandleHere_" id="_IDhere_">
-	<item handle="_LocalisedHandleHere_">_LocalisedTitleHere_</item>
+\<page handle="\_HandleHere\_" id="\_IDhere\_"\>
+	\<item handle="\_LocalisedHandleHere\_"\>\_LocalisedTitleHere\_\</item\>
 	...
-</page>
+\</page\>
 
 #### Note
 
