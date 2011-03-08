@@ -41,7 +41,7 @@ New XML supplies handle and title for the current page according to current-lang
 ### Installation
 
 1. Upload the 'page_lhandles' folder found in this archive to your Symphony 'extensions' folder.    
-2. Enable it by selecting the "Page LHandles", choose Enable from the with-selected menu, then click Apply.
+2. Enable it by selecting the "Page LHandles" under System -> Extensions, choose Enable from the with-selected menu, then click Apply.
 3. You can now add localised Titles and Handles to any Symphony Page.
 
 ## Usage
