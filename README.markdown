@@ -8,8 +8,8 @@ Offers multilingual support for localised page handle in browser URL.
 * Build Date: 2011-03-08
 * Requirements:
 	- Symphony 2.2 or above
-	- Extension [Language Redirect] by Jonas Coch (https://github.com/klaftertief/language_redirect)
-* Based on [Multilingual Field] extension by Guillem Lorman. (https://github.com/6ui11em/multilingual_field)
+	- Extension [Language Redirect](https://github.com/klaftertief/language_redirect) by Jonas Coch
+* Based on [Multilingual Field](https://github.com/6ui11em/multilingual_field) extension by Guillem Lorman.
 
 Thank you all other Symphony Extensions developers for your inspirational work.
 
@@ -20,17 +20,17 @@ Thank you all other Symphony Extensions developers for your inspirational work.
 
 Old XML for a navigation Datasource:
 
-\<page handle="\_HandleHere\_" id="\_IDhere\_"\>
-	\<name\>\_TitleHere\_\</name\>
-	...
-\</page\>
+    <page handle="_HandleHere_" id="_IDhere_">
+	    <name>_TitleHere_</name>
+	    ...
+    </page>
 
 New XML supplies handle and title for the current page according to current-language:
 
-\<page handle="\_HandleHere\_" id="\_IDhere\_"\>
-	\<item handle="\_LocalisedHandleHere\_"\>\_LocalisedTitleHere\_\</item\>
-	...
-\</page\>
+    <page handle="_HandleHere_" id="_IDhere_">
+	    <item handle="_LocalisedHandleHere_">_LocalisedTitleHere_</item>
+	    ...
+    </page>
 
 #### Note
 
