@@ -71,7 +71,7 @@ by converting the URL to 'symphony-events/symphony-title' etc.
 
 ## Compatibility
 
-   Symphony | PageLHandles
+   Symphony | Page LHandles
 ----------- |----------------
 2.0 — 2.1.* | Not compatible
 2.2.*       | [latest](git://github.com/vlad-ghita/page_lhandles.git)
