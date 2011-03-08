@@ -44,7 +44,7 @@ New XML supplies handle and title for the current page according to current-lang
 2. Enable it by selecting the "Page LHandles" under System -> Extensions, choose Enable from the with-selected menu, then click Apply.
 3. You can now add localised Titles and Handles to any Symphony Page.
 
-## Usage
+### Usage
 
 1. Make sure that Language Redirect extension is Enabled. Fill some language codes under System -> Preferences.
 2. Go to Blueprints -> Pages. Create a new page or edit an existing one.
@@ -69,7 +69,7 @@ all these 3 URLs will request "Title" Page
 by converting the URL to 'symphony-events/symphony-title' etc. 
 
 
-## Compatibility
+### Compatibility
 
    Symphony | Page LHandles
 ----------- |----------------
@@ -78,7 +78,7 @@ by converting the URL to 'symphony-events/symphony-title' etc.
 
 
 
-## Changelog
+### Changelog
 
 * 1.1, 08 March 2011
     * entire extension rewrite.
