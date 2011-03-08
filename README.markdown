@@ -28,7 +28,7 @@ Old XML for a navigation Datasource:
 New XML supplies handle and title for the current page according to current-language:
 
     <page handle="_HandleHere_" id="_IDhere_">
-	    <item handle="_LocalisedHandleHere_">_LocalisedTitleHere_</item>
+	    <item lang="_CurrentLanguage_" handle="_LocalisedHandleHere_">_LocalisedTitleHere_</item>
 	    ...
     </page>
 
