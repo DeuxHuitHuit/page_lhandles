@@ -1,216 +1,31 @@
 <?php
 
+require_once('lib/class.pagelhandles.php');
+
 	class Extension_page_lhandles extends Extension {
 		
-		private $_lang = array(						// [English name]
-			'ab' => 'аҧсуа бызшәа',					// Abkhazian
-			'af' => 'Afrikaans',					// Afrikaans
-			'sq' => 'shqip',						// Albanian
-			'am' => 'አማርኛ',							// Amharic
-			'ar-dz' => 'العربية (Algeria)',			// Arabic
-			'ar-bh' => 'العربية (Bahrain)',			// Arabic
-			'ar-eg' => 'العربية (Egypt)',			// Arabic
-			'ar-iq' => 'العربية (Iraq)',			// Arabic
-			'ar-jo' => 'العربية (Jordan)',			// Arabic
-			'ar-kw' => 'العربية (Kuwait)',			// Arabic
-			'ar-lb' => 'العربية (Lebanon)',			// Arabic
-			'ar-ly' => 'العربية (Libya)',			// Arabic
-			'ar-ma' => 'العربية (Morocco)',			// Arabic
-			'ar-om' => 'العربية (Oman)',			// Arabic
-			'ar-qa' => 'العربية (Qatar)',			// Arabic
-			'ar-sa' => 'العربية (Saudi Arabia)',	// Arabic
-			'ar-sy' => 'العربية (Syria)',			// Arabic
-			'ar-tn' => 'العربية (Tunisia)',			// Arabic
-			'ar-ae' => 'العربية (U.A.E.)',			// Arabic
-			'ar-ye' => 'العربية (Yemen)',			// Arabic
-			'ar' => 'العربية',						// Arabic
-			'hy' => 'Հայերեն',							// Armenian
-			'as' => 'অসমীয়া',								// Assamese
-			'az' => 'azərbaycan',					// Azeri
-			'eu' => 'euskera',						// Basque
-			'be' => 'Беларуская',					// Belarusian
-			'bn' => 'বাংলা',								// Bengali
-			'bg' => 'Български',					// Bulgarian
-			'ca' => 'Català',						// Catalan
-			'zh-cn' => '简体中文 (China)',					// Chinese simplified script
-			'zh-hk' => '繁體中文 (Hong Kong SAR)',			// Chinese traditional script
-			'zh-mo' => '繁體中文 (Macau SAR)',				// Chinese traditional script
-			'zh-sg' => '简体中文 (Singapore)',				// Chinese simplified script
-			'zh-tw' => '繁體中文 (Taiwan)',				// Chinese traditional script
-			'zh' => '中文',							// Chinese
-			'hr' => 'Hrvatski',						// Croatian
-			'cs' => 'čeština',						// Czech
-			'da' => 'Dansk',						// Danish
-			'dv' => 'ދިވެހި',							// Divehi
-			'nl-be' => 'Nederlands (Belgium)',		// Dutch
-			'nl' => 'Nederlands (Netherlands)',		// Dutch
-			'en-au' => 'English (Australia)',		// English
-			'en-bz' => 'English (Belize)',			// English
-			'en-ca' => 'English (Canada)',			// English
-			'en-ie' => 'English (Ireland)',			// English
-			'en-jm' => 'English (Jamaica)',			// English
-			'en-nz' => 'English (New Zealand)',		// English
-			'en-ph' => 'English (Philippines)',		// English
-			'en-za' => 'English (South Africa)',	// English
-			'en-tt' => 'English (Trinidad)',		// English
-			'en-gb' => 'English (United Kingdom)',	// English
-			'en-us' => 'English (United States)',	// English
-			'en-zw' => 'English (Zimbabwe)',		// English
-			'en' => 'English',						// English
-			'ee' => 'Ɛʋɛ',							// Ewe
-			'et' => 'Eesti',						// Estonian
-			'fo' => 'Føroyskt',						// Faeroese
-			'fa' => 'فارسی',						// Farsi
-			'fi' => 'Suomi',						// Finnish
-			'fr-be' => 'Français (Belgium)',		// French (Belgium)
-			'fr-ca' => 'Français canadien',			// French (Canada)
-			'fr-lu' => 'Français (Luxembourg)',		// French
-			'fr-mc' => 'Français (Monaco)',			// French
-			'fr-ch' => 'Français (Switzerland)',	// French
-			'fr' => 'Français',						// French
-			'ff' => 'Fulfulde, Pulaar, Pular',		// Fula, Fulah, Fulani
-			'gl' => 'Galego',						// Galician
-			'gd' => 'Gàidhlig',						// Gaelic (Scottish)
-			'ga' => 'Gaeilge',						// Gaelic (Irish)
-			'gv' => 'Gaelg',						// Gaelic (Manx) (Isle of Man)
-			'ka' => 'ქართული ენა',						// Georgian
-			'de-at' => 'Deutsch (Austria)',			// German
-			'de-li' => 'Deutsch (Liechtenstein)',	// German
-			'de-lu' => 'Deutsch (Luxembourg)',		// German
-			'de-ch' => 'Deutsch (Switzerland)',		// German
-			'de' => 'Deutsch',						// German
-			'el' => 'Ελληνικά',						// Greek
-			'gu' => 'ગુજરાતી',							// Gujarati
-			'ha' => 'هَوْسَ',							// Hausa
-			'he' => 'עברית',						// Hebrew
-			'hi' => 'हिंदी',							// Hindi
-			'hu' => 'Magyar',						// Hungarian
-			'is' => 'Íslenska',						// Icelandic
-			'id' => 'Bahasa Indonesia',				// Indonesian
-			'it-ch' => 'italiano (Switzerland)',	// Italian
-			'it' => 'Italiano',						// Italian
-			'ja' => '日本語',							// Japanese
-			'kn' => 'ಕನ್ನಡ',							// Kannada
-			'kk' => 'Қазақ',						// Kazakh
-			'rw' => 'Kinyarwanda',					// Kinyarwanda
-			'kok' => 'कोंकणी',							// Konkani
-			'ko' => '한국어/조선말',							// Korean
-			'kz' => 'Кыргыз',						// Kyrgyz
-			'lv' => 'Latviešu',						// Latvian
-			'lt' => 'Lietuviškai',					// Lithuanian
-			'luo'=> 'Dholuo',						// Luo
-			'ms' => 'Bahasa Melayu',				// Malay
-			'mk' => 'Македонски',					// Macedonian
-			'ml' => 'മലയാളം',								// Malayalam
-			'mt' => 'Malti',						// Maltese
-			'mr' => 'मराठी',							// Marathi
-			'mn' => 'Монгол',						// Mongolian  (Cyrillic)
-			'ne' => 'नेपाली',							// Nepali
-			'nb-no' => 'Norsk bokmål',				// Norwegian Bokmål
-			'nb' => 'Norsk bokmål',					// Norwegian Bokmål
-			'nn-no' => 'Norsk nynorsk',				// Norwegian Nynorsk
-			'nn' => 'Norsk nynorsk',				// Norwegian Nynorsk
-			'no' => 'Norsk',						// Norwegian
-			'or' => 'ଓଡ଼ିଆ',								// Oriya
-			'ps' => 'پښتو',							// Pashto
-			'pl' => 'polski',						// Polish
-			'pt-br' => 'português brasileiro',		// Portuguese (Brasil)
-			'pt' => 'português',					// Portuguese
-			'pa' => 'پنجابی/ਪੰਜਾਬੀ',					// Punjabi
-			'qu' => 'Runa Simi/Kichwa',				// Quechua
-			'rm' => 'Romansch',						// Rhaeto-Romanic
-			'ro-md' => 'Română (Moldova)',			// Romanian
-			'ro' => 'Română',						// Romanian
-			'rn' => 'kiRundi', 						// Rundi
-			'ru-md' => 'Pyccĸий (Moldova)',			// Russian
-			'ru' => 'Pyccĸий',						// Russian
-			'sg' => 'yângâ tî sängö',				// Sango
-			'sa' => 'संस्कृतम्',							// Sanskrit
-			'sc' => 'Sardu',						// Sardinian
-			'sr' => 'Srpski/српски',				// Serbian
-			'sn' => 'chiShona',						// Shona
-			'ii' => 'ꆇꉙ',							// Sichuan Yi
-			'si' => 'සිංහල',						// Sinhalese, Sinhala
-			'sk' => 'Slovenčina',					// Slovak
-			'ls' => 'Slovenščina',					// Slovenian
-			'so' => 'Soomaaliga/af Soomaali',		// Somali
-			'st' => 'Sesotho',						// Sotho, Sutu
-			'es-ar' => 'Español (Argentina)',		// Spanish
-			'es-bo' => 'Español (Bolivia)',			// Spanish
-			'es-cl' => 'Español (Chile)',			// Spanish
-			'es-co' => 'Español (Colombia)',		// Spanish
-			'es-cr' => 'Español (Costa Rica)',		// Spanish
-			'es-do' => 'Español (Dominican Republic)',// Spanish
-			'es-ec' => 'Español (Ecuador)',			// Spanish
-			'es-sv' => 'Español (El Salvador)',		// Spanish
-			'es-gt' => 'Español (Guatemala)',		// Spanish
-			'es-hn' => 'Español (Honduras)',		// Spanish
-			'es-mx' => 'Español (Mexico)',			// Spanish
-			'es-ni' => 'Español (Nicaragua)',		// Spanish
-			'es-pa' => 'Español (Panama)',			// Spanish
-			'es-py' => 'Español (Paraguay)',		// Spanish
-			'es-pe' => 'Español (Peru)',			// Spanish
-			'es-pr' => 'Español (Puerto Rico)',		// Spanish
-			'es-us' => 'Español (United States)',	// Spanish
-			'es-uy' => 'Español (Uruguay)',			// Spanish
-			'es-ve' => 'Español (Venezuela)',		// Spanish
-			'es' => 'Español',						// Spanish
-			'sw' => 'Kiswahili',					// Swahili
-			'sv-fi' => 'svenska (Finland)',			// Swedish
-			'sv' => 'svenska',						// Swedish
-			'syr' => 'ܣܘܪܝܝܐ',						// Syriac
-			'ta' => 'தமிழ்',							// Tamil
-			'tt' => 'татарча/تاتارچا',				// Tatar
-			'te' => 'తెలుగు',							// Telugu
-			'th' => 'ภาษาไทย',						// Thai
-			'ti' => 'ትግርኛ',							// Tigrinya
-			'ts' => 'Xitsonga',						// Tsonga
-			'tn' => 'Setswana',						// Tswana
-			'tr' => 'Türkçe',						// Turkish
-			'tk' => 'Түркмен',						// Turkmen
-			'ug' => 'ئۇيغۇرچە‎/Uyƣurqə/Уйғурчә',		// Uighur, Uyghur
-			'uk' => 'Українська',					// Ukrainian
-			'ur' => 'اردو',							// Urdu
-			'uz' => 'o\'zbek',						// Uzbek
-			've' => 'Tshivenḓa',					// Venda
-			'vi' => 'Tiếng Việt',					// Vietnamese
-			'wa' => 'Walon',						// Waloon
-			'cy' => 'Cymraeg',						// Welsh
-			'wo' => 'Wolof',						// Wolof
-			'xh' => 'isiXhosa',						// Xhosa
-			'yi' => 'ייִדיש',						// Yiddish
-			'yo' => 'Yorùbá',						// Yoruba
-			'zu' => 'isiZulu',						// Zulu
-		);
-		
-		//Boolean to pass only once through "frontendPrePageResolve".
+		private $_pageLHandles;
 		private $_firstPass;
-		
-		//Boolean to check if Language Redirect is enabled
 		private $_languageRedirect;
-		
-		//To check if state of call is from the install() function
-		private $_installation;
-
 		
 		public function __construct($args) {
 			$this->_Parent = $args['parent'];
 			
+			$this->_pageLHandles = new PageLHandles();
 			$this->_firstPass = 1;
 			$this->_languageRedirect = 'on';
-			$this->_installation = 0;
 		}
 		
 		public function about() {
 			return array(
 				'name'			=> 'Page LHandles',
-				'version'		=> '1.0',
-				'release-date'	=> '2011-02-10',
+				'version'		=> '1.1',
+				'release-date'	=> '2011-03-7',
 				'author'		=> array(
 					'name'			=> 'Vlad Ghita',
-					'email'			=> 'vlad_micutul@yahoo.com'
+					'email'			=> 'vlad.ghita@xandergroup.ro'
 				),
-				'description'	=> 'Allows localisation of page\'s handle.'
+				'description'	=> 'Allows localisation of current page handle, including its ascending line.'
 	 		);
 		}
 
@@ -220,191 +35,80 @@
 				array(
 					'page' => '/blueprints/pages/',
 					'delegate' => 'AppendPageContent',
-					'callback' => 'appendPageContent'
+					'callback' => 'append_page_content'
 				),
+				
 				array(
 					'page' => '/frontend/',
 					'delegate' => 'FrontendPrePageResolve',
-					'callback' => 'frontendPrePageResolve'
+					'callback' => 'frontend_pre_page_resolve'
 				),
+				
 				array(
 					'page' => '/system/preferences/',
 					'delegate' => 'Save',
-					'callback' => 'savePreferences' 
+					'callback' => 'save_preferences' 
 				),
+				
 				array(
 					'page' => '/backend/',
 					'delegate' => 'AppendPageAlert', 
-					'callback' => 'dependenciesCheck'
+					'callback' => 'dependencies_check'
 				),
+				
 				array(
 					'page' => '/backend/',
 					'delegate' => 'InitaliseAdminPageHead',
-					'callback' => 'initialiseAdminPageHead'
+					'callback' => 'initialise_admin_page_head'
 				),
+				
+				array(
+					'page' => '/blueprints/datasources/',
+					'delegate' => 'DatasourcePreCreate',
+					'callback' => 'datasource_pre_create'
+				),
+				
+				array(
+					'page' => '/blueprints/datasources/',
+					'delegate' => 'DatasourcePreEdit',
+					'callback' => 'datasource_pre_edit'
+				),
+				
 			);
 		}
 		
 		/**
-		 * Edit the fieldset of Page Edit, right before actions take place
+		 * Append localised Title and Handle fields to Page edit menu.
 		 * @param $context - see delegate description
 		 */
-		public function appendPageContent($context) {
+		public function append_page_content($context) {
 			$page = Symphony::Engine()->Page;
 			
 			if ($page->_context[0] == 'new' || $page->_context[0] == 'edit' || $page->_context[0] == 'template') {
-				$form = $context['form'];
-
-				$languageCodes = self::getSupportedLanguageCodes();
-				$languageCodesH = $languageCodes; 
-				self::replaceDashes($languageCodesH);
-				
-				$fieldset = new XMLElement('fieldset');
-				$fieldset->setAttribute('class', 'settings');
-				$fieldset->appendChild(new XMLElement('legend', __('Page LHandles')));
-
-				$group = new XMLElement('div');
-				$group->setAttribute('class', 'group');
-
-				$column = new XMLElement('div');
-				$column->setAttribute('class', 'page_lhandles');
-				
-				/* Tabs */
-				
-				$ul = new XMLElement('ul');
-				$ul->setAttribute('class', 'tabs');
-				
-				foreach($languageCodes as $language) {
-					$class = $language . ($language == $languageCodes[0] ? ' active' : '');
-					$li = new XMLElement('li',($this->_lang[$language] ? $this->_lang[$language] : __('Unknown Lang')));	
-					$li->setAttribute('class', $class);
-					
-					$ul->appendChild($li);
-				}
-				
-				$column->appendChild($ul);
-				
-				/* Localised Title */
-				
-				$page_id = $page->_context[1];
-				
-				$qselect = '';
-				foreach($languageCodesH as $language) {
-					$qselect .= "p.page_lhandles_t_".$language.",";
-				}
-				self::removeEndComma($qselect);
-				
-				$page_lhandles_values = Symphony::Database()->fetch("
-					SELECT 
-						{$qselect}
-					FROM
-						`tbl_pages` AS p
-					WHERE
-						id = '{$page_id}'
-					LIMIT 1
-				");
-				
-				foreach($languageCodes as $key => $language) {
-					$panel = Widget::Label(__('Localised Title'));
-					$panel->setAttribute('class', 'tab-panel tab-'.$language);
-					
-					$input = Widget::Input(
-						"fields[page_lhandles_t_".$languageCodesH[$key]."]", $page_lhandles_values[0][ 'page_lhandles_t_'.$languageCodesH[$key] ]
-					);
-					$input->setAttribute('length', '30');
-					
-					$panel->appendChild($input);
-					$column->appendChild($panel);
-				}
-				
-				/* Localised URL Handle */
-				
-				$page_id = $page->_context[1];
-				
-				$qselect = '';
-				foreach($languageCodesH as $language) {
-					$qselect .= "p.page_lhandles_h_".$language.",";
-				}
-				self::removeEndComma($qselect);
-				
-				$page_lhandles_values = Symphony::Database()->fetch("
-					SELECT 
-						{$qselect}
-					FROM
-						`tbl_pages` AS p
-					WHERE
-						id = '{$page_id}'
-					LIMIT 1
-				");						
-				
-				foreach($languageCodes as $key => $language) {
-					$panel = Widget::Label(__('Localised URL Handle'));
-					$panel->setAttribute('class', 'tab-panel tab-'.$language);
-					
-					$input = Widget::Input(
-						"fields[page_lhandles_h_".$languageCodesH[$key]."]", $page_lhandles_values[0][ 'page_lhandles_h_'.$languageCodesH[$key] ]
-					);
-					$input->setAttribute('length', '30');
-					
-					$panel->appendChild($input);
-					$column->appendChild($panel);
-				}
-				
-				$group->appendChild($column);
-				$fieldset->appendChild($group);
-				$form->prependChild($fieldset);
+				$this->_pageLHandles->append_page_form_content($context['form'], $page->_context[1]);
 			}
 		}
 		
 		/**
-		 * Replaces URLs' Localised Handle with the Symphony corresponding Page handle for further processing 
+		 * Replace URLs' Localised Handles with the Symphony corresponding Pages handles for further processing.
 		 * @param $context - see delegate description
 		 */
-		public function frontendPrePageResolve($context) {
+		public function frontend_pre_page_resolve($context) {
 
-			if (   $this->_firstPass == 1 			//1. to prevent an endless loop if called after the 404 is generated 
-				&& $this->_languageRedirect == 'on'	//2. well ... duhh :)
-				&& !empty($context['page'])			//3. "== empty" means that www.mydomain.com was accessed. No substitution needed.
-				&& $context['page'] != '//'	) {		//4. "== '//'" becomes after default index page has been retrieved. (After 3.)
+			if (   $this->_firstPass == 1 				//1. to prevent an endless loop if called after the 404 is generated 
+				&& $this->_languageRedirect == 'on'		//2. well ... duhh
+				&& !empty($context['page'])				//3. "== empty" means that www.mydomain.com was accessed. No substitution needed.
+				&& $context['page'] != '//'				//4. "== '//'" becomes after default index page has been retrieved. (After 3.)
+			) {
+				$this->_firstPass = 0 ;
 
-				$this->_firstPass = 0;
-				$oldPage = explode('/', $context['page'],3);
-				$lhandle = $oldPage[1];
+				$url = $context['page'];
+				MySQL::cleanValue($url);
 				
-				$urlLanguage = $_GET['language'];
-				$urlRegion = $_GET['region'];
-				
-				$lfield = 'page_lhandles_h_' . $urlLanguage . (!empty($urlRegion) ? '_'.$urlRegion : '');
-				
-				try {
-					$result = Symphony::Database()->fetch("
-						SELECT 
-							p.handle
-						FROM
-							`tbl_pages` AS p
-						WHERE
-							{$lfield} = '{$lhandle}'
-						LIMIT 1
-					");
-				}
-				catch (DatabaseException $e) {					
-					if ( $e->getDatabaseErrorCode() == 1054 ) {
-						//table column "$lfield" doesn't exist. redirect to 404.
-						FrontendPageNotFoundExceptionHandler::render($e);
-					}
-				}
-	
-				if ( empty($result) ) {
-					//no match. redirect to 404
-					$e = new FrontendPageNotFoundException();
-					FrontendPageNotFoundExceptionHandler::render($e);
-				}
-				else {
-					//valid page. proceed with translated handle
-					$context['page'] = '/'.$result[0]['handle'].'/'.$oldPage[2];
-				}
+				$oldURL = explode('/', $url);
+				$newURL = $this->_pageLHandles->process_url($oldURL);
+				$context['page'] = $newURL;
 			}
-			
 		}	
 		
 		/**
@@ -412,14 +116,17 @@
 		 * the language codes have been changed. If yes, integrate the new ones.
 		 * @param $context - see delegate description
 		 */
-		public function savePreferences($context) {
-			$savedLanguages = explode(',',$context['settings']['language_redirect']['language_codes']);
-			self::_cleanLanguageCodes($savedLanguages);
-			$storedLanguages = self::getSupportedLanguageCodes();
+		public function save_preferences($context) {
+			$savedLanguages = explode( ',', General::Sanitize($context['settings']['language_redirect']['language_codes']) );
+			PageLHandles::clean_language_codes($savedLanguages);
+			
+			$storedLanguages = PageLHandles::get_language_codes();
 			
 			$toCheckLanguages = array_diff($savedLanguages, $storedLanguages);
+			
 			if ( !empty($toCheckLanguages) ) {
-				return $this->_addColumnsPageTable($toCheckLanguages);
+				PageLHandles::replace_dashes($toCheckLanguages);
+				return $this->_pageLHandles->add_columns_to_page_table($toCheckLanguages);
 			}
 			
 			return true;
@@ -428,7 +135,7 @@
 		/**
 		 * Check if Language Redirect is enabled. Warning issued if not.
 		 */
-		public function dependenciesCheck() {
+		public function dependencies_check() {
 			$ExtensionManager = $this->_Parent->ExtensionManager;
 
 			$language_redirect = $ExtensionManager->fetchStatus('language_redirect');
@@ -447,7 +154,7 @@
 
 		}
 		
-		public function initialiseAdminPageHead() {
+		public function initialise_admin_page_head() {
 			$callback = Administration::instance()->getPageCallback();
 			if ( $callback['driver'] == 'blueprintspages' && ( $callback['context'][0] == 'edit' || $callback['context'][0] == 'new') ) {
 				Administration::instance()->Page->addScriptToHead(URL . '/extensions/page_lhandles/assets/page_lhandles.blueprintspages.js', 202, false);
@@ -455,14 +162,29 @@
 			}
 		}
 
+		public function datasource_pre_create($context) {
+			$this->_pageLHandles->edit_datasource('insert', $context['contents']);
+			
+			return true;
+		}
+		
+		public function datasource_pre_edit($context) {
+			$this->_pageLHandles->edit_datasource('insert', $context['contents']);
+			
+			return true;
+		}
+		
 		
 		public function install(){
-			$this->_installation = 1;
+			$this->_pageLHandles->edit_datasource('insert');
 			
-			return (boolean)$this->_addColumnsPageTable();
+			return (boolean)$this->_pageLHandles->add_columns_to_page_table(null, 1);
 		}
 		
 		public function uninstall(){
+			
+			$this->_pageLHandles->edit_datasource('delete');
+			
 			$queryFields = '';			
 			$fields = Symphony::$Database->fetch('DESCRIBE `tbl_pages`');
 			$fieldsCount = count($fields);
@@ -476,7 +198,7 @@
 			}
 			
 			if ( !empty($queryFields) ) {
-				self::removeEndComma($queryFields);
+				PageLHandles::remove_last_char($queryFields);
 				$query = "ALTER TABLE `tbl_pages` ".$queryFields;
 				return (boolean)Symphony::Database()->query($query);
 			}
@@ -485,83 +207,14 @@
 		}
 		
 		public function enable() {
-			return (boolean)$this->_addColumnsPageTable();
-		}
-
-	
-		/**
-		 * Adds columns to tbl_pages table, depending on language codes from Language Redirect.
-		 * ex: page_lhandles_ro, page_lhandles_en-us, page_lhandles_fr ...
-		 */
-		private function _addColumnsPageTable($toCheckLanguages = null) {
-			if ( empty($toCheckLanguages) ) {
-				$toCheckLanguages = self::getSupportedLanguageCodes();
-				
-				if ( empty($toCheckLanguages) ) {
-					//means there are no language codes in Configuration file
-					return true;
-				}
-			}
+			$this->_pageLHandles->edit_datasource('insert');
 			
-			self::replaceDashes($toCheckLanguages);
-			
-			$queryFields = ""; 
-
-			if ( $this->_installation == 1 ) {
-				//if called from install(), then just add all the fields
-				foreach ($toCheckLanguages as $language) {
-					$queryFields .= "\nADD `page_lhandles_t_{$language}` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,";
-					$queryFields .= "\nADD `page_lhandles_h_{$language}` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,";
-				}
-				$this->_installation = 0;
-			}
-			else {
-				//else add only the language codes that are not present in `tbl_pages`
-				$fields = Symphony::$Database->fetch('DESCRIBE `tbl_pages`');
-				$fieldsCount = count($fields);
-				for ($i = 0; $i < $fieldsCount; $i++) {
-					$fieldArray[] = $fields[$i]['Field'];
-				}
-
-				foreach ($toCheckLanguages as $language) {
-					$fieldName = "page_lhandles_t_".$language;
-					if ( !in_array($fieldName, $fieldArray) ) {
-						$queryFields .= "\nADD `page_lhandles_t_{$language}` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,";
-						$queryFields .= "\nADD `page_lhandles_h_{$language}` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,";
-					}
-				}
-			}
-			
-			if ( !empty($queryFields) ) {
-				self::removeEndComma($queryFields);
-				$query = "ALTER TABLE `tbl_pages` ".$queryFields;
-				return (boolean)Symphony::Database()->query($query);
-			}
-			
-			return true;
+			return (boolean)$this->_pageLHandles->add_columns_to_page_table();
 		}
 		
-		
-		public static function replaceDashes(&$languageCodes) {
-			foreach ($languageCodes as $key => $language) {
-				$languageCodes[$key] = str_replace('-', '_', $language);
-			}
-		}
-
-		public static function removeEndComma(&$string) {
-			$string = substr($string, 0, strlen($string)-1);
+		public function disable() {
+			$this->_pageLHandles->edit_datasource('delete');
 		}
 		
-		public static function getSupportedLanguageCodes() {
-			$supportedLanguageCodes = explode(',', General::Sanitize(Symphony::Configuration()->get('language_codes', 'language_redirect')));
-			self::_cleanLanguageCodes($supportedLanguageCodes);
-			
-			return $supportedLanguageCodes;
-		}
-		
-		private static function _cleanLanguageCodes(&$languageCodes) {
-			$languageCodes = array_map('trim', $languageCodes);
-			$languageCodes = array_filter($languageCodes);
-		}
 	}
 ?>
