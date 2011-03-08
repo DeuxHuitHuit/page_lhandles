@@ -49,7 +49,7 @@ New XML supplies handle and title for the current page according to current-lang
 1. Make sure that Language Redirect extension is Enabled. Fill some language codes under System -> Preferences.
 2. Go to Blueprints -> Pages. Create a new page or edit an existing one.
 3. Fill the available localisation fields. Every Localised URL Handle filled will become accessible from the browser. The empty ones will redirect to 404 (Page Not Found).
-4. Add the "PLH Page" Datasource to your page. Check [this](www.symphony.com) utility for other instructions to create the link for the current page in available languages.
+4. Add the "PLH Page" Datasource to your page. Check [this](http://www.symphony.com) utility for other instructions to create the link for the current page in available languages.
 
 ### Example:
 
@@ -58,7 +58,7 @@ For a Page with Title "Title", Parent page "Events" (URL handle="symphony-events
 - URL Handle = "symphony-title"
 - RO Handle = "titlu"
 - EN Handle = "title"
-- FR Handle = "title"
+- FR Handle = "titre"
 
 all these 3 URLs will request "Title" Page
 

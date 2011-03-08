@@ -30,6 +30,7 @@
 							'item', 
 							General::sanitize($page['page_lhandles_t_'.PageLHandles::get_current_language()]),
 							array (
+								'lang' => PageLHandles::get_current_language(),
 								'handle' => $page['page_lhandles_h_'.PageLHandles::get_current_language()],
 							)
 			));

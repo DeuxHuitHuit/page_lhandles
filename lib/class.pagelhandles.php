@@ -421,7 +421,7 @@ class PageLHandles
 
 		if ( $mode == 'insert' && $contents != null ) {
 			if ( $this->_is_source_navigation($contents) ) {
-				self::_insert_at_datasource($contents);
+				$contents = self::_insert_at_datasource($contents);
 			}
 		}
 		else {
