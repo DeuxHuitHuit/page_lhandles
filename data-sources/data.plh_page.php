@@ -49,7 +49,7 @@ Class datasourceplh_page extends Datasource{
     	foreach ($languageCodes as $key => $language) {
     		$itemXML = new XMLElement(
 					'item', 
-    				$pages[$i]['page_lhandles_t_'.$languageCodesH[$key] ],
+    				htmlspecialchars ( $pages[$i]['page_lhandles_t_'.$languageCodesH[$key] ] , ENT_NOQUOTES ), // espace &
     				array(
 						'lang' => $language,
 						'handle' => $pages[$i][ 'page_lhandles_h_'.$languageCodesH[$key] ]
