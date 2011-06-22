@@ -3,9 +3,9 @@ Localised Page Handles
 
 Offers multilingual support for localised page handle in browser URL.
 
-* Version: 1.1
+* Version: 1.2beta
 * Author: Vlad Ghita
-* Build Date: 2011-03-08
+* Build Date: 2011-06-22
 * Requirements:
 	- Symphony 2.2 or above
 	- Extension [Language Redirect](https://github.com/klaftertief/language_redirect) by Jonas Coch
@@ -49,11 +49,11 @@ New XML supplies handle and title for the current page according to current-lang
 1. Make sure that Language Redirect extension is Enabled. Fill some language codes under System -> Preferences.
 2. Go to Blueprints -> Pages. Create a new page or edit an existing one.
 3. Fill the available localisation fields. Every Localised URL Handle filled will become accessible from the browser. The empty ones will redirect to 404 (Page Not Found).
-4. Add the "PLH Page" Datasource to your page. Go to ?debug view and feel the difference.
+4. Add the "PLH Page" Datasource to your page. Go to ?debug and feel the difference.
 
 ### Example:
 
-For a Page with Title "Title", Parent page "Events" (URL handle="symphony-events", localised handles aswell)  and
+For a Page with Title "Title", Parent page "Events" (URL handle="events", localised handles aswell)  and
 
 - URL Handle = "symphony-title"
 - RO Handle = "titlu"
@@ -74,11 +74,14 @@ by converting the URL to 'symphony-events/symphony-title' etc.
    Symphony | Page LHandles
 ----------- |----------------
 2.0 — 2.1.* | Not compatible
-2.2.*       | [latest](git://github.com/vlad-ghita/page_lhandles.git)
+2.2.*       | [latest](https://vlad-ghita@github.com/vlad-ghita/page_lhandles.git)
 
 
 
 ### Changelog
+
+* 1.2beta, 22 June 2011
+    * code cleanup and compatibility with [Language Redirect v1.0.2](https://github.com/klaftertief/language_redirect).
 
 * 1.1, 08 March 2011
     * entire extension rewrite.
