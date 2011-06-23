@@ -39,14 +39,12 @@ New XML supplies handle and title for the current page according to current-lang
 * On disabling / uninstalling the extension, any Datasource with source set to 'navigation' will be edited to include the original template.
 
 <br />
-<br />
 ### Installation
 
 1. Upload the 'page_lhandles' folder found in this archive to your Symphony 'extensions' folder.    
 2. Enable it by selecting the "Page LHandles" under System -> Extensions, choose Enable from the with-selected menu, then click Apply.
 3. You can now add localised Titles and Handles to any Symphony Page.
 
-<br />
 <br />
 ### Usage
 
@@ -55,7 +53,6 @@ New XML supplies handle and title for the current page according to current-lang
 3. Fill the available localisation fields. Every Localised URL Handle filled will become accessible from the browser. The empty ones will redirect to 404 (Page Not Found).
 4. Add the "PLH Page" Datasource to your page. Go to ?debug and feel the difference.
 
-<br />
 <br />
 ### Example:
 
@@ -73,7 +70,6 @@ All these 3 URLs will request "Sym Title" Page:
 - www.mydomain.com/fr/evenements/titre/premier-titre --> **sym-events/sym-title**/premier-titre
 
 <br />
-<br />
 ### Compatibility
 
    Symphony | Page LHandles
@@ -87,7 +83,6 @@ Language Redirect | Page LHandles
     1.0.0 - 1.0.1 | [1.1](https://vlad-ghita@github.com/vlad-ghita/page_lhandles/tree/1.1)
     1.0.2 -       | [latest](https://vlad-ghita@github.com/vlad-ghita/page_lhandles.git)
 
-<br />
 <br />
 ### Changelog
 
