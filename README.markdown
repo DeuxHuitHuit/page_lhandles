@@ -8,7 +8,7 @@ Offers multilingual support for localised page handle in browser URL.
 * Build Date: 2011-06-22
 * Requirements:
 	- Symphony 2.2 or above
-	- Extension [Language Redirect](https://github.com/klaftertief/language_redirect) by Jonas Coch
+	- Extension [Language Redirect ](https://github.com/klaftertief/language_redirect) by Jonas Coch, at least version 1.0.2.
 * Based on [Multilingual Field](https://github.com/6ui11em/multilingual_field) extension by Guillem Lorman.
 
 Thank you all other Symphony Extensions developers for your inspirational work.
@@ -77,11 +77,18 @@ by converting the URL to 'symphony-events/symphony-title' etc.
 2.2.*       | [latest](https://vlad-ghita@github.com/vlad-ghita/page_lhandles.git)
 
 
+Language Redirect | Page LHandles
+----------------- |----------------
+    1.0.0 - 1.0.1 | [1.1](https://vlad-ghita@github.com/vlad-ghita/page_lhandles/tree/1.1)
+    1.0.2 -       | [latest](https://vlad-ghita@github.com/vlad-ghita/page_lhandles.git)
+
+
 
 ### Changelog
 
 * 1.2beta, 22 June 2011
-    * code cleanup and compatibility with [Language Redirect v1.0.2](https://github.com/klaftertief/language_redirect).
+    * code cleanup;
+    * compatibility with [Language Redirect v1.0.2](https://github.com/klaftertief/language_redirect);
 
 * 1.1, 08 March 2011
     * entire extension rewrite.
