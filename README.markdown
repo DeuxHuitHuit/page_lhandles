@@ -13,6 +13,7 @@ Offers multilingual support for localised page handle in browser URL.
 
 Thank you all other Symphony Extensions developers for your inspirational work.
 
+
 ### Features
 * Offers support for translating the handles in current supported languages.
 * Outputs the current-page handle and title in all supported languages for easy configuration of page translation url.
@@ -38,11 +39,14 @@ New XML supplies handle and title for the current page according to current-lang
 * On disabling / uninstalling the extension, any Datasource with source set to 'navigation' will be edited to include the original template.
 
 
+
 ### Installation
 
 1. Upload the 'page_lhandles' folder found in this archive to your Symphony 'extensions' folder.    
 2. Enable it by selecting the "Page LHandles" under System -> Extensions, choose Enable from the with-selected menu, then click Apply.
 3. You can now add localised Titles and Handles to any Symphony Page.
+
+
 
 ### Usage
 
@@ -51,16 +55,21 @@ New XML supplies handle and title for the current page according to current-lang
 3. Fill the available localisation fields. Every Localised URL Handle filled will become accessible from the browser. The empty ones will redirect to 404 (Page Not Found).
 4. Add the "PLH Page" Datasource to your page. Go to ?debug and feel the difference.
 
+
+
 ### Example:
 
-For a Page with Title "Title", Parent page "Events" (URL handle="events", localised handles aswell)  and
+Take 2 pages and 3 languages:
 
-- URL Handle = "symphony-title"
-- RO Handle = "titlu"
-- EN Handle = "title"
-- FR Handle = "titre"
+No. | Parent     |         Symphony        |         Romanian        |     English     |         French          | Parameters
+    |            |-------------------------|-------------------------|-----------------|-------------------------|
+    |            |   Title    |   Handle   |   Title    |   Handle   | Title  | Handle |   Title    |  Handle    |
+----|------------|------------|------------|------------|------------|--------|--------|------------|------------|-----------
+1.  | null       | Sym Events | sym-events | Evenimente | evenimente | Events | events | Evenements | evenements | null
+----|------------|------------|------------|------------|------------|--------|--------|------------|------------|-----------
+2.  | sym-events | Sym Title  | sym-title  | Titlu      | titlu      | Title  | title  | Titre      | titre      | title
 
-all these 3 URLs will request "Title" Page
+All these 3 URLs will request "Sym Title" Page:
 
 - www.mydomain.com/ro/evenimente/titlu/primul-titlu
 - www.mydomain.com/en/events/title/first-title
@@ -69,16 +78,17 @@ all these 3 URLs will request "Title" Page
 by converting the URL to 'symphony-events/symphony-title' etc. 
 
 
+
 ### Compatibility
 
    Symphony | Page LHandles
------------ |----------------
+------------|----------------
 2.0 — 2.1.* | Not compatible
 2.2.*       | [latest](https://vlad-ghita@github.com/vlad-ghita/page_lhandles.git)
 
 
 Language Redirect | Page LHandles
------------------ |----------------
+------------------|----------------
     1.0.0 - 1.0.1 | [1.1](https://vlad-ghita@github.com/vlad-ghita/page_lhandles/tree/1.1)
     1.0.2 -       | [latest](https://vlad-ghita@github.com/vlad-ghita/page_lhandles.git)
 
