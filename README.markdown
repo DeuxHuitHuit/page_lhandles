@@ -74,7 +74,7 @@ by converting the URL to 'symphony-events/symphony-title' etc.
    Symphony | Page LHandles
 ----------- |----------------
 2.0 — 2.1.* | Not compatible
-2.2.*       | [latest](git://github.com/vlad-ghita/page_lhandles.git)
+2.2.*       | [1.1](https://github.com/vlad-ghita/page_lhandles/tree/1.1)
 
 
 
