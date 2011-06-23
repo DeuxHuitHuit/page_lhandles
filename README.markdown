@@ -13,7 +13,7 @@ Offers multilingual support for localised page handle in browser URL.
 
 Thank you all other Symphony Extensions developers for your inspirational work.
 
-
+<br />
 ### Features
 * Offers support for translating the handles in current supported languages.
 * Outputs the current-page handle and title in all supported languages for easy configuration of page translation url.
@@ -38,16 +38,16 @@ New XML supplies handle and title for the current page according to current-lang
 * On enabling / installing the extension, any Datasource with source set to 'navigation' will be edited to include the new template.
 * On disabling / uninstalling the extension, any Datasource with source set to 'navigation' will be edited to include the original template.
 
-
-
+<br />
+<br />
 ### Installation
 
 1. Upload the 'page_lhandles' folder found in this archive to your Symphony 'extensions' folder.    
 2. Enable it by selecting the "Page LHandles" under System -> Extensions, choose Enable from the with-selected menu, then click Apply.
 3. You can now add localised Titles and Handles to any Symphony Page.
 
-
-
+<br />
+<br />
 ### Usage
 
 1. Make sure that Language Redirect extension is Enabled. Fill some language codes under System -> Preferences.
@@ -55,8 +55,8 @@ New XML supplies handle and title for the current page according to current-lang
 3. Fill the available localisation fields. Every Localised URL Handle filled will become accessible from the browser. The empty ones will redirect to 404 (Page Not Found).
 4. Add the "PLH Page" Datasource to your page. Go to ?debug and feel the difference.
 
-
-
+<br />
+<br />
 ### Example:
 
 Take 2 pages and 3 languages: Romanian (RO), English (EN) and French (FR).
@@ -72,8 +72,8 @@ All these 3 URLs will request "Sym Title" Page:
 - www.mydomain.com/en/events/title/first-title --------> **sym-events/sym-title**/first-title
 - www.mydomain.com/fr/evenements/titre/premier-titre --> **sym-events/sym-title**/premier-titre
 
-
-
+<br />
+<br />
 ### Compatibility
 
    Symphony | Page LHandles
@@ -87,8 +87,8 @@ Language Redirect | Page LHandles
     1.0.0 - 1.0.1 | [1.1](https://vlad-ghita@github.com/vlad-ghita/page_lhandles/tree/1.1)
     1.0.2 -       | [latest](https://vlad-ghita@github.com/vlad-ghita/page_lhandles.git)
 
-
-
+<br />
+<br />
 ### Changelog
 
 * 1.2beta, 22 June 2011
