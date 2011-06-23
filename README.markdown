@@ -35,8 +35,8 @@ New XML supplies handle and title for the current page according to current-lang
 
 #### Note
 
-* On enabling / installing the extension, any Datasource with source set to 'navigation' will be edited to include the new template.
-* On disabling / uninstalling the extension, any Datasource with source set to 'navigation' will be edited to include the original template.
+* On enabling / installing the extension, any Datasource with source set to 'navigation' will be edited to include the new localised template.
+* On disabling / uninstalling the extension, any Datasource with source set to 'navigation' will be edited to include the original Symphony template.
 
 <br />
 ### Installation
