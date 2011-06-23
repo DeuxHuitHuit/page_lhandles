@@ -61,6 +61,15 @@ New XML supplies handle and title for the current page according to current-lang
 
 Take 2 pages and 3 languages:
 
+<table>
+	<th>
+		<td>
+	</th>
+	<tbody>
+
+	</tbody>
+</table>
+
 No. | Parent     |         Symphony        |         Romanian        |     English     |         French          | Parameters
     |            |-------------------------|-------------------------|-----------------|-------------------------|
     |            |   Title    |   Handle   |   Title    |   Handle   | Title  | Handle |   Title    |  Handle    |
@@ -107,3 +116,16 @@ Language Redirect | Page LHandles
 
 * 1.0beta, 16 February 2011
 	* initial beta release.
+
+	<table border="1">
+<tr>
+<th>no</th>
+<th>Parent</th>
+<th>Symphony</th>
+</tr>
+<tr>
+  <td>400</td>
+  <td>500</td>
+  <td>600</td>
+</tr>
+</table>
