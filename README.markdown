@@ -59,32 +59,18 @@ New XML supplies handle and title for the current page according to current-lang
 
 ### Example:
 
-Take 2 pages and 3 languages:
+Take 2 pages and 3 languages: Romanian (RO), English (EN) and French (FR).
 
-<table>
-	<th>No.</th>
-	<th>Parent</th>
-	<th>Symphony</th>
-	<th>Romanian</th>
-	<th>English</th>
-	<tbody>
-
-	</tbody>
-</table>
-
-No. | Parent     |         Symphony        |         Romanian        |     English     |         French          | Parameters
-    |            |   Title    |   Handle   |   Title    |   Handle   | Title  | Handle |   Title    |  Handle    |
-----|------------|-------------------------|-------------------------|-----------------|-------------------------|-----------
-1.  | null       | Sym Events | sym-events | Evenimente | evenimente | Events | events | Evenements | evenements | null
-2.  | sym-events | Sym Title  | sym-title  | Titlu      | titlu      | Title  | title  | Titre      | titre      | title
+No. | Parent     | Sym Title  | Sym Handle | RO Title   | RO Handle  | EN Title | EN Handle | FR Title   | FR Handle  | Parameters
+----|------------|-------------------------|-------------------------|----------------------|-------------------------|-----------
+1.  | null       | Sym Events | sym-events | Evenimente | evenimente | Events   | events    | Evenements | evenements | null
+2.  | sym-events | Sym Title  | sym-title  | Titlu      | titlu      | Title    | title     | Titre      | titre      | title
 
 All these 3 URLs will request "Sym Title" Page:
 
-- www.mydomain.com/ro/evenimente/titlu/primul-titlu
-- www.mydomain.com/en/events/title/first-title
-- www.mydomain.com/fr/evenements/titre/premier-titre
-
-by converting the URL to 'symphony-events/symphony-title' etc. 
+- www.mydomain.com/ro/evenimente/titlu/primul-titlu     -> sym-events/sym-title/primul-titlu
+- www.mydomain.com/en/events/title/first-title          -> sym-events/sym-title/first-title
+- www.mydomain.com/fr/evenements/titre/premier-titre    -> sym-events/sym-title/premier-titre
 
 
 
@@ -116,16 +102,3 @@ Language Redirect | Page LHandles
 
 * 1.0beta, 16 February 2011
 	* initial beta release.
-
-	<table border="1">
-<tr>
-<th>no</th>
-<th>Parent</th>
-<th>Symphony</th>
-</tr>
-<tr>
-  <td>400</td>
-  <td>500</td>
-  <td>600</td>
-</tr>
-</table>
