@@ -73,11 +73,9 @@ Take 2 pages and 3 languages:
 </table>
 
 No. | Parent     |         Symphony        |         Romanian        |     English     |         French          | Parameters
-----|------------|-------------------------|-------------------------|-----------------|-------------------------|-----------
     |            |   Title    |   Handle   |   Title    |   Handle   | Title  | Handle |   Title    |  Handle    |
-----|------------|------------|------------|------------|------------|--------|--------|------------|------------|-----------
+----|------------|-------------------------|-------------------------|-----------------|-------------------------|-----------
 1.  | null       | Sym Events | sym-events | Evenimente | evenimente | Events | events | Evenements | evenements | null
-----|------------|------------|------------|------------|------------|--------|--------|------------|------------|-----------
 2.  | sym-events | Sym Title  | sym-title  | Titlu      | titlu      | Title  | title  | Titre      | titre      | title
 
 All these 3 URLs will request "Sym Title" Page:
