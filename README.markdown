@@ -62,7 +62,7 @@ New XML supplies handle and title for the current page according to current-lang
 Take 2 pages and 3 languages: Romanian (RO), English (EN) and French (FR).
 
 No. | Parent     | Sym Title  | Sym Handle | RO Title   | RO Handle  | EN Title | EN Handle | FR Title   | FR Handle  | Parameters
-----|------------|-------------------------|-------------------------|----------------------|-------------------------|-----------
+----|------------|------------|------------|------------|------------|----------|-----------|------------|------------|-----------
 1.  | null       | Sym Events | sym-events | Evenimente | evenimente | Events   | events    | Evenements | evenements | null
 2.  | sym-events | Sym Title  | sym-title  | Titlu      | titlu      | Title    | title     | Titre      | titre      | title
 
