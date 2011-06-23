@@ -62,16 +62,18 @@ New XML supplies handle and title for the current page according to current-lang
 Take 2 pages and 3 languages:
 
 <table>
-	<th>
-		<td>
-	</th>
+	<th>No.</th>
+	<th>Parent</th>
+	<th>Symphony</th>
+	<th>Romanian</th>
+	<th>English</th>
 	<tbody>
 
 	</tbody>
 </table>
 
 No. | Parent     |         Symphony        |         Romanian        |     English     |         French          | Parameters
-    |            |-------------------------|-------------------------|-----------------|-------------------------|
+----|------------|-------------------------|-------------------------|-----------------|-------------------------|-----------
     |            |   Title    |   Handle   |   Title    |   Handle   | Title  | Handle |   Title    |  Handle    |
 ----|------------|------------|------------|------------|------------|--------|--------|------------|------------|-----------
 1.  | null       | Sym Events | sym-events | Evenimente | evenimente | Events | events | Evenements | evenements | null
