@@ -68,9 +68,9 @@ No. | Parent     | Sym Title  | Sym Handle | RO Title   | RO Handle  | EN Title 
 
 All these 3 URLs will request "Sym Title" Page:
 
-- www.mydomain.com/ro/evenimente/titlu/primul-titlu     -> sym-events/sym-title/primul-titlu
-- www.mydomain.com/en/events/title/first-title          -> sym-events/sym-title/first-title
-- www.mydomain.com/fr/evenements/titre/premier-titre    -> sym-events/sym-title/premier-titre
+- www.mydomain.com/ro/evenimente/titlu/primul-titlu ------> sym-events/sym-title/primul-titlu
+- www.mydomain.com/en/events/title/first-title -----------> sym-events/sym-title/first-title
+- www.mydomain.com/fr/evenements/titre/premier-titre -----> sym-events/sym-title/premier-titre
 
 
 
