@@ -23,7 +23,7 @@ Class datasourceplh_page extends Datasource{
     	$result = new XMLElement('plh-page');
 		
     	$pages = PageLHandles::getPageAscendingLine();
-    	$languageCodes = LanguageR::instance()->getSupportedLanguageCodes();
+    	$languageCodes = LanguageRedirect::instance()->getSupportedLanguageCodes();
     	$languageCodesH = PageLHandles::getLanguageCodes_();
 		
     	$i = 0;

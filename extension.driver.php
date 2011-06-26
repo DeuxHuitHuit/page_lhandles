@@ -127,9 +127,9 @@
 		 */
 		public function dSave($context) {
 			$saved_languages = explode( ',', General::Sanitize($context['settings']['language_redirect']['language_codes']) );
-			$saved_languages = LanguageR::cleanLanguageCodes($saved_languages);
+			$saved_languages = LanguageRedirect::cleanLanguageCodes($saved_languages);
 			
-			$stored_languages = LanguageR::instance()->getSupportedLanguageCodes();
+			$stored_languages = LanguageRedirect::instance()->getSupportedLanguageCodes();
 			
 			$to_check_languages = array_diff($saved_languages, $stored_languages);
 			

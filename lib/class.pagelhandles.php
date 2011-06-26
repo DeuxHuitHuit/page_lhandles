@@ -18,7 +18,7 @@
 		public function __construct() {
 			self::$_page_ascending_line = array();	
 			
-			$language_codes = LanguageR::instance()->getSupportedLanguageCodes();
+			$language_codes = LanguageRedirect::instance()->getSupportedLanguageCodes();
 			
 			$this->_replaceDashes($language_codes);
 			self::$_language_codes_ = $language_codes;
@@ -43,8 +43,8 @@
 		 */
 		public function appendPageFormContent(&$form, $pageID) {
 			
-			$all_languages = LanguageR::instance()->getAllLanguages();
-			$language_codes = LanguageR::instance()->getSupportedLanguageCodes();
+			$all_languages = LanguageRedirect::instance()->getAllLanguages();
+			$language_codes = LanguageRedirect::instance()->getSupportedLanguageCodes();
 			
 			$fieldset = new XMLElement('fieldset');
 			$fieldset->setAttribute('class', 'settings');
@@ -138,7 +138,7 @@
 			foreach ( $old_url as $value ) {
 	
 				if ( !empty($value) ) {
-					$lhandle = 'page_lhandles_h_' . LanguageR::instance()->getLanguage();
+					$lhandle = 'page_lhandles_h_' . LanguageRedirect::instance()->getLanguage();
 					$query = "SELECT {$query_select} FROM `tbl_pages` WHERE `{$lhandle}` = '{$value}'";
 					
 					try {
