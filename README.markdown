@@ -3,7 +3,7 @@ Localised Page Handles
 
 Offers multilingual support for localised page handle in browser URL.
 
-* Version: 1.2
+* Version: 1.2.1
 * Author: Vlad Ghita
 * Build Date: 2011-06-28
 * Requirements:
@@ -75,15 +75,18 @@ All these 3 URLs will request "Sym Title" Page:
    Symphony | Page LHandles
 ------------|----------------
 2.0 — 2.1.* | Not compatible
-2.2.*       | [latest](https://vlad-ghita@github.com/vlad-ghita/page_lhandles.git)
+2.2.*       | [latest](https://github.com/vlad-ghita/page_lhandles)
 
 Language Redirect | Page LHandles
 ------------------|----------------
     1.0.0 - 1.0.1 | [1.1](https://vlad-ghita@github.com/vlad-ghita/page_lhandles/tree/1.1)
-    1.0.2 -       | [latest](https://vlad-ghita@github.com/vlad-ghita/page_lhandles.git)
+    1.0.2 - *     | [latest](https://github.com/vlad-ghita/page_lhandles)
 
 <br />
 ### Changelog ###
+
+* 1.2.1, 28 June 2011
+    * added French language. Thanks @nitriques;
 
 * 1.2, 28 June 2011
     * code cleanup;
