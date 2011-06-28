@@ -208,7 +208,7 @@
 				$tbl_pages = Symphony::$Database->fetch('DESCRIBE `tbl_pages`');
 				$fields_count = count($tbl_pages);
 				for ($i = 0; $i < $fields_count; $i++) {
-					$fields[] = $fields[$i]['Field'];
+					$fields[] = $tbl_pages[$i]['Field'];
 				}
 	
 				foreach ($new_codes as $language) {
