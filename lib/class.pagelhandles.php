@@ -368,6 +368,11 @@ class PageLHandles
 	 * @return The new URL string containing Symphony handles.
 	 */
 	public function process_url($oldURL) {
+	
+		// quick test to check if a language was set in the url...
+		if (strlen(self::$_currentLanguage) < 1) { // no url language found...
+			return $oldURL;
+		}
 
 		$path = '/';
 		$boolPages = true;
@@ -380,7 +385,7 @@ class PageLHandles
 
 		foreach ( $oldURL as $value ) {
 
-			if ( !empty($value) ) {
+			if ( !empty($value)) {
 				
 				$lhandle = 'page_lhandles_h_' . self::$_currentLanguage;
 				$query = "SELECT {$querySelect} FROM `tbl_pages` WHERE `{$lhandle}` = '{$value}'";
