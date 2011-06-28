@@ -22,16 +22,18 @@
 
 	if(!function_exists('__PLHbuildPageXML')){
 		function __PLHbuildPageXML($page){
-
+			
+			$current_language = LanguageRedirect::instance()->getLanguage();
+			
 			$oPage = new XMLElement('page');
 			$oPage->setAttribute('handle', $page['handle']);
 			$oPage->setAttribute('id', $page['id']);
 			$oPage->appendChild(new XMLElement(
 							'item', 
-							General::sanitize($page['page_lhandles_t_'.PageLHandles::get_current_language()]),
+							General::sanitize($page['page_lhandles_t_'.$current_language]),
 							array (
-								'lang' => PageLHandles::get_current_language(),
-								'handle' => $page['page_lhandles_h_'.PageLHandles::get_current_language()],
+								'lang' => $current_language,
+								'handle' => $page['page_lhandles_h_'.$current_language],
 							)
 			));
 
