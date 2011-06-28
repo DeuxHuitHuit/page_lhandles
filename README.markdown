@@ -5,7 +5,7 @@ Offers multilingual support for localised page handle in browser URL.
 
 * Version: 1.2
 * Author: Vlad Ghita
-* Build Date: 2011-06-22
+* Build Date: 2011-06-28
 * Requirements:
 	- Symphony 2.2 or above
 	- Extension [Language Redirect ](https://github.com/klaftertief/language_redirect) by Jonas Coch, at least version 1.0.2.
