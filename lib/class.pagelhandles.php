@@ -3,7 +3,7 @@
 	if(!defined('__IN_SYMPHONY__')) die('<h2>Error</h2><p>You cannot directly access this file</p>');
 	
 	require_once(TOOLKIT . '/class.datasourcemanager.php');
-	require_once(EXTENSIONS . '/language_redirect/lib/class.languager.php');
+	require_once(EXTENSIONS . '/language_redirect/lib/class.languageredirect.php');
 	
 	class PageLHandles
 	{

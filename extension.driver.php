@@ -1,7 +1,7 @@
 <?php
 
 	require_once('lib/class.pagelhandles.php');
-	require_once(EXTENSIONS . '/language_redirect/lib/class.languager.php');
+	require_once(EXTENSIONS . '/language_redirect/lib/class.languageredirect.php');
 
 	class Extension_page_lhandles extends Extension {
 		
