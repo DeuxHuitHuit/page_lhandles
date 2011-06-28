@@ -22,9 +22,9 @@ Class datasourceplh_page extends Datasource{
     public function grab(&$param_pool=NULL){
     	$result = new XMLElement('plh-page');
 		
-    	$pages = PageLHandles::get_page_ascending_line();
-    	$languageCodes = PageLHandles::get_language_codes();
-    	$languageCodesH = PageLHandles::get_language_codes_h();
+    	$pages = PageLHandles::getPageAscendingLine();
+    	$languageCodes = LanguageRedirect::instance()->getSupportedLanguageCodes();
+    	$languageCodesH = PageLHandles::getLanguageCodes_();
 		
     	$i = 0;
 		
