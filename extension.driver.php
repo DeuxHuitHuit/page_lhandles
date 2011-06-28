@@ -20,8 +20,8 @@
 		public function about() {
 			return array(
 				'name'			=> 'Page LHandles',
-				'version'		=> '1.2beta',
-				'release-date'	=> '2011-06-22',
+				'version'		=> '1.2',
+				'release-date'	=> '2011-06-28',
 				'author'		=> array(
 					'name'			=> 'Vlad Ghita',
 					'email'			=> 'vlad_micutul@yahoo.com'

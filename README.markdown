@@ -3,7 +3,7 @@ Localised Page Handles
 
 Offers multilingual support for localised page handle in browser URL.
 
-* Version: 1.2beta
+* Version: 1.2
 * Author: Vlad Ghita
 * Build Date: 2011-06-22
 * Requirements:
@@ -85,7 +85,7 @@ Language Redirect | Page LHandles
 <br />
 ### Changelog ###
 
-* 1.2beta, 22 June 2011
+* 1.2, 28 June 2011
     * code cleanup;
     * compatibility with [Language Redirect v1.0.2](https://github.com/klaftertief/language_redirect);
 
