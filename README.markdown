@@ -75,12 +75,12 @@ All these 3 URLs will request "Sym Title" Page:
    Symphony | Page LHandles
 ------------|----------------
 2.0 — 2.1.* | Not compatible
-2.2.*       | [latest](https://vlad-ghita@github.com/vlad-ghita/page_lhandles.git)
+2.2.*       | [latest](https://github.com/vlad-ghita/page_lhandles)
 
 Language Redirect | Page LHandles
 ------------------|----------------
     1.0.0 - 1.0.1 | [1.1](https://vlad-ghita@github.com/vlad-ghita/page_lhandles/tree/1.1)
-    1.0.2 - *     | [latest](https://vlad-ghita@github.com/vlad-ghita/page_lhandles.git)
+    1.0.2 - *     | [latest](https://github.com/vlad-ghita/page_lhandles)
 
 <br />
 ### Changelog ###
