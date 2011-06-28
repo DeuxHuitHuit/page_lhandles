@@ -126,6 +126,11 @@
 		 */
 		public function processUrl($old_url) {
 	
+			// if no language is set, return current URL
+			if (strlen(LanguageRedirect::instance()->getLanguage()) < 1) {
+				return $oldURL;
+			}
+			
 			$path = '/';
 			$bool_pages = true;
 			
