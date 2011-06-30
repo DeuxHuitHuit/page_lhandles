@@ -85,6 +85,9 @@ Language Redirect | Page LHandles
 <br />
 ### Changelog ###
 
+* 1.2.2, 30 June 2011
+    * Language code is now properly retrieved whereas before only the language without the region was used.
+
 * 1.2.1, 28 June 2011
     * added French language. Thanks @nitriques;
 
