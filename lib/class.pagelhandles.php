@@ -127,7 +127,7 @@
 		public function processUrl($old_url) {
 	
 			// if no language is set, return current URL
-			if (strlen(LanguageRedirect::instance()->getLanguage()) < 1) {
+			if (strlen(LanguageRedirect::instance()->getLanguageCode()) < 1) {
 				return $oldURL;
 			}
 			
@@ -143,7 +143,7 @@
 			foreach ( $old_url as $value ) {
 	
 				if ( !empty($value) ) {
-					$lhandle = 'page_lhandles_h_' . LanguageRedirect::instance()->getLanguage();
+					$lhandle = 'page_lhandles_h_' . LanguageRedirect::instance()->getLanguageCode();
 					$query = "SELECT {$query_select} FROM `tbl_pages` WHERE `{$lhandle}` = '{$value}'";
 					
 					try {
@@ -208,7 +208,7 @@
 				$tbl_pages = Symphony::$Database->fetch('DESCRIBE `tbl_pages`');
 				$fields_count = count($tbl_pages);
 				for ($i = 0; $i < $fields_count; $i++) {
-					$fields[] = $fields[$i]['Field'];
+					$fields[] = $tbl_pages[$i]['Field'];
 				}
 	
 				foreach ($new_codes as $language) {
