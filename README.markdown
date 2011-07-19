@@ -3,9 +3,9 @@ Localised Page Handles
 
 Offers multilingual support for localised page handle in browser URL.
 
-* Version: 1.2.1
+* Version: 1.2.2
 * Author: Vlad Ghita
-* Build Date: 2011-06-28
+* Build Date: 2011-06-30
 * Requirements:
 	- Symphony 2.2 or above
 	- Extension [Language Redirect ](https://github.com/klaftertief/language_redirect) by Jonas Coch, at least version 1.0.2.
@@ -84,6 +84,9 @@ Language Redirect | Page LHandles
 
 <br />
 ### Changelog ###
+
+* 1.2.2, 30 June 2011
+    * Language code is now properly retrieved whereas before only the language without the region was used.
 
 * 1.2.1, 28 June 2011
     * added French language. Thanks @nitriques;
