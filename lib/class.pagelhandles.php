@@ -174,8 +174,6 @@
 				}
 			}
 			
-			var_dump($path);
-			
 			return (string)$path;
 		}
 	
