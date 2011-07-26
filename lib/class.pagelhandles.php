@@ -119,8 +119,9 @@
 		/**
 		 * Process the accessed URL in browser and translate the localised page handles to Symphony handles.
 		 * 
-		 * @param string $old_url
+		 * @param array $old_url
 		 *  Contains the URL with localised handles.
+		 *  Array must be created with the string split on each /
 		 * @return string
 		 *  The new URL string containing Symphony handles.
 		 */
@@ -128,13 +129,14 @@
 	
 			// if no language is set, return current URL
 			if (strlen(LanguageRedirect::instance()->getLanguageCode()) < 1) {
-				return $oldURL;
+				return '/' . implode('/', $old_url) . '/';
 			}
 			
 			$path = '/';
 			$bool_pages = true;
+			$lastParent = null;
 			
-			$query_select = '`id`, `handle`';
+			$query_select = '`id`, `handle`, `parent`';
 			foreach ( self::$_language_codes_ as $language ) {
 				$query_select .= ', `page_lhandles_h_'.$language.'`';
 				$query_select .= ', `page_lhandles_t_'.$language.'`';
@@ -155,18 +157,24 @@
 						}
 					}
 						
-					//check if the value of an URL param matches the handle of a page
-					if ( !empty($page) && $bool_pages ) {
+					// Check if the value of an URL param matches the handle of a page.
+					// Also, check that the current page has the right parent to
+					// prevent translating parameters (fixes issue #8)
+					if ( !empty($page) && $bool_pages && $lastParent == $page[0]['parent']) {
 						self::$_page_ascending_line[] = $page[0];
 						$path .= $page[0]['handle'] . '/';
+						$lastParent = $page[0]['id'];
 					}
-					else {
+					else { // we have reached the end of the page url
+						// concat the other params without translating them
 						$bool_pages = false;
 						$path .= $value . '/';
 					};
 					
 				}
 			}
+			
+			var_dump($path);
 			
 			return (string)$path;
 		}
