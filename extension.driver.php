@@ -20,11 +20,18 @@
 		public function about() {
 			return array(
 				'name'			=> 'Page LHandles',
-				'version'		=> '1.2.2',
-				'release-date'	=> '2011-06-28',
+				'version'		=> '1.2.3',
+				'release-date'	=> '2011-08-18',
 				'author'		=> array(
-					'name'			=> 'Vlad Ghita',
-					'email'			=> 'vlad_micutul@yahoo.com'
+					array(
+						'name'			=> 'Vlad Ghita',
+						'email'			=> 'vlad_micutul@yahoo.com'
+					),
+					array(
+						'name'			=> 'Solutions Nitriques',
+						'website'		=> 'http://www.nitriques.com/open-source/',
+						'email'			=> 'open-source (at) nitriques.com'
+					)
 				),
 				'description'	=> 'Allows localisation of current page handle, including its ascending line.'
 	 		);
