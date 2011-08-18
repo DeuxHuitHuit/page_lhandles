@@ -3,12 +3,12 @@ Localised Page Handles
 
 Offers multilingual support for localised page handle in browser URL.
 
-* Version: 1.2.2
+* Version: 1.2.3
 * Author: Vlad Ghita
-* Build Date: 2011-06-30
+* Build Date: 2011-08-18
 * Requirements:
 	- Symphony 2.2 or above
-	- Extension [Language Redirect ](https://github.com/klaftertief/language_redirect) by Jonas Coch, at least version 1.0.2.
+	- Extension [Language Redirect](https://github.com/klaftertief/language_redirect) by Jonas Coch, at least version 1.0.2.
 * Based on [Multilingual Field](https://github.com/6ui11em/multilingual_field) extension by Guillem Lorman.
 
 Thank you all other Symphony Extensions developers for your inspirational work.
@@ -84,6 +84,9 @@ Language Redirect | Page LHandles
 
 <br />
 ### Changelog ###
+
+* 1.2.3, 18 August 2011
+    * Fix a bug where the handle passed in the WHERE clause would filter based on the lastParent value, since two sub-pages could share the same handle
 
 * 1.2.2, 30 June 2011
     * Language code is now properly retrieved whereas before only the language without the region was used.
