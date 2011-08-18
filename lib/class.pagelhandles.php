@@ -148,6 +148,15 @@
 					$lhandle = 'page_lhandles_h_' . LanguageRedirect::instance()->getLanguageCode();
 					$query = "SELECT {$query_select} FROM `tbl_pages` WHERE `{$lhandle}` = '{$value}'";
 					
+					// this ensure that the handle passed in the WHERE
+					// will filter based on the lastParent value,
+					// since two sub-pages could share the same handle
+					// ex.: /php/support/ vs. /jQuery/support/
+					if ($lastParent != null) {
+						$query .= " AND `parent` = {$lastParent}";
+					}
+					$query .= ' LIMIT 1';
+					
 					try {
 						$page = Symphony::Database()->fetch($query);
 					} catch (DatabaseException $e) {
