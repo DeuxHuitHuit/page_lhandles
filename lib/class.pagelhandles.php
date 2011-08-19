@@ -154,6 +154,11 @@
 					// ex.: /php/support/ vs. /jQuery/support/
 					if ($lastParent != null) {
 						$query .= " AND `parent` = {$lastParent}";
+					} else { 
+						// specify that parent must be null to avoid
+						// confusion between /en/calendar vs. /en/some-folder/calendar
+						// /en/calendar -> calendard page must not have a parent
+						$query .= ' AND `parent` IS NULL';
 					}
 					$query .= ' LIMIT 1';
 					
