@@ -132,6 +132,9 @@
 				return '/' . implode('/', $old_url) . '/';
 			}
 
+			// reset variables
+			self::$_page_ascending_line = array();
+
 			$path = '/';
 			$bool_pages = true;
 			$lastParent = null;
@@ -235,7 +238,7 @@
 				// we have reached the end of the page url
 				// concat the other params without translating them
 				$bool_pages = false;
-				$path = $old_path . '/';
+				$path = $old_value . '/';
 			};
 
 			return $path;
