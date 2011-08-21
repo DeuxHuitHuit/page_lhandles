@@ -213,9 +213,9 @@
 			// run the query only if we are in page mode
 			if ($bool_pages) {
 
-				//try {
+				try {
 					$page = Symphony::Database()->fetch($query);
-				/*} catch (DatabaseException $e) {
+				} catch (DatabaseException $e) {
 					if ( $e->getDatabaseErrorCode() == 1054 ) {
 						//table column "$lhandle" doesn't exist. redirect to 404.
 						FrontendPageNotFoundExceptionHandler::render($e);
@@ -223,7 +223,7 @@
 						// always re-trow non-handled exception
 						throw $e;
 					}
-				}*/
+				}
 			}
 
 			// Check if the value of an URL param matches the handle of a page.
@@ -241,6 +241,7 @@
 				$path = $old_value . '/';
 			};
 
+			// return the full path, with translated pieces and params
 			return $path;
 		}
 
