@@ -3,8 +3,8 @@ Localised Page Handles
 
 Offers multilingual support for localised page handle in browser URL.
 
-* Version: 1.2.5
-* Build Date: 2011-08-27
+* Version: 1.2.6
+* Build Date: 2011-08-30
 * Authors:
 	- Vlad Ghita
 	- Solutions Nitriques
@@ -222,6 +222,9 @@ Language Redirect | Page LHandles
 
 <br />
 ## Changelog ##
+
+* 1.2.6, 30 August 2011
+	* Fix issue #13 where `sym\_` was hardcoded in query. It now properly uses `tbl\_`.
 
 * 1.2.5, 27 August 2011
 	* Added `utilities/plh-toolkit.xsl` utility for easier URL generation.
