@@ -224,7 +224,7 @@ Language Redirect | Page LHandles
 ## Changelog ##
 
 * 1.2.6, 30 August 2011
-	* Fix issue #13 where `sym\_` was hardcoded in query. It now properly uses `tbl\_`.
+	* Fix issue #13 where `sym_` was hardcoded in query. It now properly uses `tbl_`.
 
 * 1.2.5, 27 August 2011
 	* Added `utilities/plh-toolkit.xsl` utility for easier URL generation.
