@@ -151,7 +151,7 @@
 				// get the index page
 				$query = "SELECT {$query_select}
 							FROM `tbl_pages` as p
-								INNER JOIN `sym_pages_types` as pt
+								INNER JOIN `tbl_pages_types` as pt
 									ON pt.`page_id` = p.`id`
 								WHERE pt.`type` = 'index' LIMIT 1";
 
