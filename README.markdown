@@ -18,6 +18,7 @@ Thank you all other Symphony Extensions developers for your inspirational work.
 <br />
 ## Features ##
 * Offers support for translating the handles in current supported languages.
+* Adds a button in `preferences` to automatically fill empty localisation `title` and `handle` inputs.
 * Outputs the current-page handle and title in all supported languages for easy configuration of page translation url.
 * Provides a utility for easier URL generation.
 * Overrides the navigation template Datasources to output the extra information.
