@@ -3,8 +3,8 @@ Localised Page Handles
 
 Offers multilingual support for localised page handle in browser URL.
 
-* Version: 1.2.6
-* Build Date: 2011-08-30
+* Version: 1.2.7
+* Build Date: 2011-09-16
 * Authors:
 	- Vlad Ghita
 	- Solutions Nitriques
@@ -223,6 +223,10 @@ Language Redirect | Page LHandles
 
 <br />
 ## Changelog ##
+
+* 1.2.7, 16 September 2011
+	* Readded the button in `preferences` to automatically fill empty localisation `title` and `handle` for Pages. It was lost somewhere in transaition from 1.1 to 1.2.
+	* Code cleanup.
 
 * 1.2.6, 30 August 2011
 	* Fix issue #13 where `sym_` was hardcoded in query. It now properly uses `tbl_`.

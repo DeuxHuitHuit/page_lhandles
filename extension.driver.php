@@ -20,8 +20,8 @@
 		public function about() {
 			return array(
 				'name'			=> 'Page LHandles',
-				'version'		=> '1.2.6',
-				'release-date'	=> '2011-08-31',
+				'version'		=> '1.2.7',
+				'release-date'	=> '2011-09-16',
 				'author'		=> array(
 					array(
 						'name'			=> 'Vlad Ghita',
@@ -59,6 +59,12 @@
 
 				array(
 					'page' => '/system/preferences/',
+					'delegate' => 'AddCustomPreferenceFieldsets',
+					'callback' => 'dAddCustomPreferenceFieldsets'
+				),
+				
+				array(
+					'page' => '/system/preferences/',
 					'delegate' => 'Save',
 					'callback' => 'dSave'
 				),
@@ -86,7 +92,6 @@
 					'delegate' => 'DatasourcePreEdit',
 					'callback' => 'dDatasourcePreEdit'
 				),
-
 			);
 		}
 
@@ -115,12 +120,6 @@
 				&& $this->_language_redirect == 'on'	//2. well ... duhh
 				&& !empty($context['page'])				//3. "== empty" means that www.mydomain.com was accessed. No substitution needed.
 														// the LR ext will take care of the redirection
-
-				// This is not needed anymore since the processUrl
-				// method can handle an empty array (index page)
-				// we should delete this line in the next release
-
-				//&& $context['page'] != '//'			//4. "== '//'" becomes after default index page has been retrieved. (After 3.)
 			 ) {
 				$this->_first_pass = 0 ;
 
@@ -131,6 +130,48 @@
 			}
 		}
 
+		/**
+		 * Add a button on preferences page to Update all Pages' Title and Handle data.
+		 * 
+		 * @param $context - see delegate description
+		 */
+		public function dAddCustomPreferenceFieldsets($context) {
+			
+			if(isset($_POST['action']['plh']['update'])){
+				$this->_plh->fillNamesAndHandlesForPages();
+			}
+
+			$group = new XMLElement('fieldset');
+			$group->setAttribute('class', 'settings');
+			$group->appendChild(new XMLElement('legend', __('Page LHandles')));
+
+
+			$div = new XMLElement('div', NULL, array('id' => 'file-actions', 'class' => 'label'));
+			
+			$span = new XMLElement('span', NULL, array('class' => 'frame'));
+			$span->appendChild(new XMLElement('button', __('Fill test Names and Handles for Pages'), array('name' => 'action[plh][update]', 'type' => 'submit')));
+
+			$div->appendChild($span);
+			
+			$supported_language_codes = LanguageRedirect::instance()->getSupportedLanguageCodes();
+			$all_languages_names = LanguageRedirect::instance()->getAllLanguages();
+			
+			__('The section associated with the data source <code>%s</code> could not be found.', array($about['name']));
+			
+			$div->appendChild(new XMLElement(
+				'p', 
+				__(
+					'Updates every Page\'s empty Titles and Handles with the value for <b>%s - %s</b> language, prefixed by language code.<br />E.g. <code>Romana : Acasa => English : ENAcasa</code>',
+					array($supported_language_codes[0],
+					$all_languages_names[$supported_language_codes[0]])
+				),
+				array('class' => 'help')
+			));
+
+			$group->appendChild($div);
+			$context['wrapper']->appendChild($group);
+		}
+		
 		/**
 		 * On Preferences page, right before Saving the preferences, check whether or not
 		 * the language codes have been changed. If yes, integrate the new ones.
@@ -146,7 +187,8 @@
 			$to_check_languages = array_diff($saved_languages, $stored_languages);
 
 			if ( !empty($to_check_languages) ) {
-				return $this->_plh->addColumnsToPageTable($to_check_languages);
+				$this->_plh->addColumnsToPageTable($to_check_languages);
+				$this->_plh->fillNamesAndHandlesForPages($to_check_languages);
 			}
 
 			return true;
@@ -191,7 +233,7 @@
 		 * @param array $context - see delegate description
 		 */
 		public function dDatasourcePreCreate($context) {
-			$this->_plh->editDatasource('insert', $context['contents']);
+			$this->_plh->editNavDsTo('PLH', $context['contents']);
 
 			return true;
 		}
@@ -202,11 +244,10 @@
 		 * @param array $context - see delegate description
 		 */
 		public function dDatasourcePreEdit($context) {
-			$this->_plh->editDatasource('insert', $context['contents']);
+			$context['contents'] = $this->_plh->editNavDsTo('PLH', $context['contents']);
 
 			return true;
 		}
-
 
 
 		/*------------------------------------------------------------------------------------------------*/
@@ -214,14 +255,14 @@
 		/*------------------------------------------------------------------------------------------------*/
 
 		public function install(){
-			$this->_plh->editDatasource('insert');
+			$this->_plh->editAllNavDssTo('PLH');
 
 			return (boolean)$this->_plh->addColumnsToPageTable(null, 1);
 		}
 
 		public function uninstall(){
 
-			$this->_plh->editDatasource('delete');
+			$this->_plh->editAllNavDssTo('SYMPHONY');
 
 			$query_fields = '';
 			$fields = Symphony::$Database->fetch('DESCRIBE `tbl_pages`');
@@ -245,13 +286,13 @@
 		}
 
 		public function enable() {
-			$this->_plh->editDatasource('insert');
+			$this->_plh->editAllNavDssTo('PLH');
 
 			return (boolean)$this->_plh->addColumnsToPageTable();
 		}
 
 		public function disable() {
-			$this->_plh->editDatasource('delete');
+			$this->_plh->editAllNavDssTo('SYMPHONY');
 		}
 
 	}
