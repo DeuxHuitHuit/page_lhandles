@@ -30,7 +30,7 @@
 		}
 
 		public static function getPageAscendingLine() {
-			return (string) self::$_page_ascending_line;
+			return (array) self::$_page_ascending_line;
 		}
 
 

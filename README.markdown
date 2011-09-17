@@ -225,7 +225,7 @@ Language Redirect | Page LHandles
 ## Changelog ##
 
 * 1.2.7, 16 September 2011
-	* Readded the button in `preferences` to automatically fill empty localisation `title` and `handle` for Pages. It was lost somewhere in transaition from 1.1 to 1.2.
+	* Readded the button in `preferences` to automatically fill empty localisation `title` and `handle` for Pages. It was lost somewhere in transition from 1.1 to 1.2.
 	* Code cleanup.
 
 * 1.2.6, 30 August 2011
