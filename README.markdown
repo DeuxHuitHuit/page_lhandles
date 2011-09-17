@@ -3,7 +3,7 @@ Localised Page Handles
 
 Offers multilingual support for localised page handle in browser URL.
 
-* Version: 1.2.7
+* Version: 1.2.7.1
 * Build Date: 2011-09-16
 * Authors:
 	- Vlad Ghita
@@ -223,6 +223,9 @@ Language Redirect | Page LHandles
 
 <br />
 ## Changelog ##
+
+* 1.2.7.1, 16 September 2011
+	* Hotfix. Changed type return from string to array.
 
 * 1.2.7, 16 September 2011
 	* Readded the button in `preferences` to automatically fill empty localisation `title` and `handle` for Pages. It was lost somewhere in transition from 1.1 to 1.2.

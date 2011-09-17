@@ -20,7 +20,7 @@
 		public function about() {
 			return array(
 				'name'			=> 'Page LHandles',
-				'version'		=> '1.2.7',
+				'version'		=> '1.2.7.1',
 				'release-date'	=> '2011-09-16',
 				'author'		=> array(
 					array(
