@@ -20,8 +20,8 @@
 		public function about() {
 			return array(
 				'name'			=> 'Page LHandles',
-				'version'		=> '1.2.7.1',
-				'release-date'	=> '2011-09-16',
+				'version'		=> '1.2.8',
+				'release-date'	=> '2011-09-22',
 				'author'		=> array(
 					array(
 						'name'			=> 'Vlad Ghita',
