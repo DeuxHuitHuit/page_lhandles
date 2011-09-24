@@ -20,8 +20,8 @@
 		public function about() {
 			return array(
 				'name'			=> 'Page LHandles',
-				'version'		=> '1.2.8',
-				'release-date'	=> '2011-09-22',
+				'version'		=> '1.2.8.1',
+				'release-date'	=> '2011-09-24',
 				'author'		=> array(
 					array(
 						'name'			=> 'Vlad Ghita',
@@ -233,7 +233,7 @@
 		 * @param array $context - see delegate description
 		 */
 		public function dDatasourcePreCreate($context) {
-			$this->_plh->editNavDsTo('PLH', $context['contents']);
+			$context['contents'] = $this->_plh->editNavDsTo('PLH', $context['contents']);
 
 			return true;
 		}

@@ -3,8 +3,8 @@ Localised Page Handles
 
 Offers multilingual support for localised page handle in browser URL.
 
-* Version: 1.2.8
-* Build Date: 2011-09-16
+* Version: 1.2.8.1
+* Build Date: 2011-09-24
 * Authors:
 	- Vlad Ghita
 	- Solutions Nitriques
@@ -223,6 +223,9 @@ Language Redirect | Page LHandles
 
 <br />
 ## Changelog ##
+
+* 1.2.8.1, 24 September 2011
+	* Fixed a bug on Navigation Datasource creation.
 
 * 1.2.8, 22 September 2011
 	* Typo fix. Renamed `plh-toolikt.xsl` to `plh-toolkit.xsl`.
