@@ -30,10 +30,10 @@
 			$oPage->setAttribute('id', $page['id']);
 			$oPage->appendChild(new XMLElement(
 							'item', 
-							General::sanitize($page['page_lhandles_t_'.$current_language]),
+							General::sanitize($page['plh_t-'.$current_language]),
 							array (
 								'lang' => $current_language,
-								'handle' => $page['page_lhandles_h_'.$current_language],
+								'handle' => $page['plh_h-'.$current_language],
 							)
 			));
 

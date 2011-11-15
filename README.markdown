@@ -1,26 +1,27 @@
 Localised Page Handles
 ==============
 
-Offers multilingual support for localised page handle in browser URL.
+Offers multilingual support for localised page handles in browser URL.
 
-* Version: 1.2.8.1
-* Build Date: 2011-09-24
+* Version: 2.0
+* Build Date: 2011-11-15
 * Authors:
 	- Vlad Ghita
-	- Solutions Nitriques
 * Requirements:
 	- Symphony 2.2 or above
-	- Extension [Language Redirect](https://github.com/klaftertief/language_redirect) by Jonas Coch, at least version 1.0.2.
-* Based on [Multilingual Field](https://github.com/6ui11em/multilingual_field) extension by Guillem Lorman.
+	- Extension [Frontend localisation](https://github.com/vlad-ghita/frontend_localisation)
 
 Thank you all other Symphony Extensions developers for your inspirational work.
 
-<br />
-## Features ##
+
+
+
+# 1 Features #
+
 * Offers support for translating the handles in current supported languages.
 * Adds a button in `preferences` to automatically fill empty localisation `title` and `handle` inputs.
-* Outputs the current-page handle and title in all supported languages for easy configuration of page translation url.
-* Provides a utility for easier URL generation.
+* Outputs the current-page handle and title in all supported languages for easy configuration of page url.
+* Provides a utility for easier URL manipulation.
 * Overrides the navigation template Datasources to output the extra information.
 
 Old XML for a navigation Datasource:
@@ -42,24 +43,30 @@ New XML supplies handle and title for the current page according to current-lang
 * On enabling / installing the extension, any Datasource with source set to 'navigation' will be edited to include the new localised template.
 * On disabling / uninstalling the extension, any Datasource with source set to 'navigation' will be edited to include the original Symphony template.
 
-<br />
-## Installation ##
+
+
+
+
+# 2 Installation #
 
 1. Upload the 'page_lhandles' folder found in this archive to your Symphony 'extensions' folder.    
 2. Enable it by selecting the "Page LHandles" under System -> Extensions, choose Enable from the with-selected menu, then click Apply.
 3. You can now add localised Titles and Handles to any Symphony Page.
 
-<br />
-## Usage ##
 
-1. Make sure that Language Redirect extension is Enabled. Fill some language codes under System -> Preferences.
+
+
+# 3 Usage #
+
+1. Make sure that Frontend Localisation extension is Enabled. Read it's [Readme](https://github.com/vlad-ghita/frontend_localisation) if you don't know what it represents.
 2. Go to Blueprints -> Pages. Create a new page or edit an existing one.
 3. Fill the available localisation fields. Every Localised URL Handle filled will become accessible from the browser. The empty ones will redirect to 404 (Page Not Found).
 4. Add the "PLH Page" Datasource to your page. Go to ?debug and feel the difference.
-5. To include the utility in your stylesheets copy `utilities/plh-toolkit.xsl` to `workspace/utilities`.
+5. To include the utility in your stylesheets copy `utilities/plh-toolkit.xsl` to `workspace/utilities` and include it in your XSLT stylesheets.
 
-<br />
-## Example ##
+
+
+## 3.1 Example ##
 
 Take 2 pages and 3 languages: Romanian (RO), English (EN) and French (FR).
 
@@ -74,8 +81,9 @@ All these 3 URLs will request "Sym Title" Page:
 - www.example.com/en/events/title/first-title --------> **sym-events/sym-title**/first-title
 - www.example.com/fr/evenements/titre/premier-titre --> **sym-events/sym-title**/premier-titre
 
-<br />
-## More examples regarding `plh-toolkit.xsl` utility ##
+
+
+## 3.2 More examples regarding `plh-toolkit.xsl` utility ##
 
 Given this structure of pages:
 
@@ -89,30 +97,36 @@ Page `foo` is parent of `beta` who is parent of a page called `bar` as well.
 
 These handles are **Symphony handles**, not localised handles. Remember that Symphony handles are used for various processing and localised handles are displayed in the link. `foo` could be localised as `ro-foo`, `en-foo`,`pieceofcake` or whatever.
 
-<br />
-*Example #1* on `foo > beta`<br />
+
+
+### 3.2.1 Example \#1 on `foo > beta` ###
+
 By default, calling `plh-url` template generates `href` for current page
 
     <xsl:call-template name="plh-url" />
     
     href = www.example.com/lang-code/foo/beta
 
-<br />
-*Example #2*<br />
+
+
+### 3.2.2 Example \#2 ###
+
 Setting a `href` to another page is as simple as calling the template with appropriate param:
 
     <xsl:call-template name="plh-url">
         <xsl:with-param name="p">
-            <p>foo</p>   // grand-parent
-            <p>beta</p>  // parent
-            <p>bar</p>   // target-page
+            <p>foo</p>   // grand-parent of target_page
+            <p>beta</p>  // parent of target_page
+            <p>bar</p>   // handle of target_page
         </xsl:with-param>
     </xsl:call-template>
     
     href = www.example.com/lang-code/foo/beta/bar
 
-<br />
-*Example #3* on `foo > alfa`<br />
+
+
+### 3.2.3 Example \#3 on `foo > alfa` ###
+
 On this page I want to set a link to parent page `foo`. I can hardcode it like this (more readable):
 
     <xsl:call-template name="plh-url">
@@ -133,8 +147,10 @@ or I can make it future proof using the `root-page` parameter Symphony provides 
     
     href = www.example.com/lang-code/foo/alfa
 
-<br />
-*Example #4a*<br />
+
+
+### 3.2.4 Example \#4a ###
+
 Building URL with Page parameters.
 
 Take these pages: `events > title`. `title` page displays one event and has a parameter called `$event-title`
@@ -159,8 +175,10 @@ Take these pages: `events > title`. `title` page displays one event and has a pa
     
     href = www.example.com/lang-code/events/title/handle-of-an-event-title
     
-<br />
-*Example #4b*<br />
+
+
+### 3.2.5 Example \#4b ###
+
 Building URL with Page parameters and URL parameters.
 
 Take these pages: `events > title`. `title` page displays one event and has a parameter called `$event-title`
@@ -187,8 +205,10 @@ Take these pages: `events > title`. `title` page displays one event and has a pa
     
     href = www.example.com/lang-code/events/title/handle-of-an-event-title?one_param=foo&another_param=bar
 
-<br />
-*Example #5*<br />
+
+
+### 3.2.6 Example \#5 ###
+
 Building current-page link in all languages
 
 In `master.xsl`, wherever you want to put the links, call this template:
@@ -199,7 +219,7 @@ On pages without parameters it works fine out-of-the-box. However, what do you d
 In generating current-page URL in all languages, the `plh-page-parameters` template is called along the way to populate the URL with localised parameters.<br />
 So, on each page that has parameters, overload (define) this template with the contents you need.
 
-Because I'm using Multilingual Field, this is how my template looks like (nb. my page parameter is for `Title` field) in `events_title.xsl`:
+Because I'm using Multilingual Text, this is how my template looks like (NB: my page parameter is for `Title` field) in `events_title.xsl`:
 
     <xsl:template name="plh-page-parameters">
         <xsl:param name="languageCode" />
@@ -208,21 +228,29 @@ Because I'm using Multilingual Field, this is how my template looks like (nb. my
         <xsl:value-of select="/data/events-datasource-that-outputs-one-event-based-on-page-parameter/entry/title/@*[ local-name() = $countryHandle ]" />
     </xsl:template>
 
-<br />
-## Compatibility ##
+
+
+
+
+# Compatibility #
 
    Symphony | Page LHandles
 ------------|----------------
 2.0 — 2.1.* | Not compatible
 2.2.*       | [latest](https://github.com/vlad-ghita/page_lhandles)
 
-Language Redirect | Page LHandles
-------------------|----------------
-    1.0.0 - 1.0.1 | [1.1](https://vlad-ghita@github.com/vlad-ghita/page_lhandles/tree/1.1)
-    1.0.2 - *     | [latest](https://github.com/vlad-ghita/page_lhandles)
+Frontend Localisation | Page LHandles
+----------------------|----------------
+      0.3beta - *     | [latest](https://github.com/vlad-ghita/page_lhandles)
 
-<br />
-## Changelog ##
+
+
+
+
+# Changelog #
+
+* 2.0, 15 November 2011
+	* Extension rewrite, code cleaning. It now depends on Frontend Localisation instead of Language Redirect.
 
 * 1.2.8.1, 24 September 2011
 	* Fixed a bug on Navigation Datasource creation.

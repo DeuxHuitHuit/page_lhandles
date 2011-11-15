@@ -1,18 +1,19 @@
 <?php
 
 	require_once(TOOLKIT . '/class.datasource.php');
-
+	
 	Class datasourceplh_page extends Datasource{
 
 		public function about(){
-				return array(
-					'name' => 'PLH Page',
-					'author' => array(
-						'name' => 'Vlad Ghita',
-						'email' => 'vlad_micutul@yahoo.com'),
-					'version' => '1.0',
-					'release-date' => '2011-02-16',
-					'description' => 'From Page LHandles extension. Retrieves the current pages\' and it\'s parents localised titles and handles in all supported languages.');
+			return array(
+				'name' => 'PLH Page',
+				'author' => array(
+					'name' => 'Vlad Ghita',
+					'email' => 'vlad_micutul@yahoo.com'
+				),
+				'version' => '1.1',
+				'release-date' => '2011-11-15',
+				'description' => 'From Page LHandles extension. Retrieves the current pages\' and it\'s parents localised titles and handles in all supported languages.');
 		}
 
 		public function allowEditorToParse(){
@@ -21,54 +22,66 @@
 
 	    public function grab(&$param_pool=NULL){
 	    	$result = new XMLElement('plh-page');
-
-	    	$pages = PageLHandles::getPageAscendingLine();
-	    	$languageCodes = LanguageRedirect::instance()->getSupportedLanguageCodes();
-	    	$languageCodesH = PageLHandles::getLanguageCodes_();
-
-	    	$i = 0;
-
+			
+	    	$language_codes = FrontendLanguage::instance()->languageCodes();
+	    	$fields = array();
+	    	
+	    	foreach( $language_codes as $language_code ){
+	    		$fields[] = "plh_t-{$language_code}";
+	    		$fields[] = "plh_h-{$language_code}";
+	    	}
+	    	
 	    	$result->appendChild(
-	    		$this->_addPageXML($pages, $i, $languageCodes, $languageCodesH)
+	    		$this->_addPageXML(FLPageManager::instance()->listAll($fields), $this->_env['param']['current-page-id'], $language_codes)
 	    	);
 
 	        return $result;
 	    }
+		
+	    
+	    
+	 	/**
+	     * Add parent pages including current to XML output.
+	     * 
+	     * @param array $pages - contains all pages data
+	     * @param $page_id - current page id
+	     * @param $language_codes - all supported language codes
+	     * 
+	     * @return XMLElement - a pages XML ouput
+	     */
+		private function _addPageXML($pages, $page_id, $language_codes) {
+			$pageXML = new XMLElement(
+				'page',
+				null,
+				array(
+					'handle' => $pages[$page_id]['handle'],
+					'id' => $page_id
+				)
+			);
+			
+			foreach( $language_codes as $language_code ){
+				$itemXML = new XMLElement(
+					'item',
+					General::sanitize( $pages[$page_id]['plh_t-'.$language_code] ),
+					array(
+						'lang' => $language_code,
+						'handle' => $pages[$page_id]['plh_h-'.$language_code]
+					)
+				);
 
-	    private function _addPageXML($pages, $i, $languageCodes, $languageCodesH) {
-
-	    	$pageXML = new XMLElement(
-	    			'page',
-	    			null,
-			    	array(
-			    		'handle' => $pages[$i]['handle'],
-						'id' => $pages[$i]['id']
-	    			)
-	    	);
-
-	    	foreach ($languageCodes as $key => $language) {
-	    		$itemXML = new XMLElement(
-						'item',
-	    				General::sanitize ( $pages[$i]['page_lhandles_t_'.$languageCodesH[$key] ] ), // espace &
-	    				array(
-							'lang' => $language,
-							'handle' => $pages[$i][ 'page_lhandles_h_'.$languageCodesH[$key] ]
-	    				)
-	    		);
-
-	    		$pageXML->appendChild($itemXML);
-	    	}
-
-	    	if ( $i < count($pages)-1 ) {
-
-		    	$pageXML->appendChild(
-		    		$this->_addPageXML($pages, $i + 1, $languageCodes, $languageCodesH)
-		    	);
-
-	    	}
-
-	    	return $pageXML;
-
-	    }
-
-}
+				$pageXML->prependChild($itemXML);
+			}
+			
+			// if it has a parent, generate it, append current page and return parent
+			if( !empty($pages[$page_id]['parent']) ){
+				$parentXML = $this->_addPageXML($pages, $pages[$page_id]['parent'], $language_codes);
+				$parentXML->appendChild($pageXML);
+				
+				return $parentXML;
+			}
+			
+			// return this page
+			return $pageXML;
+		}
+	    
+	}

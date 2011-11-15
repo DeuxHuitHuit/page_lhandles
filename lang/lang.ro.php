@@ -14,8 +14,8 @@
 	 */
 	$dictionary = array(
 
-		'<code>Page LHandles</code> depends on <code>%s</code>. Make sure you have this extension installed and enabled.' => 
-		'<code>Page LHandles</code> depinde de <code>%s</code>. Asiguraţi-vă că această extensie există şi este activată.',
+		'<code>%1$s</code> depends on <code>%2$s</code>. Make sure you have this extension installed and enabled.' => 
+		'<code>%1$s</code> depinde de <code>%2$s</code>. Asiguraţi-vă că această extensie există şi este activată.',
 
 		'Localised Title' => 
 		'Titlu localizat',
@@ -23,16 +23,16 @@
 		'Localised URL Handle' => 
 		'Handle URL localizat',
 
-		'Unknown Lang' => 
-		'Limbă Necunoscută',
+		'Unknown Lang : %s' => 
+		'Limbă necunoscută : %s',
 
 		'Page LHandles' => 
 		false,
 
 		'Fill test Names and Handles for Pages' => 
-		'Încarcă Nume de test pentur Pagini',
+		'Încarcă Nume de test pentru Pagini',
 
-		'Updates every Page\'s empty Titles and Handles with the value for <b>%s - %s</b> language, prefixed by language code.<br />E.g. <code>Romana : Acasa => English : ENAcasa</code>' =>
-		'Actualizează Titlul şi Handleul fiecărei Pagini cu valoarea pentru limba <b>%s - %s</b>, prefixată de codul de limbă.<br />Ex:  <code>Romana : Acasa => English : ENAcasa</code>',
+		'Updates every Page\'s empty Titles and Handles with the value for <b>%1$s - %2$s</b> language, prefixed by language code.<br />E.g. <code>Romana : Acasa => English : ENAcasa</code>' =>
+		'Actualizează Titlul şi Handleul fiecărei Pagini cu valoarea pentru limba <b>%1$s - %2$s</b>, prefixată de codul de limbă.<br />Ex:  <code>Romana : Acasa => English : ENAcasa</code>',
 		
 	);

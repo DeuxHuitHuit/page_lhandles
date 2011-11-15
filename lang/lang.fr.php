@@ -14,8 +14,8 @@
 	 * Page LHandles
 	 */
 	$dictionary = array(
-		'Unknown Lang' => 
-		'Langue inconnue',
+		'Unknown Lang : %s' => 
+		'Langue inconnue : %s',
 
 		'Localised Title' => 
 		'Titre localisé',
@@ -23,7 +23,7 @@
 		'Localised URL Handle' => 
 		'Handle d\'URL localisé',
 
-		'<code>Page LHandles</code> depends on <code>%s</code>. Make sure you have this extension installed and enabled.' => 
-		'<code>Page LHandles</code> dépends de <code>%s</code>. Assurez-vous d\'avoir cette extension installée et activée.',
+		'<code>%1$s</code> depends on <code>%2$s</code>. Make sure you have this extension installed and enabled.' => 
+		'<code>%1$s</code> dépends de <code>%2$s</code>. Assurez-vous d\'avoir cette extension installée et activée.',
 
 	);
