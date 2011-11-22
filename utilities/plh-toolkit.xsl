@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 	<xsl:stylesheet version="1.0"
 		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns:exsl="http://exslt.org/common">
+		xmlns:exsl="http://exslt.org/common"
+		xmlns:string="http://symphony-cms.com/functions">
+	
+	
+	
+	
+	<xsl:import href="string-op.xsl" />
+	
+	
 	
 	
 	<!-- Default values -->
 	
 	<!--
-		Current-page hyerarchy as XML, based on "PLH Page" datasource
+		Current-page hierarchy as XML, based on "PLH Page" datasource
 		
 		e.g.:
 		<p>handle_grand_parent</p>
 		<p>handle_parent</p>
 		<p>handle_current_page</p>
 	-->
-	<xsl:variable name="plh_current_page_hyerarchy">
+	<xsl:variable name="plh_current_page_hierarchy">
 		<xsl:apply-templates select="/data/plh-page/page" mode="parent-path" />
 	</xsl:variable>
 	
@@ -26,10 +34,9 @@
 	
 	
 	<!--
-		Contains handle of your main navigation Datasource. This Datasource SHOULD contain all pages that will be referenced in an `a` link
+		Contains handle of your main navigation Datasource. This Datasource SHOULD contain all pages that will be referenced in an link (`a` tag)
 	-->
 	<xsl:variable name="plh_navi_node" select="'navigare'" />
-	
 	
 	
 	
@@ -40,8 +47,8 @@
 		e.g.: www.domain.com/en/grand-parent-page/parent-page/page
 	
 		@param h
-			- XML nodeset containig page hyerarchy
-			- defaults to `$plh_current_page_hyerarchy` current-page hyerarchy
+			- XML nodeset containig page hierarchy
+			- defaults to `$plh_current_page_hierarchy` current-page hierarchy
 		@param p_language_code
 			- language code to search for
 			- defaults to `$plh_language_code` current-language set by Language Redirect
@@ -52,7 +59,7 @@
 			- current iterated page
 	-->
 	<xsl:template name="plh-url">
-		<xsl:param name="h" select="$plh_current_page_hyerarchy" />
+		<xsl:param name="h" select="$plh_current_page_hierarchy" />
 		<xsl:param name="p_language_code" select="$plh_language_code" />
 		<xsl:param name="p_pages" select="/data/*[local-name() = $plh_navi_node]" />
 		<xsl:param name="p_cur_page" select="1" />
@@ -88,8 +95,8 @@
 		Retrieves localised title for required page
 		
 		@param h
-			- XML nodeset containig required page hyerarchy
-			- defaults to `$plh_current_page_hyerarchy` current-page hyerarchy
+			- XML nodeset containig required page hierarchy
+			- defaults to `$plh_current_page_hierarchy` current-page hierarchy
 		@param p_language_code
 			- language code to search for
 			- defaults to `$plh_language_code` current-language set by Language Redirect
@@ -100,7 +107,7 @@
 			- current iterated page
 	-->
 	<xsl:template name="plh-page-title">
-		<xsl:param name="h" select="$plh_current_page_hyerarchy" />
+		<xsl:param name="h" select="$plh_current_page_hierarchy" />
 		<xsl:param name="p_language_code" select="$plh_language_code" />
 		<xsl:param name="p_pages" select="/data/*[local-name() = $plh_navi_node]" />
 		<xsl:param name="p_cur_page" select="1" />
@@ -130,8 +137,8 @@
 		Retrieves localised handle for required page
 		
 		@param h
-			- XML nodeset containig required page hyerarchy
-			- defaults to `$plh_current_page_hyerarchy` current-page hyerarchy
+			- XML nodeset containig required page hierarchy
+			- defaults to `$plh_current_page_hierarchy` current-page hierarchy
 		@param p_language_code
 			- language code to search for
 			- defaults to `$plh_language_code` current-language set by Language Redirect
@@ -142,7 +149,7 @@
 			- current iterated page
 	-->
 	<xsl:template name="plh-page-handle">
-		<xsl:param name="h" select="$plh_current_page_hyerarchy" />
+		<xsl:param name="h" select="$plh_current_page_hierarchy" />
 		<xsl:param name="p_language_code" select="$plh_language_code" />
 		<xsl:param name="p_pages" select="/data/*[local-name() = $plh_navi_node]" />
 		<xsl:param name="p_cur_page" select="1" />
@@ -184,32 +191,41 @@
 	
 	
 	<xsl:template match="language-redirect/supported-languages/item" mode="plh">
-		
 		<xsl:variable name="v_images_path" select="concat(/data/params/workspace, '/public/css/images/flags/')" />
 		<xsl:variable name="v_images_extension" select="'png'" />
 		
-		<a title="{text()}">
-			<xsl:attribute name="href">
-			
-				<!-- root-url and handles of pages -->
-				<xsl:call-template name="plh-url">
-					<xsl:with-param name="p_language_code" select="@handle" />
-					<xsl:with-param name="p_pages" select="/data/*[local-name() = 'plh-page']" />
-				</xsl:call-template>
-				
-				<!-- page params -->
-				<xsl:call-template name="plh-page-parameters">
-					<xsl:with-param name="p_language_code" select="@handle" />
-				</xsl:call-template>
-				
-				<!-- url params -->
-				<xsl:call-template name="plh-url-parameters" />
-				
-			</xsl:attribute>
-			
-			<img src="{$v_images_path}{@handle}.{$v_images_extension}" alt="{text()}" />
-		</a>
-		
+		<xsl:choose>
+			<xsl:when test="../../current-language/@handle = current()/@handle">
+				<div class="selectedLanguage">
+					<xsl:value-of select="string:upper-case(@handle)" />
+				</div>
+			</xsl:when>
+			<xsl:otherwise>
+				<div>
+					<a title="{text()}">
+						<xsl:attribute name="href">
+						
+							<!-- root-url and handles of pages -->
+							<xsl:call-template name="plh-url">
+								<xsl:with-param name="p_language_code" select="@handle" />
+								<xsl:with-param name="p_pages" select="/data/*[local-name() = 'plh-page']" />
+							</xsl:call-template>
+							
+							<!-- page params -->
+							<xsl:call-template name="plh-page-parameters">
+								<xsl:with-param name="p_language_code" select="@handle" />
+							</xsl:call-template>
+							
+							<!-- url params -->
+							<xsl:call-template name="plh-url-parameters" />
+							
+						</xsl:attribute>
+						
+						<xsl:value-of select="string:upper-case(@handle)" />
+					</a>
+				</div>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	
 	
