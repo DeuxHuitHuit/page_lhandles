@@ -18,14 +18,14 @@
 		
 		/**
 		 * PLH Datasource manager
-		 * 
+		 *
 		 * @var PLHDatasourceManager
 		 */
 		private $plh_dsm;
 		
 		/**
 		 * Knows if the first time the URL has been processed or not.
-		 * 
+		 *
 		 * @var bollean
 		 */
 		private $first_pass;
@@ -42,8 +42,8 @@
 		public function about() {
 			return array(
 				'name'			=> PLH_NAME,
-				'version'		=> '2.0',
-				'release-date'	=> '2011-11-15',
+				'version'		=> '2.0.1',
+				'release-date'	=> '2011-11-29',
 				'author'		=> array(
 					array(
 						'name'  => 'Vlad Ghita',
@@ -164,7 +164,7 @@
 				array(
 					'page' => '/system/preferences/',
 					'delegate' => 'CustomActions',
-					'callback' => 'dCustomActions' 
+					'callback' => 'dCustomActions'
 				),
 				
 				array(
@@ -315,7 +315,7 @@
 						SELECT p.`id`, p.`handle`, p.`parent`
 						FROM `tbl_pages` as p
 						INNER JOIN `tbl_pages_types` as pt ON pt.`page_id` = p.`id`
-						WHERE pt.`type` = 'index' 
+						WHERE pt.`type` = 'index'
 						LIMIT 1";
 
 					// try to get the index page
@@ -367,7 +367,7 @@
 
 		/**
 		 * Add a button on preferences page to Update all Pages' Title and Handle data.
-		 * 
+		 *
 		 * @param $context - see delegate description
 		 */
 		public function dAddCustomPreferenceFieldsets($context) {
@@ -380,8 +380,8 @@
 			
 			$span = new XMLElement('span', NULL, array('class' => 'frame'));
 			$span->appendChild(new XMLElement(
-				'button', 
-				__('Fill test Names and Handles for Pages'), 
+				'button',
+				__('Fill test Names and Handles for Pages'),
 				array('name' => 'action['.PLH_GROUP.'][update]', 'type' => 'submit')
 			));
 
@@ -392,7 +392,7 @@
 			$all_languages = FrontendLanguage::instance()->allLanguages();
 			
 			$div->appendChild(new XMLElement(
-				'p', 
+				'p',
 				__(
 					'Updates every Page\'s empty Titles and Handles with the value for <b>%1$s - %2$s</b> language, prefixed by language code.<br />E.g. <code>Romana : Acasa => English : ENAcasa</code>',
 					array($reference_language, $all_languages[$reference_language])
@@ -476,7 +476,7 @@
 		 *
 		 * @param string $query
 		 * @param integer $last_parent (reference)
-		 * 
+		 *
 		 * @return mixed - Symphony handle or false if no handle found.
 		 */
 		private function _getPageHandle($query, &$last_parent) {
@@ -506,7 +506,7 @@
 		
 		/**
 		 * For all Pages, fill the new added columns with the page_data from $reference_language.
-		 * 
+		 *
 		 * @param array $to_check_languages - languages to set data for.
 		 */
 		private function _insertTestTitlesAndHandles($to_check_languages = array()) {
@@ -576,11 +576,11 @@
 		}
 		
 		/**
-		 * 
+		 *
 		 * Adds columns to 'tbl_pages' table.
 		 *
 		 * @param array $language_codes - the language codes array to be inserted.
-		 * 
+		 *
 		 * @return boolean - true on success, false otherwise
 		 */
 		private function _addColumnsToPageTable($language_codes = array()) {
@@ -621,7 +621,7 @@
 		
 		/**
 		 * Validate extension dependencies.
-		 * 
+		 *
 		 * @return boolean - true if dependencies are met, false otherwise
 		 */
 		private function _validateDependencies(){

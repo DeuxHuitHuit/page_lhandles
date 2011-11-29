@@ -3,8 +3,8 @@ Localised Page Handles
 
 Offers multilingual support for localised page handles in browser URL.
 
-* Version: 2.0
-* Build Date: 2011-11-15
+* Version: 2.0.1
+* Build Date: 2011-11-29
 * Authors:
 	- Vlad Ghita
 * Requirements:
@@ -248,6 +248,9 @@ Frontend Localisation | Page LHandles
 
 
 # Changelog #
+
+* 2.0.1, 29 November 2011
+	* Fixed a preg_match mistake ...
 
 * 2.0, 15 November 2011
 	* Extension rewrite, code cleaning. It now depends on Frontend Localisation instead of Language Redirect.

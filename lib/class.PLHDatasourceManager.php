@@ -60,14 +60,14 @@
 
 
 		private function _isDsTypeNavigation($contents) {
-			return (boolean) (preg_match("return 'navigation';", $contents) == 1);
+			return (boolean) (preg_match("/return 'navigation';/", $contents) === 1);
 		}
 
 		/**
 		 * Replace standard navigation template with PLH navigation template
 		 *
 		 * @param string $contents- old datasource file contents.
-		 * 
+		 *
 		 * @return string - new datasource file contents.
 		 */
 		private function _setNavDsToPLH($contents){
