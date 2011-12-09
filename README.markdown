@@ -3,8 +3,8 @@ Localised Page Handles
 
 Offers multilingual support for localised page handles in browser URL.
 
-* Version: 2.0.1
-* Build Date: 2011-11-29
+* Version: 2.0.2
+* Build Date: 2011-12-09
 * Authors:
 	- Vlad Ghita
 * Requirements:
@@ -66,14 +66,15 @@ New XML supplies handle and title for the current page according to current-lang
 
 
 
+
 ## 3.1 Example ##
 
 Take 2 pages and 3 languages: Romanian (RO), English (EN) and French (FR).
 
 No. | Parent     | Sym Title  | Sym Handle | RO Title   | RO Handle  | EN Title | EN Handle | FR Title   | FR Handle  | Parameters
 ----|------------|------------|------------|------------|------------|----------|-----------|------------|------------|-----------
-1.  | null       | Sym Events | sym-events | Evenimente | evenimente | Events   | events    | Evenements | evenements | null
-2.  | sym-events | Sym Title  | sym-title  | Titlu      | titlu      | Title    | title     | Titre      | titre      | title
+1.  | -          | Sym Events | sym-events | Evenimente | evenimente | Events   | events    | Evenements | evenements | -
+2.  | sym-events | Sym Title  | sym-title  | Titlu      | titlu      | Title    | title     | Titre      | titre      | event-title
 
 All these 3 URLs will request "Sym Title" Page:
 
@@ -85,147 +86,41 @@ All these 3 URLs will request "Sym Title" Page:
 
 ## 3.2 More examples regarding `plh-toolkit.xsl` utility ##
 
-Given this structure of pages:
+Recommendation: put the navigation DS output in a variable so you can access it easily:
 
-    foo > alfa > bar
-    foo > beta > bar
+    <xsl:variable name="nav" select="/data/navigation" />
 
-Page `foo` is parent of `alfa` who is parent of a page called `bar`.<br />
-Page `foo` is parent of `beta` who is parent of a page called `bar` as well.
+Get the URL of a page with ID = 7:
 
-`bar` of `alfa` is *different* than `bar` of `beta`. They simply have the same handle.
+    <xsl:apply-templates select="$nav//page[ @id=7 ]" mode="plh-url" />
 
-These handles are **Symphony handles**, not localised handles. Remember that Symphony handles are used for various processing and localised handles are displayed in the link. `foo` could be localised as `ro-foo`, `en-foo`,`pieceofcake` or whatever.
+Get the Title of a page with ID = 7:
 
+	<xsl:value-of select="$nav//page[ @id=7 ]/item" />
 
+If you have URL parameters attached to current URL and want to pass them forward, call template `plh-url-parameters` :
 
-### 3.2.1 Example \#1 on `foo > beta` ###
+    <xsl:apply-templates select="$nav//page[ @id=7 ]" mode="plh-url" />
+    <xsl:call-template name="plh-url-parameters" />
 
-By default, calling `plh-url` template generates `href` for current page
+<br />
+Building current-page link in all languages:
 
-    <xsl:call-template name="plh-url" />
-    
-    href = www.example.com/lang-code/foo/beta
-
-
-
-### 3.2.2 Example \#2 ###
-
-Setting a `href` to another page is as simple as calling the template with appropriate param:
-
-    <xsl:call-template name="plh-url">
-        <xsl:with-param name="p">
-            <p>foo</p>   // grand-parent of target_page
-            <p>beta</p>  // parent of target_page
-            <p>bar</p>   // handle of target_page
-        </xsl:with-param>
-    </xsl:call-template>
-    
-    href = www.example.com/lang-code/foo/beta/bar
-
-
-
-### 3.2.3 Example \#3 on `foo > alfa` ###
-
-On this page I want to set a link to parent page `foo`. I can hardcode it like this (more readable):
-
-    <xsl:call-template name="plh-url">
-        <xsl:with-param name="p">
-            <p>foo</p>
-        </xsl:with-param>
-    </xsl:call-template>
-    
-    href = www.example.com/lang-code/foo/alfa
-
-or I can make it future proof using the `root-page` parameter Symphony provides (in case parent page handle changes, this is safest):
-
-    <xsl:call-template name="plh-url">
-        <xsl:with-param name="p">
-            <p><xsl:value-of select="/data/params/root-page" /></p>
-        </xsl:with-param>
-    </xsl:call-template>
-    
-    href = www.example.com/lang-code/foo/alfa
-
-
-
-### 3.2.4 Example \#4a ###
-
-Building URL with Page parameters.
-
-Take these pages: `events > title`. `title` page displays one event and has a parameter called `$event-title`
-
-    <xsl:template match="/data/events-datasource-that-outputs-all-events-titles/entry">
-    
-        <a title="title">
-            <xsl:attribute name="href">
-                <xsl:call-template name="plh-url">
-                    <xsl:with-param name="p">
-                        <p>events</p>
-                        <p>title</p>
-                    </xsl:with-param>
-                </xsl:call-template>
-                
-                <xsl:value-of select="title/@handle" />    // handle of title
-            </xsl:attribute>
-            
-            <xsl:value-of select="title" />    // title
-        </a>
-    </xsl:template>
-    
-    href = www.example.com/lang-code/events/title/handle-of-an-event-title
-    
-
-
-### 3.2.5 Example \#4b ###
-
-Building URL with Page parameters and URL parameters.
-
-Take these pages: `events > title`. `title` page displays one event and has a parameter called `$event-title`
-
-    <xsl:template match="/data/events-datasource-that-outputs-all-events-titles/entry">
-    
-        <a title="title">
-            <xsl:attribute name="href">
-                <xsl:call-template name="plh-url">
-                    <xsl:with-param name="p">
-                        <p>events</p>
-                        <p>title</p>
-                    </xsl:with-param>
-                </xsl:call-template>
-                
-                <xsl:value-of select="title/@handle" />    // handle of title
-                
-                <xsl:call-template name="plh-url-parameters" /> // URL parameters
-            </xsl:attribute>
-            
-            <xsl:value-of select="title" />    // title
-        </a>
-    </xsl:template>
-    
-    href = www.example.com/lang-code/events/title/handle-of-an-event-title?one_param=foo&another_param=bar
-
-
-
-### 3.2.6 Example \#5 ###
-
-Building current-page link in all languages
-
-In `master.xsl`, wherever you want to put the links, call this template:
+In `master.xsl`, or wherever you want to put the links, call this template:
 
     <xsl:call-template name="plh-site-languages" />
 
-On pages without parameters it works fine out-of-the-box. However, what do you do with pages that have parameters, such as `events > title > event-title` ?<br />
+On pages without parameters it works fine out-of-the-box. However, what do you do with pages that have parameters, such as `title --> event-title` ?<br />
 In generating current-page URL in all languages, the `plh-page-parameters` template is called along the way to populate the URL with localised parameters.<br />
 So, on each page that has parameters, overload (define) this template with the contents you need.
 
 Because I'm using Multilingual Text, this is how my template looks like (NB: my page parameter is for `Title` field) in `events_title.xsl`:
 
     <xsl:template name="plh-page-parameters">
-        <xsl:param name="languageCode" />
-        <xsl:variable name="countryHandle" select="concat('handle-',$languageCode)" />
+        <xsl:param name="lang" />
+        <xsl:variable name="country_handle" select="concat('handle-',$lang)" />
     
-        <xsl:value-of select="/data/events-datasource-that-outputs-one-event-based-on-page-parameter/entry/title/@*[ local-name() = $countryHandle ]" />
+        <xsl:value-of select="/data/events-datasource-that-outputs-one-event-based-on-page-parameter/entry/title/@*[ local-name() = $country_handle ]" />
     </xsl:template>
 
 
@@ -248,6 +143,9 @@ Frontend Localisation | Page LHandles
 
 
 # Changelog #
+
+* 2.0.2, 09 December 2011
+	* Reworked the templates from `plh-toolkit.xsl`. Thanks @phoque.
 
 * 2.0.1, 29 November 2011
 	* Fixed a preg_match mistake ...

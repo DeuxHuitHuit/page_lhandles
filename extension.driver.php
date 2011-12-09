@@ -42,8 +42,8 @@
 		public function about() {
 			return array(
 				'name'			=> PLH_NAME,
-				'version'		=> '2.0.1',
-				'release-date'	=> '2011-11-29',
+				'version'		=> '2.0.2',
+				'release-date'	=> '2011-12-09',
 				'author'		=> array(
 					array(
 						'name'  => 'Vlad Ghita',
