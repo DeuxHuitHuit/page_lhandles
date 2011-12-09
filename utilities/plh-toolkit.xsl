@@ -12,8 +12,14 @@
 	
 	
 	
+	<!-- 
+		If your navigation DS is "navigation", and want the URL for page with id=7, call like this:
+		
+		<xsl:apply-templates select="/data/navigation//page[ @id=7 ]" mode="plh-url" />
+	 -->
+	
 	<xsl:template match="page" mode="plh-url">
-	    <xsl:value-of select="concat(/data/params/root,'/',/data/events/language-redirect/current-language/@handle,'/',item/@handle, '/')"/>
+	    <xsl:value-of select="concat(/data/params/root, '/', /data/events/language-redirect/current-language/@handle, '/', item/@handle, '/')"/>
 	</xsl:template>
 	
 	<xsl:template match="page/page" mode="plh-url">
