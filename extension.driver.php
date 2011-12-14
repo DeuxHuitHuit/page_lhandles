@@ -5,6 +5,7 @@
 	
 	
 	require_once('lib/class.PLHDatasourceManager.php');
+	require_once('lib/class.PLHManagerURL.php');
 	require_once(EXTENSIONS . '/frontend_localisation/lib/class.FrontendLanguage.php');
 	
 	
@@ -42,8 +43,8 @@
 		public function about() {
 			return array(
 				'name'			=> PLH_NAME,
-				'version'		=> '2.0.2',
-				'release-date'	=> '2011-12-09',
+				'version'		=> '2.1',
+				'release-date'	=> '2011-12-13',
 				'author'		=> array(
 					array(
 						'name'  => 'Vlad Ghita',
@@ -293,75 +294,9 @@
 			) {
 				$this->first_pass = false;
 				
-				$language_code = FrontendLanguage::instance()->getLangaugeCode();
-				
-				// if no language is set, return current URL
-				if( empty($language_code) ){
-					return true;
-				}
-				
 				$url = MySQL::cleanValue( $context['page'] );
-				$old_url = preg_split('/\//', trim($url, '/'), -1, PREG_SPLIT_NO_EMPTY);
-
-				$path = '/';
-				$last_parent = null;
-
-					
-				// resolve index
-				if( $old_url == null || empty($old_url) || !is_array($old_url) ){
-
-					// get the index page
-					$query = "
-						SELECT p.`id`, p.`handle`, p.`parent`
-						FROM `tbl_pages` as p
-						INNER JOIN `tbl_pages_types` as pt ON pt.`page_id` = p.`id`
-						WHERE pt.`type` = 'index'
-						LIMIT 1";
-
-					// try to get the index page
-					$bit = $this->_getPageHandle($query, $last_parent);
-
-					if( $bit === false ){
-						return (string) '/' . implode('/', $old_url) . '/';
-					}
-					else{
-						$path = $bit.'/';
-					}
-				}
-					
-				// resolve other pages
-				else{
-					$page_mode = true;
-
-					foreach( $old_url as $value ){
-						if( !empty($value) ){
-							
-							$query = sprintf("
-								SELECT `id`, `handle`, `parent` FROM `tbl_pages` WHERE `plh_h-%s` = '%s' AND `parent` %s LIMIT 1",
-								$language_code,
-								$value,
-								($last_parent != null ? sprintf("= %s", $last_parent) : "IS NULL")
-							);
-
-							if( $page_mode ){
-								$bit = $this->_getPageHandle($query, $last_parent);
-									
-								if( $bit === false ){
-									$path .= $value.'/';
-									$page_mode = false;
-								}
-								else{
-									$path .= $bit.'/';
-								}
-							}
-							else{
-								$path .= $value.'/';
-							}
-						}
-					}
-				}
-
-				$context['page'] = $path;
+				
+				$context['page'] = PLHManagerURL::instance()->lang2sym($url);
 			}
 		}
 
@@ -469,40 +404,7 @@
 			return true;
 		}
 		
-		
-		
-		/**
-		 * Executes the given query and returns Symphoy page handle or false if no match
-		 *
-		 * @param string $query
-		 * @param integer $last_parent (reference)
-		 *
-		 * @return mixed - Symphony handle or false if no handle found.
-		 */
-		private function _getPageHandle($query, &$last_parent) {
-			try {
-				$page = Symphony::Database()->fetch($query);
-			}
-			catch (DatabaseException $e) {
-				//table column "$lhandle" doesn't exist. redirect to 404.
-				if ( $e->getDatabaseErrorCode() == 1054 ) {
-					FrontendPageNotFoundExceptionHandler::render($e);
-				}
-				// re-trow non-handled exception
-				else {
-					throw $e;
-				}
-			}
 
-			// page handle exists, store it
-			if( !empty($page) && ($last_parent == $page[0]['parent']) ){
-				$last_parent = $page[0]['id'];
-				
-				return $page[0]['handle'] . '/';
-			}
-				
-			return false;
-		}
 		
 		/**
 		 * For all Pages, fill the new added columns with the page_data from $reference_language.

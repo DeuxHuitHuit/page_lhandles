@@ -3,8 +3,8 @@ Localised Page Handles
 
 Offers multilingual support for localised page handles in browser URL.
 
-* Version: 2.0.2
-* Build Date: 2011-12-09
+* Version: 2.1
+* Build Date: 2011-12-13
 * Authors:
 	- Vlad Ghita
 * Requirements:
@@ -143,6 +143,9 @@ Frontend Localisation | Page LHandles
 
 
 # Changelog #
+
+* 2.1, 13 December 2011
+	* Reworked the templates from `plh-toolkit.xsl`. Thanks @phoque.
 
 * 2.0.2, 09 December 2011
 	* Reworked the templates from `plh-toolkit.xsl`. Thanks @phoque.
