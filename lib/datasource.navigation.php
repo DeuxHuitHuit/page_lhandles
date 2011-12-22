@@ -23,7 +23,7 @@
 	if(!function_exists('__PLHbuildPageXML')){
 		function __PLHbuildPageXML($page){
 			
-			$current_language = LanguageRedirect::instance()->getLanguageCode();
+			$current_language = FLang::instance()->ld()->languageCode();
 			
 			$oPage = new XMLElement('page');
 			$oPage->setAttribute('handle', $page['handle']);

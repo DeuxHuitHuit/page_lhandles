@@ -4,7 +4,7 @@
 	
 	
 	
-	require_once(EXTENSIONS . '/frontend_localisation/lib/class.FrontendLanguage.php');
+	require_once(EXTENSIONS . '/frontend_localisation/lib/class.FLang.php');
 	
 	
 	
@@ -32,7 +32,7 @@
 		 */
 		public function sym2lang($url, $language_code = null){
 			if( empty($language_code) ){
-				$language_code = FrontendLanguage::instance()->referenceLanguage();
+				$language_code = FLang::instance()->referenceLanguage();
 			
 				// if no language is set, return current URL
 				if( empty($language_code) ){
@@ -56,7 +56,7 @@
 		 */
 		public function lang2sym($url, $language_code = null){
 			if( empty($language_code) ){
-				$language_code = FrontendLanguage::instance()->getLangaugeCode();
+				$language_code = FLang::instance()->ld()->languageCode();
 			
 				// if no language is set, return current URL
 				if( empty($language_code) ){

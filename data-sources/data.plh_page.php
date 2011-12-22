@@ -23,7 +23,7 @@
 	    public function grab(&$param_pool=NULL){
 	    	$result = new XMLElement('plh-page');
 			
-	    	$language_codes = FrontendLanguage::instance()->languageCodes();
+	    	$language_codes = FLang::instance()->ld()->languageCodes();
 	    	$fields = array();
 	    	
 	    	foreach( $language_codes as $language_code ){

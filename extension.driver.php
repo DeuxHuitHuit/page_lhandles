@@ -6,7 +6,7 @@
 	
 	require_once('lib/class.PLHDatasourceManager.php');
 	require_once('lib/class.PLHManagerURL.php');
-	require_once(EXTENSIONS . '/frontend_localisation/lib/class.FrontendLanguage.php');
+	require_once(EXTENSIONS . '/frontend_localisation/lib/class.FLang.php');
 	
 	
 	
@@ -16,6 +16,21 @@
 	
 	
 	class Extension_page_lhandles extends Extension {
+		
+		public function about() {
+			return array(
+					'name'			=> PLH_NAME,
+					'version'		=> '2.2',
+					'release-date'	=> '2011-12-22',
+					'author'		=> array(
+							array(
+									'name'  => 'Vlad Ghita',
+									'email' => 'vlad_micutul@yahoo.com'
+							),
+					),
+					'description'	=> 'Allows localisation of Pages\' Titles and Handles.'
+			);
+		}
 		
 		/**
 		 * PLH Datasource manager
@@ -38,21 +53,6 @@
 			
 			$this->plh_dsm = new PLHDatasourceManager();
 			$this->first_pass = true;
-		}
-
-		public function about() {
-			return array(
-				'name'			=> PLH_NAME,
-				'version'		=> '2.1',
-				'release-date'	=> '2011-12-13',
-				'author'		=> array(
-					array(
-						'name'  => 'Vlad Ghita',
-						'email' => 'vlad_micutul@yahoo.com'
-					),
-				),
-				'description'	=> 'Allows localisation of Pages\' Titles and Handles.'
-	 		);
 		}
 
 		
@@ -204,9 +204,9 @@
 		public function dAppendPageContent($context) {
 			$page_id = $page->_context[1];
 
-			$all_languages = FrontendLanguage::instance()->allLanguages();
-			$language_codes = FrontendLanguage::instance()->languageCodes();
-			$reference_language = FrontendLanguage::instance()->referenceLanguage();
+			$all_languages = FLang::instance()->ld()->allLanguages();
+			$language_codes = FLang::instance()->ld()->languageCodes();
+			$reference_language = FLang::instance()->referenceLanguage();
 
 			$fieldset = new XMLElement('fieldset');
 			$fieldset->setAttribute('class', 'settings');
@@ -323,8 +323,8 @@
 			$div->appendChild($span);
 			
 			
-			$reference_language = FrontendLanguage::instance()->referenceLanguage();
-			$all_languages = FrontendLanguage::instance()->allLanguages();
+			$reference_language = FLang::instance()->referenceLanguage();
+			$all_languages = FLang::instance()->ld()->allLanguages();
 			
 			$div->appendChild(new XMLElement(
 				'p',
@@ -355,8 +355,8 @@
 		 * @param array $context - see delegate description
 		 */
 		public function dSavePreferences($context) {
-			$saved_languages = FrontendLanguage::instance()->savedLanguages($context);
-			$stored_languages = FrontendLanguage::instance()->languageCodes();
+			$saved_languages = FLang::instance()->ld()->getSavedLanguages($context);
+			$stored_languages = FLang::instance()->ld()->languageCodes();
 
 			$to_check_languages = array_diff($saved_languages, $stored_languages);
 
@@ -413,7 +413,7 @@
 		 */
 		private function _insertTestTitlesAndHandles($to_check_languages = array()) {
 			if ( empty($to_check_languages) ) {
-				$to_check_languages = FrontendLanguage::instance()->languageCodes();
+				$to_check_languages = FLang::instance()->ld()->languageCodes();
 	
 				if ( empty($to_check_languages) ) {
 					//means there are no language codes in Configuration file
@@ -421,7 +421,7 @@
 				}
 			}
 			
-			$reference_language = FrontendLanguage::instance()->referenceLanguage();
+			$reference_language = FLang::instance()->referenceLanguage();
 			
 			$pages_IDs = Symphony::Database()->fetchCol('id', 'SELECT `id` FROM `tbl_pages`');
 			
@@ -487,7 +487,7 @@
 		 */
 		private function _addColumnsToPageTable($language_codes = array()) {
 			if( empty($language_codes) ){
-				$language_codes = FrontendLanguage::instance()->languageCodes();
+				$language_codes = FLang::instance()->ld()->languageCodes();
 
 				if( empty($language_codes) ){
 					//means there are no language codes in Configuration file
