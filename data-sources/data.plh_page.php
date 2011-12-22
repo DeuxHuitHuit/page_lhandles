@@ -1,6 +1,7 @@
 <?php
 
 	require_once(TOOLKIT . '/class.datasource.php');
+	require_once(EXTENSIONS . '/frontend_localisation/lib/class.FLPageManager.php');
 	
 	Class datasourceplh_page extends Datasource{
 
