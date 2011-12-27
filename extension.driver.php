@@ -25,7 +25,7 @@
 					'author'		=> array(
 							array(
 									'name'  => 'Vlad Ghita',
-									'email' => 'vlad_micutul@yahoo.com'
+									'email' => 'vlad.github@gmail.com'
 							),
 					),
 					'description'	=> 'Allows localisation of Pages\' Titles and Handles.'

@@ -4,7 +4,7 @@
 
 	<name>Page LHandles</name>
 
-	<description>Offers an integrated solution to localise the Frontend of your site.</description>
+	<description>Offers multilingual support for localised page handles in browser URL.</description>
 
 	<repo type="github">https://github.com/vlad-ghita/page_lhandles</repo>
 

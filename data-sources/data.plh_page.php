@@ -10,7 +10,7 @@
 				'name' => 'PLH Page',
 				'author' => array(
 					'name' => 'Vlad Ghita',
-					'email' => 'vlad_micutul@yahoo.com'
+					'email' => 'vlad.github@gmail.com'
 				),
 				'version' => '1.1',
 				'release-date' => '2011-11-15',
