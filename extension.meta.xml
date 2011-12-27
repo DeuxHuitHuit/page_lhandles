@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<extension id="page_lhandles" status="released" xmlns="http://symphony-cms.com/schemas/extension/1.0">
+
+	<name>Page LHandles</name>
+
+	<description>Offers an integrated solution to localise the Frontend of your site.</description>
+
+	<repo type="github">https://github.com/vlad-ghita/page_lhandles</repo>
+
+	<url type="discuss">http://symphony-cms.com/discuss/thread/61887/</url>
+
+	<types>
+		<type>Interface</type>
+		<type>Multilingual</type>
+		<type>Workflow</type>
+	</types>
+
+	<authors>
+		<author>
+			<name github="vlad-ghita" symphony="vladG">Vlad Ghita</name>
+			<email>vlad.github@gmail.com</email>
+			<website>http://www.xanderadvertising.com</website>
+		</author>
+	</authors>
+
+	<dependencies>
+		<dependency version="1.0">https://github.com/vlad-ghita/frontend_localisation</dependency>
+	</dependencies>
+
+	<releases>
+		<release version="2.2" date="2011-12-22" min="2.2.x"><![CDATA[
+			* Compatibility release for Frontend Localisation 1.0
+		]]></release>
+	</releases>
+
+</extension>
