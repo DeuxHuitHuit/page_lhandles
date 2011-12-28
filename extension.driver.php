@@ -20,8 +20,8 @@
 		public function about() {
 			return array(
 					'name'			=> PLH_NAME,
-					'version'		=> '2.2',
-					'release-date'	=> '2011-12-22',
+					'version'		=> '2.3',
+					'release-date'	=> '2011-12-28',
 					'author'		=> array(
 							array(
 									'name'  => 'Vlad Ghita',

@@ -86,9 +86,35 @@
 		 * @return string - processed URL
 		 */
 		private function _processURL($url, $ref_handle, $target_handle){
+			/*
+			 * This is here in case raw URLs are processed. (eg: URLs comming from Multilingual Entry URL).
+			 * Normally, a sanitized $url will come here (from Symphony)
+			 */
+			$url_query = '';
+			$url_hash = '';
+			
+			// find the Query
+			$url_query_pos = strpos($url, '?');
+			
+			if( $url_query_pos !== false ){
+				$url_query = substr($url, $url_query_pos);
+				$url = substr($url, 0, $url_query_pos);
+			}
+			
+			// else find the Hash
+			else{
+				$url_hash_pos = strpos($url, '#');
+				
+				if( $url_hash_pos !== false ){
+					$url_hash = substr($url, $url_hash_pos);
+					$url = substr($url, 0, $url_hash_pos);
+				}
+			}
+			
+			
 			$old_url = preg_split('/\//', trim($url, '/'), -1, PREG_SPLIT_NO_EMPTY);
 
-			$path = '/';
+			$path = '';
 			$last_parent = null;
 
 
@@ -107,10 +133,10 @@
 				$bit = $this->_getPageHandle($query, $last_parent, $target_handle);
 
 				if( $bit === false ){
-					return (string) '/' . implode('/', $old_url) . '/';
+					$path = $url;
 				}
 				else{
-					$path = $bit.'/';
+					$path = '/'.$bit;
 				}
 			}
 
@@ -133,21 +159,21 @@
 							$bit = $this->_getPageHandle($query, $last_parent, $target_handle);
 
 							if( $bit === false ){
-								$path .= $value.'/';
+								$path .= '/'.$value;
 								$page_mode = false;
 							}
 							else{
-								$path .= $bit.'/';
+								$path .= '/'.$bit;
 							}
 						}
 						else{
-							$path .= $value.'/';
+							$path .= '/'.$value;
 						}
 					}
 				}
 			}
 			
-			return $path;
+			return (string) $path .'/'. $url_query . $url_hash;
 		}
 		
 		/**

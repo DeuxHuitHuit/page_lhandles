@@ -19,12 +19,19 @@
 	 -->
 	
 	<xsl:template match="page" mode="plh-url">
-	    <xsl:value-of select="concat(/data/params/root, '/', /data/events/language-redirect/current-language/@handle, '/', item/@handle, '/')"/>
+		<xsl:param name="lang" select="/data/events/language-redirect/current-language/@handle" />
+		
+	    <xsl:value-of select="concat(/data/params/root, '/', $lang, '/', item[@lang=$lang]/@handle, '/')"/>
 	</xsl:template>
 	
+	
 	<xsl:template match="page/page" mode="plh-url">
-	    <xsl:apply-templates select="parent::page" mode="plh-url"/>
-	    <xsl:value-of select="concat(item/@handle, '/')"/>
+		<xsl:param name="lang" select="/data/events/language-redirect/current-language/@handle" />
+		
+	    <xsl:apply-templates select="parent::page" mode="plh-url">
+	    	<xsl:with-param name="lang" select="$lang" />
+	    </xsl:apply-templates>
+	    <xsl:value-of select="concat(item[@lang=$lang]/@handle, '/')"/>
 	</xsl:template>
 	
 	
@@ -51,7 +58,7 @@
 		<a title="{text()}">
 			<xsl:attribute name="href">
 				<!-- root and page handle -->
-				<xsl:apply-templates select="/data/plh-page//page[ @id=/data/params/current-page-id ]" mode="plh-page">
+				<xsl:apply-templates select="/data/plh-page//page[ @id=/data/params/current-page-id ]" mode="plh-url">
 					<xsl:with-param name="lang" select="@handle" />
 				</xsl:apply-templates>
 				
@@ -66,21 +73,6 @@
 			
 			<img src="{$v_images_path}{@handle}.png" alt="{text()}" />
 		</a>
-	</xsl:template>
-
-
-
-	<xsl:template match="page" mode="plh-page">
-		<xsl:param name="lang" />
-	    <xsl:value-of select="concat(/data/params/root, '/', $lang, '/', item[@lang=$lang]/@handle, '/')"/>
-	</xsl:template>
-	
-	<xsl:template match="page/page" mode="plh-page">
-		<xsl:param name="lang" />
-	    <xsl:apply-templates select="parent::page" mode="plh-page">
-	    	<xsl:with-param name="lang" select="$lang" />
-	    </xsl:apply-templates>
-	    <xsl:value-of select="concat(item[@lang=$lang]/@handle, '/')"/>
 	</xsl:template>
 
 

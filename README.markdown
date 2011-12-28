@@ -3,8 +3,8 @@ Page LHandles
 
 Offers multilingual support for localised page handles in browser URL.
 
-* Version: 2.2
-* Build Date: 2011-12-22
+* Version: 2.3
+* Build Date: 2011-12-28
 * Authors:
 	- [Vlad Ghita](http://www.xanderadvertising.com)
 * Requirements:
