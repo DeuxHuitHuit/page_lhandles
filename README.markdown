@@ -3,8 +3,8 @@ Page LHandles
 
 Offers multilingual support for localised page handles in browser URL.
 
-* Version: 2.3
-* Build Date: 2011-12-28
+* Version: 2.4
+* Build Date: 2012-02-08
 * Authors:
 	- [Vlad Ghita](http://www.xanderadvertising.com)
 * Requirements:
@@ -23,6 +23,7 @@ Thank you all other Symphony Extensions developers for your inspirational work.
 * Offers a DS which outputs the current-page handle and title in all supported languages.
 * Provides a utility for easier URL manipulation.
 * Overrides the navigation template Datasources to output the extra information.
+* URL Router compatible. URLs like `www.site.com/clients/_param1_/projects/_param2_/` are possible if `Operating mode` is set to `Relax`. See Preferences page.
 
 Old XML for a navigation Datasource:
 

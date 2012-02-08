@@ -121,7 +121,7 @@
 			// resolve index
 			if( $old_url == null || empty($old_url) || !is_array($old_url) ){
 
-				// get the index page
+				// get the index page info
 				$query = "
 					SELECT p.`id`, p.`{$target_handle}`, p.`parent`
 					FROM `tbl_pages` as p
@@ -129,7 +129,7 @@
 					WHERE pt.`type` = 'index'
 					LIMIT 1";
 
-				// try to get the index page
+				// try to resolve the index page
 				$bit = $this->_getPageHandle($query, $last_parent, $target_handle);
 
 				if( $bit === false ){
@@ -142,38 +142,91 @@
 
 			// resolve other pages
 			else{
-				$page_mode = true;
-
-				foreach( $old_url as $value ){
-					if( !empty($value) ){
-
-						$query = sprintf("
-								SELECT `id`, `%s`, `parent` FROM `tbl_pages` WHERE `%s` = '%s' AND `parent` %s LIMIT 1",
-								$target_handle,
-								$ref_handle,
-								$value,
-								($last_parent != null ? sprintf("= %s", $last_parent) : "IS NULL")
-						);
-
-						if( $page_mode ){
-							$bit = $this->_getPageHandle($query, $last_parent, $target_handle);
-
-							if( $bit === false ){
-								$path .= '/'.$value;
-								$page_mode = false;
-							}
-							else{
-								$path .= '/'.$bit;
-							}
-						}
-						else{
-							$path .= '/'.$value;
-						}
-					}
+				$op_mode = Symphony::Configuration()->get('op_mode', PLH_GROUP);
+				$method = '_process'.ucfirst($op_mode);
+				
+				if( method_exists($this, $method) ){
+					$path = call_user_method($method, $this, $old_url, $ref_handle, $target_handle);
+				}
+				else{
+					$path = trim($url, '/');
 				}
 			}
 			
 			return (string) $path .'/'. $url_query . $url_hash;
+		}
+		
+		/**
+		 * Processes the URL with relax settings. Used for URL Router compatibility
+		 * Doesn't respect Symphony Page parents structure.
+		 *
+		 * @param array $old_url
+		 * @param string $ref_handle
+		 * @param string $target_handle
+		 */
+		private function _processRelax($old_url, $ref_handle, $target_handle){
+			$path = '';
+			
+			foreach( $old_url as $value ){
+				if( !empty($value) ){
+					$last_parent = null;
+					
+					$query = sprintf(
+							"SELECT `id`, `%s`, `parent` FROM `tbl_pages` WHERE `%s` = '%s' LIMIT 1",
+							$target_handle, $ref_handle, $value
+					);
+			
+					$bit = $this->_getPageHandle($query, $last_parent, $target_handle);
+					
+					$path .= '/'.($bit === false ? $value : $bit );
+				}
+			}
+			
+			return $path;
+		}
+		
+		/**
+		 * Processes the URL with strict settings.
+		 * Respects Symphony Page parents structure.
+		 *
+		 * @param array $old_url
+		 * @param string $ref_handle
+		 * @param string $target_handle
+		 */
+		private function _processStrict($old_url, $ref_handle, $target_handle){
+			$path = '';
+			$page_mode = true;
+			$last_parent = null;
+			
+			foreach( $old_url as $value ){
+				if( !empty($value) ){
+			
+					$query = sprintf("
+							SELECT `id`, `%s`, `parent` FROM `tbl_pages` WHERE `%s` = '%s' AND `parent` %s LIMIT 1",
+							$target_handle,
+							$ref_handle,
+							$value,
+							($last_parent != null ? sprintf("= %s", $last_parent) : "IS NULL")
+					);
+			
+					if( $page_mode ){
+						$bit = $this->_getPageHandle($query, $last_parent, $target_handle);
+			
+						if( $bit === false ){
+							$path .= '/'.$value;
+							$page_mode = false;
+						}
+						else{
+							$path .= '/'.$bit;
+						}
+					}
+					else{
+						$path .= '/'.$value;
+					}
+				}
+			}
+			
+			return $path;
 		}
 		
 		/**
@@ -209,4 +262,5 @@
 		
 			return false;
 		}
+	
 	}

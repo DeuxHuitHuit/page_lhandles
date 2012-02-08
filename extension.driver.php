@@ -20,8 +20,8 @@
 		public function about() {
 			return array(
 					'name'			=> PLH_NAME,
-					'version'		=> '2.3',
-					'release-date'	=> '2011-12-28',
+					'version'		=> '2.4',
+					'release-date'	=> '2012-02-08',
 					'author'		=> array(
 							array(
 									'name'  => 'Vlad Ghita',
@@ -31,6 +31,14 @@
 					'description'	=> 'Allows localisation of Pages\' Titles and Handles.'
 			);
 		}
+		
+		
+		/**
+		 * Supported operating modes.
+		 *
+		 * @var array
+		 */
+		private $op_modes;
 		
 		/**
 		 * PLH Datasource manager
@@ -53,6 +61,19 @@
 			
 			$this->plh_dsm = new PLHDatasourceManager();
 			$this->first_pass = true;
+			
+			$this->op_modes = array(
+					array(
+							'handle' => 'strict',
+							'name' => __('Strict'),
+							'desc' => __('Default & Recommended mode.')
+					),
+					array(
+							'handle' => 'relax',
+							'name' => __('Relax'),
+							'desc' => __('Compatibility mode for URL Router. Enable this to use URLs like: <code>site.com/clients/_param1_/projects/_param2_/</b>. If you\'ll have <code>_param1_ = `projects`</code>, that will be a collision and Page LHandles will fail.')
+					)
+			);
 		}
 
 		
@@ -63,7 +84,9 @@
 
 		public function install(){
 			$this->plh_dsm->editAllNavDssTo('PLH');
-
+			
+			Symphony::Configuration()->set('op_mode', $this->op_modes[0]['handle'], PLH_GROUP);
+			
 			return (boolean)$this->_addColumnsToPageTable();
 		}
 		 
@@ -94,13 +117,22 @@
 					return Symphony::Database()->query($query);
 				}
 			}
+			
+			if( version_compare($previous_version, '2.4', '<') ){
+				Symphony::Configuration()->set('op_mode', $this->op_modes[0]['handle'], PLH_GROUP);
+			}
 
 			return true;
 		}
 		
 		public function uninstall(){
+			// Reset navigation datasources
 			$this->plh_dsm->editAllNavDssTo('SYMPHONY');
-
+			
+			// remove config settings
+			Symphony::Configuration()->remove(PLH_GROUP);
+			
+			// remove columns from tbl_pages table
 			$query_fields = '';
 			$fields = Symphony::Database()->fetch('DESCRIBE `tbl_pages`');
 			$fields_count = count($fields);
@@ -118,7 +150,7 @@
 				
 				return (boolean)Symphony::Database()->query($query);
 			}
-
+			
 			return true;
 		}
 
@@ -310,7 +342,8 @@
 			$group->setAttribute('class', 'settings');
 			$group->appendChild(new XMLElement('legend', __('Page LHandles')));
 
-
+			
+			/* Fill test Names and Handles for Pages */
 			$div = new XMLElement('div', NULL, array('id' => 'file-actions', 'class' => 'label'));
 			
 			$span = new XMLElement('span', NULL, array('class' => 'frame'));
@@ -321,7 +354,6 @@
 			));
 
 			$div->appendChild($span);
-			
 			
 			$reference_language = FLang::instance()->referenceLanguage();
 			$all_languages = FLang::instance()->ld()->allLanguages();
@@ -336,6 +368,32 @@
 			));
 
 			$group->appendChild($div);
+			
+			
+			/* Operating mode */
+			$label = Widget::Label(__('Operating mode'));
+			
+			$op_mode = Symphony::Configuration()->get('op_mode', PLH_GROUP);
+			$options = array();
+			$message = '';
+			
+			foreach( $this->op_modes as $idx => $op_mode_details ){
+				$options[] = array(
+						$op_mode_details['handle'],
+						($op_mode_details['handle'] == $op_mode),
+						$op_mode_details['name']
+				);
+				
+				if( $idx > 0 ) $message .= "<br />";
+				
+				$message .= "<b>".$op_mode_details['name']."</b>: ".$op_mode_details['desc'];
+			}
+			
+			$label->appendChild( Widget::Select('settings['.PLH_GROUP.'][op_mode]', $options) );
+			$group->appendChild($label);
+			$group->appendChild(new XMLElement('p', $message, array('class' => 'help')));
+			
+			
 			$context['wrapper']->appendChild($group);
 		}
 		
@@ -365,7 +423,7 @@
 			}
 			
 			$this->_insertTestTitlesAndHandles($saved_languages);
-
+			
 			return true;
 		}
 
