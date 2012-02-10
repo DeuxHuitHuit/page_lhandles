@@ -29,7 +29,7 @@
 	<xsl:template match="page" mode="plh-url">
 		<xsl:param name="lang" select="/data/fl-languages/current-language/@handle" />
 		
-	    <xsl:value-of select="concat($xs_root, '/', $lang, '/', item[@lang=$lang]/@handle, '/')"/>
+	    <xsl:value-of select="concat('/', $lang, '/', item[@lang=$lang]/@handle, '/')"/>
 	</xsl:template>
 	
 	
