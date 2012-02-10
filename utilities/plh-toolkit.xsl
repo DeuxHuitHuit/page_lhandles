@@ -1,37 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:exsl="http://exslt.org/common"
-	xmlns:string="http://symphony-cms.com/functions"
-	extension-element-prefixes="exsl string">
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	
 	
 	
 	
-	<xsl:import href="string-op.xsl" />
+	<!--
+		These templates **assume** you attached the following Datasources to your page:
+		
+		- FL: Languages
+		- PLH: Page
+		- a navigation datasource with your Pages
+		
+		If you didn't, you should attach them ;) 
+	 -->
 	
 	
 	
 	
 	<!-- 
+		Page URL generator.
+		
 		If your navigation DS is "navigation", and want the URL for page with id=7, call like this:
 		
 		<xsl:apply-templates select="/data/navigation//page[ @id=7 ]" mode="plh-url" />
 	 -->
 	
 	<xsl:template match="page" mode="plh-url">
-		<xsl:param name="lang" select="/data/events/language-redirect/current-language/@handle" />
+		<xsl:param name="lang" select="/data/fl-languages/current-language/@handle" />
 		
-	    <xsl:value-of select="concat(/data/params/root, '/', $lang, '/', item[@lang=$lang]/@handle, '/')"/>
+	    <xsl:value-of select="concat($xs_root, '/', $lang, '/', item[@lang=$lang]/@handle, '/')"/>
 	</xsl:template>
 	
 	
 	<xsl:template match="page/page" mode="plh-url">
-		<xsl:param name="lang" select="/data/events/language-redirect/current-language/@handle" />
+		<xsl:param name="lang" select="/data/fl-languages/current-language/@handle" />
 		
 	    <xsl:apply-templates select="parent::page" mode="plh-url">
 	    	<xsl:with-param name="lang" select="$lang" />
 	    </xsl:apply-templates>
+	    
 	    <xsl:value-of select="concat(item[@lang=$lang]/@handle, '/')"/>
 	</xsl:template>
 	
@@ -39,44 +47,48 @@
 	
 	
 	<!--
-		Generates links for current-page in all languages. Languages are add as:
-		
-			<a title="languageName">
-				<img src="path-to-image" alt="languageName" />
-			</a>
-		
-		In my case the images are located in `workspace/public/css/images/flags`.
-		I took them from "Backend languages" extension.
+		Generates the URL for current-page in all languages.
 	-->
 	<xsl:template name="plh-site-languages">
-		<xsl:apply-templates select="/data/events/language-redirect/supported-languages/item" mode="plh" />
+		<ul>
+			<xsl:apply-templates select="/data/fl-languages/supported-languages/item" mode="plh" />
+		</ul>
 	</xsl:template>
 	
 	
-	<xsl:template match="language-redirect/supported-languages/item" mode="plh">
-		<xsl:variable name="v_images_path" select="concat(/data/params/workspace, '/public/css/images/flags/')" />
+	<xsl:template match="fl-languages/supported-languages/item" mode="plh">
+		<li>
+			<a>
+				<xsl:attribute name="href">
+					<xsl:call-template name="plh-multilang-url">
+						<xsl:with-param name="lang" select="@handle" />
+					</xsl:call-template>
+				</xsl:attribute>
+				
+				<xsl:value-of select="." />
+			</a>
+		</li>
+	</xsl:template>
+
+	
+	<!-- Generates the URL for current page -->
+	<xsl:template name="plh-multilang-url">
+		<xsl:param name="lang" />
+		<xsl:param name="page_id" select="/data/params/current-page-id" />
+	
+		<!-- root-url and handles of pages -->
+		<xsl:apply-templates select="/data/plh-page//page[ @id=$page_id ]" mode="plh-url">
+			<xsl:with-param name="lang" select="$lang" />
+		</xsl:apply-templates>
 		
-		<a title="{text()}">
-			<xsl:attribute name="href">
-				<!-- root and page handle -->
-				<xsl:apply-templates select="/data/plh-page//page[ @id=/data/params/current-page-id ]" mode="plh-url">
-					<xsl:with-param name="lang" select="@handle" />
-				</xsl:apply-templates>
-				
-				<!-- page params -->
-				<xsl:call-template name="plh-page-parameters">
-					<xsl:with-param name="lang" select="@handle" />
-				</xsl:call-template>
-				
-				<!-- url params -->
-				<xsl:call-template name="plh-url-parameters" />
-			</xsl:attribute>
-			
-			<img src="{$v_images_path}{@handle}.png" alt="{text()}" />
-		</a>
+		<!-- page params -->
+		<xsl:call-template name="plh-page-parameters">
+			<xsl:with-param name="lang" select="$lang" />
+		</xsl:call-template>
+		
+		<!-- query string -->
+		<xsl:call-template name="plh-query-string" />
 	</xsl:template>
-
-
 	
 	
 	<!--
@@ -90,20 +102,29 @@
 	</xsl:template>
 	
 	
-	
-	
 	<!--
-		Populates with URL parameters. Call it whenever you need them as well.
+		Populates with the query string. Call it whenever you need it as well.
 		
-		`?url-param-1=foo&url-param-2=bar`
+		`?url-param-1=foo&url-param-2=bar#just-a-hash`
 	-->
-	<xsl:template name="plh-url-parameters">
-		<xsl:variable name="v_url_params" select="substring-after(/data/params/current-url, '?')" />
+	<xsl:template name="plh-query-string">
+		<xsl:variable name="v_query-string" select="substring-after(/data/params/current-url, '?')" />
 		
-		<xsl:if test="$v_url_params != ''">
-			<xsl:text>?</xsl:text>
-			<xsl:value-of select="$v_url_params" />
-		</xsl:if>
+		<xsl:choose>
+			<!-- Show Query string -->
+			<xsl:when test="$v_query-string != ''">
+				<xsl:value-of select="concat('?', $v_query-string)" />
+			</xsl:when>
+			
+			<!-- Show Hash -->
+			<xsl:otherwise>
+				<xsl:variable name="v_hash" select="substring-after(/data/params/current-url, '#')" />
+				
+				<xsl:if test="$v_hash != ''">
+					<xsl:value-of select="concat('#', $v_hash)" />
+				</xsl:if>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 
