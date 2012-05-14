@@ -1,52 +1,31 @@
 <?php
-	
-	if(!defined('__IN_SYMPHONY__')) die('<h2>Error</h2><p>You cannot directly access this file</p>');
-	
-	
-	
+
+	if( !defined('__IN_SYMPHONY__') ) die('<h2>Error</h2><p>You cannot directly access this file</p>');
+
+
+
+	require_once('lib/class.datasource.MultilingualNavigation.php');
 	require_once('lib/class.PLHDatasourceManager.php');
 	require_once('lib/class.PLHManagerURL.php');
-	require_once(EXTENSIONS . '/frontend_localisation/lib/class.FLang.php');
-	
-	
-	
+	require_once(EXTENSIONS.'/frontend_localisation/lib/class.FLang.php');
+
+
+
 	define_safe(PLH_NAME, 'Page LHandles');
 	define_safe(PLH_GROUP, 'page_lhandles');
-	
-	
-	
-	class Extension_page_lhandles extends Extension {
-		
-		public function about() {
-			return array(
-					'name'			=> PLH_NAME,
-					'version'		=> '2.4',
-					'release-date'	=> '2012-02-08',
-					'author'		=> array(
-							array(
-									'name'  => 'Vlad Ghita',
-									'email' => 'vlad.github@gmail.com'
-							),
-					),
-					'description'	=> 'Allows localisation of Pages\' Titles and Handles.'
-			);
-		}
-		
-		
+
+
+
+	class Extension_page_lhandles extends Extension
+	{
+
 		/**
 		 * Supported operating modes.
 		 *
 		 * @var array
 		 */
 		private $op_modes;
-		
-		/**
-		 * PLH Datasource manager
-		 *
-		 * @var PLHDatasourceManager
-		 */
-		private $plh_dsm;
-		
+
 		/**
 		 * Knows if the first time the URL has been processed or not.
 		 *
@@ -54,128 +33,129 @@
 		 */
 		private $first_pass;
 
-		
-		
-		public function __construct($args) {
-			$this->_Parent = $args['parent'];
-			
-			$this->plh_dsm = new PLHDatasourceManager();
+
+
+		public function __construct(){
 			$this->first_pass = true;
-			
+
 			$this->op_modes = array(
-					array(
-							'handle' => 'strict',
-							'name' => __('Strict'),
-							'desc' => __('Default & Recommended mode.')
-					),
-					array(
-							'handle' => 'relax',
-							'name' => __('Relax'),
-							'desc' => __('Compatibility mode for URL Router. Enable this to use URLs like: <code>site.com/clients/_param1_/projects/_param2_/</b>. If you\'ll have <code>_param1_ = `projects`</code>, that will be a collision and Page LHandles will fail.')
-					)
+				array(
+					'handle' => 'strict',
+					'name' => __('Strict'),
+					'desc' => __('Default & Recommended mode.')
+				),
+				array(
+					'handle' => 'relax',
+					'name' => __('Relax'),
+					'desc' => __('Compatibility mode for URL Router. Enable this to use URLs like: <code>site.com/clients/_param1_/projects/_param2_/</b>. Without this mode, if you have <code>_param1_ = `projects`</code>, it will be a collision and Page LHandles will fail.')
+				)
 			);
 		}
 
-		
-		
-	/*------------------------------------------------------------------------------------------------
-		Installation
-	------------------------------------------------------------------------------------------------*/
+
+
+		/*------------------------------------------------------------------------------------------------*/
+		/*  Installation  */
+		/*------------------------------------------------------------------------------------------------*/
 
 		public function install(){
-			$this->plh_dsm->editAllNavDssTo('PLH');
-			
+			PLHDatasourceManager::editAllNavDssTo('PLH');
+
 			Symphony::Configuration()->set('op_mode', $this->op_modes[0]['handle'], PLH_GROUP);
-			
+
 			return (boolean)$this->_addColumnsToPageTable();
 		}
-		 
+
 		public function update($previous_version){
 			if( version_compare($previous_version, '2.0', '<') ){
 				$query_change = '';
-				
+
 				$fields = Symphony::Database()->fetch('DESCRIBE `tbl_pages`');
 				$fields_count = count($fields);
-	
-				for( $i=0; $i<$fields_count; $i++ ){
+
+				for( $i = 0; $i < $fields_count; $i++ ){
 					$old_name = $fields[$i]['Field'];
 					$is_page_lhandle = strpos($old_name, 'page_lhandles');
-	
+
 					if( $is_page_lhandle !== false ){
-						$new_name = 'plh_' . str_replace('_', '-', substr($old_name, 14));
-						
+						$new_name = 'plh_'.str_replace('_', '-', substr($old_name, 14));
+
 						$query_change .= sprintf(
 							' CHANGE `%s` `%s` VARCHAR ( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,',
 							$old_name, $new_name
 						);
 					}
 				}
-	
+
 				if( !empty($query_change) ){
 					$query = "ALTER TABLE `tbl_pages` ".trim($query_change, ',');
-					
+
 					return Symphony::Database()->query($query);
 				}
 			}
-			
+
 			if( version_compare($previous_version, '2.4', '<') ){
 				Symphony::Configuration()->set('op_mode', $this->op_modes[0]['handle'], PLH_GROUP);
 			}
 
 			return true;
 		}
-		
+
 		public function uninstall(){
 			// Reset navigation datasources
-			$this->plh_dsm->editAllNavDssTo('SYMPHONY');
-			
+			PLHDatasourceManager::editAllNavDssTo('SYMPHONY');
+
 			// remove config settings
 			Symphony::Configuration()->remove(PLH_GROUP);
-			
+
 			// remove columns from tbl_pages table
 			$query_fields = '';
 			$fields = Symphony::Database()->fetch('DESCRIBE `tbl_pages`');
 			$fields_count = count($fields);
 
-			for ($i = 0; $i < $fields_count; $i++) {
+			for( $i = 0; $i < $fields_count; $i++ ){
 				$field_name = $fields[$i]['Field'];
 				$is_page_lhandle = strpos($field_name, 'plh');
 
-				if ( $is_page_lhandle !== false )
-					$query_fields.= "\nDROP `$field_name`,";
+				if( $is_page_lhandle !== false )
+					$query_fields .= "\nDROP `$field_name`,";
 			}
 
-			if ( !empty($query_fields) ) {
+			if( !empty($query_fields) ){
 				$query = "ALTER TABLE `tbl_pages` ".trim($query_fields, ',');
-				
+
 				return (boolean)Symphony::Database()->query($query);
 			}
-			
-			return true;
-		}
-
-		public function enable() {
-			$this->plh_dsm->editAllNavDssTo('PLH');
 
 			return true;
 		}
 
-		public function disable() {
-			$this->plh_dsm->editAllNavDssTo('SYMPHONY');
-			
+		public function enable(){
+			PLHDatasourceManager::editAllNavDssTo('PLH');
+
 			return true;
 		}
-		
-		
 
-		public function getSubscribedDelegates() {
+		public function disable(){
+			PLHDatasourceManager::editAllNavDssTo('SYMPHONY');
+
+			return true;
+		}
+
+
+
+		/*------------------------------------------------------------------------------------------------*/
+		/*  Delegates  */
+		/*------------------------------------------------------------------------------------------------*/
+
+		public function getSubscribedDelegates(){
 			return array(
 				array(
 					'page' => '/backend/',
 					'delegate' => 'InitaliseAdminPageHead',
 					'callback' => 'dInitaliseAdminPageHead'
 				),
-				
+
 				array(
 					'page' => '/blueprints/pages/',
 					'delegate' => 'AppendPageContent',
@@ -193,17 +173,17 @@
 					'delegate' => 'AddCustomPreferenceFieldsets',
 					'callback' => 'dAddCustomPreferenceFieldsets'
 				),
-				
+
 				array(
 					'page' => '/system/preferences/',
 					'delegate' => 'CustomActions',
 					'callback' => 'dCustomActions'
 				),
-				
+
 				array(
-					'page' => '/system/preferences/',
-					'delegate' => 'Save',
-					'callback' => 'dSavePreferences'
+					'page' => '/extensions/frontend_localisation/',
+					'delegate' => 'FLSavePreferences',
+					'callback' => 'dFLSavePreferences'
 				),
 
 				array(
@@ -226,366 +206,367 @@
 			);
 		}
 
-		
-		
-		/**
-		 * Append localised Title and Handle fields to Page edit menu.
-		 *
-		 * @param array $context - see delegate description
-		 */
-		public function dAppendPageContent($context) {
-			$page_id = $page->_context[1];
-
-			$all_languages = FLang::instance()->ld()->allLanguages();
-			$language_codes = FLang::instance()->ld()->languageCodes();
-			$reference_language = FLang::instance()->referenceLanguage();
-
-			$fieldset = new XMLElement('fieldset');
-			$fieldset->setAttribute('class', 'settings');
-			$fieldset->appendChild(new XMLElement('legend', __('Page LHandles')));
-
-			$group = new XMLElement('div');
-			$group->setAttribute('class', 'group');
-
-			$column = new XMLElement('div');
-			$column->setAttribute('class', 'page_lhandles');
 
 
-			/* Tabs */
-				
-			$ul = new XMLElement('ul', '', array('class' => 'tabs'));
-
-			foreach( $language_codes as $language ){
-				$li = new XMLElement(
-					'li',
-					($all_languages[$language] ? $all_languages[$language] : __('Unknown Lang : %s', array($language)) ),
-					array('class' => $language . ($language == $reference_language ? ' active' : ''))
-				);
-				
-				if( $language == $reference_language ){
-					$ul->prependChild($li);
-				}
-				else{
-					$ul->appendChild($li);
-				}
-			}
-
-			$column->appendChild($ul);
-
-
-			/* Localised Title */
-
-			foreach( $language_codes as $key => $language ){
-				$column->appendChild(
-					Widget::Label(
-						__('Localised Title'),
-						Widget::Input(
-							"fields[plh_t-".$language."]",
-							$context['fields']['plh_t-'.$language],
-							'text',
-							array('length', '30')
-						),
-						'tab-panel tab-'.$language
-					)
-				);
-			}
-
-
-			/* Localised URL Handle */
-
-			foreach( $language_codes as $key => $language ){
-				$column->appendChild(
-					Widget::Label(
-						__('Localised URL Handle'),
-						Widget::Input(
-							"fields[plh_h-".$language."]",
-							$context['fields']['plh_h-'.$language],
-							'text',
-							array('length', '30')
-						),
-						'tab-panel tab-'.$language
-					)
-				);
-			}
-
-
-			$group->appendChild($column);
-			$fieldset->appendChild($group);
-			$context['form']->prependChild($fieldset);
-		}
+		/*------------------------------------------------------------------------------------------------*/
+		/*  Frontend  */
+		/*------------------------------------------------------------------------------------------------*/
 
 		/**
 		 * Process the URL and translate the localised page handles to Symphony handles.
 		 *
 		 * @param array $context - see delegate description
 		 */
-		public function dFrontendPrePageResolve($context) {
+		public function dFrontendPrePageResolve($context){
 
-			if (   $this->first_pass == true 		//1. to prevent an endless loop if called after the 404 is generated
-			    && $this->_validateDependencies()	//2. make sure needed extensions are enabled
-			) {
+			if( $this->first_pass === true //1. to prevent an endless loop if called after the 404 is generated
+				&& $this->_validateDependencies() //2. make sure needed extensions are enabled
+			){
 				$this->first_pass = false;
-				
-				$url = MySQL::cleanValue( $context['page'] );
-				
-				$context['page'] = PLHManagerURL::instance()->lang2sym($url);
+
+				$url = MySQL::cleanValue($context['page']);
+
+				$context['page'] = PLHManagerURL::lang2sym($url);
 			}
 		}
 
+
+
+		/*------------------------------------------------------------------------------------------------*/
+		/*  Pages  */
+		/*------------------------------------------------------------------------------------------------*/
+
 		/**
-		 * Add a button on preferences page to Update all Pages' Title and Handle data.
+		 * Append localised Title and Handle fields to Page edit menu.
 		 *
-		 * @param $context - see delegate description
+		 * @param array $context - see delegate description
 		 */
-		public function dAddCustomPreferenceFieldsets($context) {
+		public function dAppendPageContent($context){
+			$this->_appendAssets();
+
+			$main_lang = FLang::getMainLang();
+			$all_langs = FLang::getAllLangs();
+			$langs = FLang::getLangs();
+
+			$fieldset = new XMLElement('fieldset', null, array('class' => 'settings'));
+			$fieldset->appendChild(new XMLElement('legend', __('Page LHandles')));
+
+			$group = new XMLElement('div', null, array('class' => 'field-multilingual'));
+
+
+			/* Tabs */
+
+			$ul = new XMLElement('ul', '', array('class' => 'tabs'));
+
+			foreach( $langs as $lc ){
+				$li = new XMLElement(
+					'li',
+					$all_langs[$lc] ? $all_langs[$lc] : __('Unknown Lang : %s', array($lc)),
+					array('class' => $lc.($lc === $main_lang ? ' active' : ''))
+				);
+
+				$lc === $main_lang ? $ul->prependChild($li) : $ul->appendChild($li);
+			}
+
+			$group->appendChild($ul);
+
+
+			/* Content */
+
+			foreach( $langs as $lc ){
+
+				// title
+				$group->appendChild(
+					Widget::Label(
+						__('Localised Title'),
+						Widget::Input(
+							"fields[plh_t-".$lc."]",
+							$context['fields']['plh_t-'.$lc],
+							'text',
+							array('length', '30')
+						),
+						'tab-panel tab-'.$lc
+					)
+				);
+
+				// handle
+				$group->appendChild(
+					Widget::Label(
+						__('Localised URL Handle'),
+						Widget::Input(
+							"fields[plh_h-".$lc."]",
+							$context['fields']['plh_h-'.$lc],
+							'text',
+							array('length', '30')
+						),
+						'tab-panel tab-'.$lc
+					)
+				);
+			}
+
+
+			$fieldset->appendChild($group);
+			$context['form']->prependChild($fieldset);
+		}
+
+
+
+		/*------------------------------------------------------------------------------------------------*/
+		/*  Preferences  */
+		/*------------------------------------------------------------------------------------------------*/
+
+		/**
+		 * Display options on Preferences page.
+		 *
+		 * @param array $context
+		 */
+		public function dAddCustomPreferenceFieldsets($context){
 			$group = new XMLElement('fieldset');
 			$group->setAttribute('class', 'settings');
 			$group->appendChild(new XMLElement('legend', __('Page LHandles')));
 
-			
-			/* Fill test Names and Handles for Pages */
+			$this->_appendUpdateButton($group);
+			$this->_appendConsolidate($group);
+			$this->_appendOperatingMode($group);
+
+			$context['wrapper']->appendChild($group);
+		}
+
+		/**
+		 * Convenience method; builds the update button
+		 *
+		 * @param XMLElement &$wrapper
+		 */
+		private function _appendUpdateButton(XMLElement &$wrapper){
+			$main_lang = FLang::getMainLang();
+			$all_langs = FLang::getAllLangs();
+
 			$div = new XMLElement('div', NULL, array('id' => 'file-actions', 'class' => 'label'));
-			
+
 			$span = new XMLElement('span', NULL, array('class' => 'frame'));
 			$span->appendChild(new XMLElement(
 				'button',
 				__('Fill test Names and Handles for Pages'),
 				array('name' => 'action['.PLH_GROUP.'][update]', 'type' => 'submit')
 			));
-
 			$div->appendChild($span);
-			
-			$reference_language = FLang::instance()->referenceLanguage();
-			$all_languages = FLang::instance()->ld()->allLanguages();
-			
-			$div->appendChild(new XMLElement(
-				'p',
-				__(
-					'Updates every Page\'s empty Titles and Handles with the value for <b>%1$s - %2$s</b> language, prefixed by language code.<br />E.g. <code>Romana : Acasa => English : ENAcasa</code>',
-					array($reference_language, $all_languages[$reference_language])
-				),
-				array('class' => 'help')
-			));
+			$div->appendChild(new XMLElement('p', __('Updates every Page\'s empty Titles and Handles with the value for <b>%1$s - %2$s</b> language, prefixed by language code.<br />E.g. <code>Romana : Acasa => English : ENAcasa</code>', array($main_lang, $all_langs[$main_lang])), array('class' => 'help')));
 
-			$group->appendChild($div);
-			
-			
-			/* Operating mode */
+			$wrapper->appendChild($div);
+		}
+
+		/**
+		 * Convenience method; builds consolidate checkbox
+		 *
+		 * @param XMLElement &$wrapper
+		 */
+		private function _appendConsolidate(XMLElement &$wrapper){
+			$label = Widget::Label(__('Consolidate entry data'));
+			$label->appendChild(Widget::Input('settings['.PLH_GROUP.'][consolidate]', 'yes', 'checkbox', array('checked' => 'checked')));
+			$wrapper->appendChild($label);
+			$wrapper->appendChild(new XMLElement('p', __('Check this field if you want to consolidate database by <b>keeping</b> entry values of removed/old Language Driver language codes. Entry values of current language codes will not be affected.'), array('class' => 'help')));
+		}
+
+		/**
+		 * Convenience method; builds operatin mode select
+		 *
+		 * @param XMLElement &$wrapper
+		 */
+		private function _appendOperatingMode(XMLElement &$wrapper){
 			$label = Widget::Label(__('Operating mode'));
-			
+
 			$op_mode = Symphony::Configuration()->get('op_mode', PLH_GROUP);
 			$options = array();
 			$message = '';
-			
+
 			foreach( $this->op_modes as $idx => $op_mode_details ){
 				$options[] = array(
-						$op_mode_details['handle'],
-						($op_mode_details['handle'] == $op_mode),
-						$op_mode_details['name']
+					$op_mode_details['handle'],
+					($op_mode_details['handle'] == $op_mode),
+					$op_mode_details['name']
 				);
-				
+
 				if( $idx > 0 ) $message .= "<br />";
-				
+
 				$message .= "<b>".$op_mode_details['name']."</b>: ".$op_mode_details['desc'];
 			}
-			
-			$label->appendChild( Widget::Select('settings['.PLH_GROUP.'][op_mode]', $options) );
-			$group->appendChild($label);
-			$group->appendChild(new XMLElement('p', $message, array('class' => 'help')));
-			
-			
-			$context['wrapper']->appendChild($group);
+
+			$label->appendChild(Widget::Select('settings['.PLH_GROUP.'][op_mode]', $options));
+			$wrapper->appendChild($label);
+			$wrapper->appendChild(new XMLElement('p', $message, array('class' => 'help')));
 		}
-		
+
 		/**
-		 * On preferences page, personalize custom form actions.
+		 * Handle custom preferences actions
 		 */
 		public function dCustomActions(){
-			if(isset($_POST['action'][PLH_GROUP]['update'])){
+			if( isset($_POST['action'][PLH_GROUP]['update']) ){
 				$this->_insertTestTitlesAndHandles();
 			}
 		}
-		
+
 		/**
-		 * On Preferences page, right before saving the preferences, check whether or not
-		 * the language codes have been changed. If yes, integrate the new ones.
+		 * Save options from Preferences page
 		 *
-		 * @param array $context - see delegate description
+		 * @param array $context
+		 *
+		 * @return boolean
 		 */
-		public function dSavePreferences($context) {
-			$saved_languages = FLang::instance()->ld()->getSavedLanguages($context);
-			$stored_languages = FLang::instance()->ld()->languageCodes();
-
-			$to_check_languages = array_diff($saved_languages, $stored_languages);
-
-			if( !empty($to_check_languages) ){
-				$this->_addColumnsToPageTable($to_check_languages);
+		public function dFLSavePreferences($context){
+			try{
+				$show_columns = Symphony::Database()->fetch("SHOW COLUMNS FROM `tbl_pages` LIKE 'plh_t-%';");
 			}
-			
-			$this->_insertTestTitlesAndHandles($saved_languages);
-			
+			catch( Exception $e ){
+				die('Pages table from Database doesn\'t exist. Grab a <a href="http://github.com/vlad-ghita/page_Lhandles/">newer version</a>  of Page LHandles extension.');
+			}
+
+			$columns = array();
+
+			if( $show_columns ){
+				foreach( $show_columns as $column ){
+					$lc = substr($column['Field'], strlen($column['Field']) - 2);
+
+					// If not consolidate option AND column lang_code not in supported languages codes -> Drop Column
+					if( ($_POST['settings'][PLH_GROUP]['consolidate'] !== 'yes') && !in_array($lc, $context['new_langs']) ){
+						Symphony::Database()->query("ALTER TABLE  `tbl_pages` DROP COLUMN `plh_t-{$lc}`");
+						Symphony::Database()->query("ALTER TABLE  `tbl_pages` DROP COLUMN `plh_h-{$lc}`");
+					} else{
+						$columns[] = $column['Field'];
+					}
+				}
+			}
+
+			// Add new fields
+			foreach( $context['new_langs'] as $lc ){
+				// If column lang_code dosen't exist in the laguange add columns
+
+				if( !in_array('plh_t-'.$lc, $columns) ){
+					Symphony::Database()->query("ALTER TABLE  `tbl_pages` ADD COLUMN `plh_t-{$lc}` varchar(255) default NULL");
+					Symphony::Database()->query("ALTER TABLE  `tbl_pages` ADD COLUMN `plh_h-{$lc}` int(11) unsigned NULL");
+				}
+			}
+
+			$this->_insertTestTitlesAndHandles($context['new_langs']);
+
 			return true;
 		}
+
+
+
+		/*------------------------------------------------------------------------------------------------*/
+		/*  Notifications  */
+		/*------------------------------------------------------------------------------------------------*/
 
 		/**
 		 * Issue a warning if dependencies are not met.
 		 */
-		public function dAppendPageAlert() {
+		public function dAppendPageAlert(){
 			if( !$this->_validateDependencies() ){
-				
+
 				Administration::instance()->Page->pageAlert(
-					__('<code>%1$s</code> depends on <code>%2$s</code>. Make sure you have this extension installed and enabled.', array(PLH_NAME, 'Frontend localisation') ),
+					__('<code>%1$s</code> depends on <code>%2$s</code>. Make sure you have this extension installed and enabled.', array(PLH_NAME, 'Frontend localisation')),
 					Alert::ERROR
 				);
 			}
 		}
 
-		/**
-		 * Add necessary assets to page head
-		 */
-		public function dInitaliseAdminPageHead() {
-			$callback = Administration::instance()->getPageCallback();
-			if ( $callback['driver'] == 'blueprintspages' && ( in_array($callback['context'][0], array('new', 'edit')) ) ) {
-				Administration::instance()->Page->addScriptToHead(URL . '/extensions/page_lhandles/assets/page_lhandles.blueprintspages.js', 202, false);
-				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/page_lhandles/assets/page_lhandles.blueprintspages.css', "screen");
-			}
-		}
+
+
+		/*------------------------------------------------------------------------------------------------*/
+		/*  Datasources  */
+		/*------------------------------------------------------------------------------------------------*/
 
 		/**
 		 * Edit navigation datasource content.
 		 *
 		 * @param array $context - see delegate description
 		 */
-		public function dDatasourceNavigation($context) {
-			$context['contents'] = $this->plh_dsm->editNavDsTo('PLH', $context['contents']);
-
-			return true;
+		public function dDatasourceNavigation($context){
+			$context['contents'] = PLHDatasourceManager::editNavDsTo('PLH', $context['contents']);
 		}
-		
 
-		
+
+
 		/**
 		 * For all Pages, fill the new added columns with the page_data from $reference_language.
 		 *
-		 * @param array $to_check_languages - languages to set data for.
+		 * @param array $langs - languages to set data for.
+		 *
+		 * @return boolean
 		 */
-		private function _insertTestTitlesAndHandles($to_check_languages = array()) {
-			if ( empty($to_check_languages) ) {
-				$to_check_languages = FLang::instance()->ld()->languageCodes();
-	
-				if ( empty($to_check_languages) ) {
-					//means there are no language codes in Configuration file
-					return (boolean) true;
-				}
-			}
-			
-			$reference_language = FLang::instance()->referenceLanguage();
-			
-			$pages_IDs = Symphony::Database()->fetchCol('id', 'SELECT `id` FROM `tbl_pages`');
-			
-			$query_fields = "`handle`,`title`,";
-			
-			foreach( $to_check_languages as $language ){
-				$query_fields .= "`plh_t-{$language}`,";
-				$query_fields .= "`plh_h-{$language}`,";
-			}
-			
-			foreach( $pages_IDs as $page_id ){
-				$query = sprintf("SELECT %s FROM `tbl_pages` WHERE `id` = '%s'",
-					trim($query_fields,','),
-					$page_id
-				);
-				
-				$page_data = Symphony::Database()->fetch($query);
-				
-				$title = $page_data[0]["title"];
-				$handle = $page_data[0]["handle"];
-				
-				unset($page_data[0]["handle"], $page_data[0]["title"]);
-				
-				$new_page_data = array();
-				$query_update_fields = '';
-				
-				foreach( $page_data[0] as $key => $value ){
-					if( empty($value) ){
-						$is_title = strpos($key, '_t-');
-						
-						$lang_code = substr($key, 6);
-						if( $lang_code == $reference_language ){
-							$lang_code = '';
-						}
-						
-						if( empty($is_title) ){
-							$new_value = $lang_code . $handle; }
-						else{
-							$new_value = strtoupper($lang_code) . $title;
-						}
-						
-						$query_update_fields .= "\n `{$key}` = '{$new_value}',";
-					}
-				}
-				
-				if( !empty($query_update_fields) ){
-					$query = "UPDATE tbl_pages SET ".trim($query_update_fields, ',')." WHERE `id` = '{$page_id}';";
-					
-					Symphony::Database()->query($query);
-				}
-			}
-			
-			return true;
-		}
-		
-		/**
-		 *
-		 * Adds columns to 'tbl_pages' table.
-		 *
-		 * @param array $language_codes - the language codes array to be inserted.
-		 *
-		 * @return boolean - true on success, false otherwise
-		 */
-		private function _addColumnsToPageTable($language_codes = array()) {
-			if( empty($language_codes) ){
-				$language_codes = FLang::instance()->ld()->languageCodes();
+		private function _insertTestTitlesAndHandles($langs = array()){
+			if( empty($langs) ){
+				$langs = FLang::getLangs();
 
-				if( empty($language_codes) ){
-					//means there are no language codes in Configuration file
+				// languages codes must exist
+				if( empty($langs) ){
 					return true;
 				}
 			}
-			
-			
-			$tbl_pages = Symphony::Database()->fetch('DESCRIBE `tbl_pages`');
-			$fields_count = count($tbl_pages);
-			for( $i = 0; $i < $fields_count; $i++ ){
-				$fields[$i] = $tbl_pages[$i]['Field'];
+
+			$main_lang = FLang::getMainLang();
+
+			$pages_IDs = Symphony::Database()->fetchCol('id', 'SELECT `id` FROM `tbl_pages`');
+
+			$query_fields = "`handle`,`title`,";
+
+			foreach( $langs as $lc ){
+				$query_fields .= "`plh_t-{$lc}`,";
+				$query_fields .= "`plh_h-{$lc}`,";
 			}
-			
-			$query_fields = "";
-			
-			foreach( $language_codes as $language_code ){
-				if( !in_array("plh_t-".$language_code, $fields) ){
-					
-					$query_fields .= "\nADD `plh_t-{$language_code}` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,";
-					$query_fields .= "\nADD `plh_h-{$language_code}` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,";
+
+			foreach( $pages_IDs as $page_id ){
+				$query = sprintf("SELECT %s FROM `tbl_pages` WHERE `id` = '%s'",
+					trim($query_fields, ','), $page_id
+				);
+
+				$page_data = Symphony::Database()->fetch($query);
+
+				$title = $page_data[0]["title"];
+				$handle = $page_data[0]["handle"];
+
+				unset($page_data[0]["handle"], $page_data[0]["title"]);
+
+				$fields = '';
+
+				foreach( $page_data[0] as $key => $value ){
+					if( empty($value) ){
+						$lang_code = substr($key, 6) !== $main_lang ? substr($key, 6) : '';
+
+						$new_value = strpos($key, '_t-') === false ? $lang_code.$handle : strtoupper($lang_code).$title;
+
+						$fields .= "\n `{$key}` = '{$new_value}',";
+					}
 				}
-			}
 
-			if( !empty($query_fields) ){
-				$query = "ALTER TABLE `tbl_pages` ".trim($query_fields, ',');
-
-				return (boolean) Symphony::Database()->query($query);
+				if( !empty($fields) ){
+					Symphony::Database()->query("UPDATE tbl_pages SET ".trim($fields, ',')." WHERE `id` = '{$page_id}';");
+				}
 			}
 
 			return true;
 		}
-		
+
 		/**
 		 * Validate extension dependencies.
 		 *
 		 * @return boolean - true if dependencies are met, false otherwise
 		 */
 		private function _validateDependencies(){
-			return (boolean) Symphony::ExtensionManager()->fetchStatus('frontend_localisation') == EXTENSION_ENABLED;
+			$fl_status = ExtensionManager::fetchStatus(array('handle' => 'frontend_localisation'));
+
+			return (boolean) ($fl_status[0] === EXTENSION_ENABLED);
 		}
-		
+
+		private function _appendAssets(){
+			$this->assets_loaded = true;
+
+			$page = Administration::instance()->Page;
+
+			// multilingual stuff
+			$fl_assets = URL.'/extensions/frontend_localisation/assets/frontend_localisation.multilingual_tabs';
+			$page->addStylesheetToHead($fl_assets.'.css', 'screen', null, false);
+			$page->addScriptToHead($fl_assets.'_init.js', null, false);
+		}
+
 	}

@@ -3,23 +3,20 @@ Page LHandles
 
 Offers multilingual support for localised page handles in browser URL.
 
-* Version: 2.4
-* Build Date: 2012-02-08
+* Version: 2.5
+* Build Date: 2012-05-11
 * Authors:
 	- [Vlad Ghita](http://www.xanderadvertising.com)
 * Requirements:
-	- Symphony 2.2.x
-	- Extension [Frontend localisation](https://github.com/vlad-ghita/frontend_localisation)
-
-Thank you all other Symphony Extensions developers for your inspirational work.
-
+	- Symphony 2.3
+	- [Frontend localisation 1.4](https://github.com/vlad-ghita/frontend_localisation)
 
 
 
 ## 1 Features ##
 
 * Offers support for translating Page handles in current supported languages (from Frontend Localisation).
-* Adds a button in `System -> Preferences` to automatically fill empty localisation `title` and `handle` inputs.
+* Adds a button in `System -> Preferences` to automatically fill empty localisation `title` and `handle` inputs for Pages.
 * Offers a DS which outputs the current-page handle and title in all supported languages.
 * Provides a utility for easier URL manipulation.
 * Overrides the navigation template Datasources to output the extra information.
@@ -63,7 +60,7 @@ New XML supplies handle and title for the current page according to current-lang
 2. Go to Blueprints -> Pages. Create a new page or edit an existing one.
 3. Fill the available localisation fields. Every Localised URL Handle filled will become accessible from the browser. The empty ones will redirect to 404 (Page Not Found).
 4. Add the "PLH Page" Datasource to your page. Go to `?debug` and feel the difference.
-5. To include the utility in your stylesheets copy `utilities/plh-toolkit.xsl` to `workspace/utilities` and include it in your XSLT stylesheets.
+5. To include the utility in your stylesheets copy `/utilities/plh-toolkit.xsl` to `/workspace/utilities` and include it in your XSLT stylesheets.
 
 
 
@@ -75,13 +72,13 @@ Take 2 pages and 3 languages: Romanian (RO), English (EN) and French (FR).
 No. | Parent     | Sym Title  | Sym Handle | RO Title   | RO Handle  | EN Title | EN Handle | FR Title   | FR Handle  | Parameters
 ----|------------|------------|------------|------------|------------|----------|-----------|------------|------------|-----------
 1.  | -          | Sym Events | sym-events | Evenimente | evenimente | Events   | events    | Evenements | evenements | -
-2.  | sym-events | Sym Title  | sym-title  | Titlu      | titlu      | Title    | title     | Titre      | titre      | event-title
+2.  | sym-events | Sym Single | sym-single | Single     | single     | Single   | single    | Single     | single     | event-single
 
-All these 3 URLs will request "Sym Title" Page:
+All these 3 URLs will request "Sym Single" Page:
 
-- www.example.com/ro/evenimente/titlu/primul-titlu ---> **sym-events/sym-title**/primul-titlu
-- www.example.com/en/events/title/first-title --------> **sym-events/sym-title**/first-title
-- www.example.com/fr/evenements/titre/premier-titre --> **sym-events/sym-title**/premier-titre
+- www.example.com/ro/evenimente/single/primul-titlu ---> **sym-events/sym-single**/primul-titlu
+- www.example.com/en/events/single/first-title --------> **sym-events/sym-single**/first-title
+- www.example.com/fr/evenements/single/premier-titre --> **sym-events/sym-single**/premier-titre
 
 
 
@@ -121,5 +118,5 @@ Because I'm using Multilingual Text, this is how my template looks like (NB: my 
         <xsl:param name="lang" />
         <xsl:variable name="country_handle" select="concat('handle-',$lang)" />
     
-        <xsl:value-of select="/data/events-datasource-that-outputs-one-event-based-on-page-parameter/entry/title/@*[ local-name() = $country_handle ]" />
+        <xsl:value-of select="/data/events-datasource-that-outputs-one-event-based-on-page-parameter/entry/title/@*[ name() = $country_handle ]" />
     </xsl:template>

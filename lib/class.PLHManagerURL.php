@@ -1,81 +1,80 @@
 <?php
 
-	if(!defined('__IN_SYMPHONY__')) die('<h2>Error</h2><p>You cannot directly access this file</p>');
-	
-	
-	
-	require_once(EXTENSIONS . '/frontend_localisation/lib/class.FLang.php');
-	
-	
-	
-	final class PLHManagerURL implements Singleton
+	if( !defined('__IN_SYMPHONY__') ) die('<h2>Error</h2><p>You cannot directly access this file</p>');
+
+
+
+	require_once(EXTENSIONS.'/frontend_localisation/lib/class.FLang.php');
+
+
+
+	final class PLHManagerURL
 	{
-		private static $instance;
-		
-		public static function instance(){
-			if (!self::$instance instanceof PLHManagerURL) {
-				self::$instance = new PLHManagerURL();
-			}
-			
-			return self::$instance;
-		}
-		
-		
-		
+
 		/**
-		 * Converts given URL from Symphony Page handles to $language_code Page handles.
+		 * Converts given URL from Symphony Page handles to $lang_code Page handles.
 		 *
-		 * @param string $url - URL to convert
-		 * @param string $language_code (optional) - language code. If empty, defaults to reference Frontend language
+		 * @param string $url       - URL to convert
+		 * @param string $lang_code - language code. If empty, defaults to main language
 		 *
-		 * @return string - localised URL if $language_code was found else original URL
+		 * @static
+		 *
+		 * @return string - localised URL if $lang_code was found else original URL
 		 */
-		public function sym2lang($url, $language_code = null){
-			if( empty($language_code) ){
-				$language_code = FLang::instance()->referenceLanguage();
-			
-				// if no language is set, return current URL
-				if( empty($language_code) ){
-					return $url;
-				}
-			}
-			
+		public static function sym2lang($url, $lang_code = null){
+			self::_setLangCode($lang_code);
+
+			// if no language is set, return current URL
+			if( empty($lang_code) ) return $url;
+
 			$ref_handle = 'handle';
-			$target_handle = 'plh_h-'.$language_code;
-			
-			return $this->_processURL($url, $ref_handle, $target_handle);
+			$target_handle = 'plh_h-'.$lang_code;
+
+			return self::_processURL($url, $ref_handle, $target_handle);
 		}
-		
+
 		/**
-		 * Converts given URL from $language_code Page handles to Symphony Page handles.
+		 * Converts given URL from $lang_code Page handles to Symphony Page handles.
 		 *
-		 * @param string $url - URL to convert
-		 * @param string $language_code (optional) - language code. If empty, defaults to current Frontend language
+		 * @param string $url       - URL to convert
+		 * @param string $lang_code - language code. If empty, defaults to main FLang
 		 *
-		 * @return string - symphony URL if $language_code was found else original URL
+		 * @static
+		 *
+		 * @return string - symphony URL if $lang_code was found else original URL
 		 */
-		public function lang2sym($url, $language_code = null){
-			if( empty($language_code) ){
-				$language_code = FLang::instance()->ld()->languageCode();
-			
-				// if no language is set, return current URL
-				if( empty($language_code) ){
-					return $url;
-				}
-			}
-			
-			$ref_handle = 'plh_h-'.$language_code;
+		public static function lang2sym($url, $lang_code = null){
+			self::_setLangCode($lang_code);
+
+			// if no language is set, return current URL
+			if( empty($lang_code) ) return $url;
+
+			$ref_handle = 'plh_h-'.$lang_code;
 			$target_handle = 'handle';
-			
-			return $this->_processURL($url, $ref_handle, $target_handle);
+
+			return self::_processURL($url, $ref_handle, $target_handle);
 		}
-		
-		
-		
-	/*-------------------------------------------------------------------------
-		Utilities:
-	-------------------------------------------------------------------------*/
-		
+
+
+
+		/*------------------------------------------------------------------------------------------------*/
+		/*  In-house  */
+		/*------------------------------------------------------------------------------------------------*/
+
+		/**
+		 * Sets a valid language code
+		 *
+		 * @static
+		 *
+		 * @param &$lang_code
+		 */
+		private static function _setLangCode(&$lang_code){
+			if( empty($lang_code) || (FLang::validateLangCode($lang_code) === false ) ){
+
+				$lang_code = FLang::getMainLang();
+			}
+		}
+
 		/**
 		 * Process given URL. Finds target_handles from reference_handles.
 		 *
@@ -83,45 +82,44 @@
 		 * @param string $ref_handle
 		 * @param string $target_handle
 		 *
+		 * @static
+		 *
 		 * @return string - processed URL
 		 */
-		private function _processURL($url, $ref_handle, $target_handle){
+		private static function _processURL($url, $ref_handle, $target_handle){
 			/*
 			 * This is here in case raw URLs are processed. (eg: URLs comming from Multilingual Entry URL).
 			 * Normally, a sanitized $url will come here (from Symphony)
 			 */
 			$url_query = '';
 			$url_hash = '';
-			
+
 			// find the Query
 			$url_query_pos = strpos($url, '?');
-			
+
 			if( $url_query_pos !== false ){
 				$url_query = substr($url, $url_query_pos);
 				$url = substr($url, 0, $url_query_pos);
 			}
-			
+
 			// else find the Hash
 			else{
 				$url_hash_pos = strpos($url, '#');
-				
+
 				if( $url_hash_pos !== false ){
 					$url_hash = substr($url, $url_hash_pos);
 					$url = substr($url, 0, $url_hash_pos);
 				}
 			}
-			
-			
-			$old_url = preg_split('/\//', trim($url, '/'), -1, PREG_SPLIT_NO_EMPTY);
 
-			$path = '';
+
+			$old_url = preg_split('/\//', trim($url, '/'), -1, PREG_SPLIT_NO_EMPTY);
 			$last_parent = null;
 
 
 			// resolve index
 			if( $old_url == null || empty($old_url) || !is_array($old_url) ){
 
-				// get the index page info
 				$query = "
 					SELECT p.`id`, p.`{$target_handle}`, p.`parent`
 					FROM `tbl_pages` as p
@@ -129,89 +127,91 @@
 					WHERE pt.`type` = 'index'
 					LIMIT 1";
 
-				// try to resolve the index page
-				$bit = $this->_getPageHandle($query, $last_parent, $target_handle);
+				$bit = self::_getPageHandle($query, $last_parent, $target_handle);
 
-				if( $bit === false ){
-					$path = $url;
-				}
-				else{
-					$path = '/'.$bit;
-				}
+				$path = ($bit === false) ? $url : '/'.$bit;
 			}
 
 			// resolve other pages
 			else{
 				$op_mode = Symphony::Configuration()->get('op_mode', PLH_GROUP);
-				$method = '_process'.ucfirst($op_mode);
-				
-				if( method_exists($this, $method) ){
-					$path = call_user_method($method, $this, $old_url, $ref_handle, $target_handle);
+				$method = '_process'.ucfirst(strtolower($op_mode));
+
+				if( method_exists(get_class(), $method) ){
+					$path = call_user_func(array(self, $method), $old_url, $ref_handle, $target_handle);
 				}
 				else{
 					$path = trim($url, '/');
 				}
 			}
-			
-			return (string) $path .'/'. $url_query . $url_hash;
+
+			return (string)$path.'/'.$url_query.$url_hash;
 		}
-		
+
 		/**
 		 * Processes the URL with relax settings. Used for URL Router compatibility
 		 * Doesn't respect Symphony Page parents structure.
 		 *
-		 * @param array $old_url
+		 * @param array  $old_url
 		 * @param string $ref_handle
 		 * @param string $target_handle
+		 *
+		 * @static
+		 *
+		 * @return string - the new path
 		 */
-		private function _processRelax($old_url, $ref_handle, $target_handle){
+		private static function _processRelax($old_url, $ref_handle, $target_handle){
 			$path = '';
-			
+
 			foreach( $old_url as $value ){
 				if( !empty($value) ){
 					$last_parent = null;
-					
+
 					$query = sprintf(
-							"SELECT `id`, `%s`, `parent` FROM `tbl_pages` WHERE `%s` = '%s' LIMIT 1",
-							$target_handle, $ref_handle, $value
+						"SELECT `id`, `%s`, `parent` FROM `tbl_pages` WHERE `%s` = '%s' LIMIT 1",
+						$target_handle, $ref_handle, $value
 					);
-			
-					$bit = $this->_getPageHandle($query, $last_parent, $target_handle);
-					
-					$path .= '/'.($bit === false ? $value : $bit );
+
+					$bit = self::_getPageHandle($query, $last_parent, $target_handle);
+
+					$path .= '/'.($bit === false ? $value : $bit);
 				}
 			}
-			
+
 			return $path;
 		}
-		
+
 		/**
 		 * Processes the URL with strict settings.
 		 * Respects Symphony Page parents structure.
 		 *
-		 * @param array $old_url
+		 * @param array  $old_url
 		 * @param string $ref_handle
 		 * @param string $target_handle
+		 *
+		 * @static
+		 *
+		 * @return string - the new path
 		 */
-		private function _processStrict($old_url, $ref_handle, $target_handle){
+		private static function _processStrict($old_url, $ref_handle, $target_handle){
 			$path = '';
 			$page_mode = true;
 			$last_parent = null;
-			
+
 			foreach( $old_url as $value ){
 				if( !empty($value) ){
-			
-					$query = sprintf("
+
+					if( $page_mode ){
+						$query = sprintf("
 							SELECT `id`, `%s`, `parent` FROM `tbl_pages` WHERE `%s` = '%s' AND `parent` %s LIMIT 1",
 							$target_handle,
 							$ref_handle,
 							$value,
-							($last_parent != null ? sprintf("= %s", $last_parent) : "IS NULL")
-					);
-			
-					if( $page_mode ){
-						$bit = $this->_getPageHandle($query, $last_parent, $target_handle);
-			
+							$last_parent != null ? sprintf("= %s", $last_parent) : "IS NULL"
+						);
+
+						$bit = self::_getPageHandle($query, $last_parent, $target_handle);
+
 						if( $bit === false ){
 							$path .= '/'.$value;
 							$page_mode = false;
@@ -225,42 +225,44 @@
 					}
 				}
 			}
-			
+
 			return $path;
 		}
-		
+
 		/**
 		 * Executes the given query and returns target_handle or false if no match
 		 *
 		 * @param string $query
-		 * @param integer $last_parent (reference)
+		 * @param int    &$last_parent
 		 * @param string $target_handle - $target_handle desired
+		 *
+		 * @static
 		 *
 		 * @return mixed - Translated handle or false if no handle found.
 		 */
-		private function _getPageHandle($query, &$last_parent, $target_handle) {
-			try {
+		private static function _getPageHandle($query, &$last_parent, $target_handle){
+			try{
 				$page = Symphony::Database()->fetch($query);
 			}
-			catch (DatabaseException $e) {
+			catch( DatabaseException $e ){
 				//table column "$lhandle" doesn't exist. redirect to 404.
-				if ( $e->getDatabaseErrorCode() == 1054 ) {
+				if( $e->getDatabaseErrorCode() == 1054 ){
 					FrontendPageNotFoundExceptionHandler::render($e);
 				}
 				// re-trow non-handled exception
-				else {
+				else{
 					throw $e;
 				}
 			}
-		
+
 			// page handle exists, store it
 			if( !empty($page) && ($last_parent == $page[0]['parent']) ){
 				$last_parent = $page[0]['id'];
-				
+
 				return $page[0][$target_handle];
 			}
-		
+
 			return false;
 		}
-	
+
 	}

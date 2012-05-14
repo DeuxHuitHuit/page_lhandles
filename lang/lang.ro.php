@@ -38,12 +38,12 @@
 
 		'Relax' =>
 		'Relax',
-		
+
 		'Updates every Page\'s empty Titles and Handles with the value for <b>%1$s - %2$s</b> language, prefixed by language code.<br />E.g. <code>Romana : Acasa => English : ENAcasa</code>' =>
 		'Actualizează Titlul şi Handleul fiecărei Pagini cu valorile de la limba <b>%1$s - %2$s</b>, prefixate de codul de limbă.<br />Ex. <code>Romana : Acasa => English : ENAcasa</code>',
-		
-		'Compatibility mode for URL Router. Enable this to use URLs like: <code>site.com/clients/_param1_/projects/_param2_/</b>. If you\'ll have <code>_param1_ = `projects`</code>, that will be a collision and Page LHandles will fail.' =>
-		'Mod de compatibilitate pentru URL Router. Activează pentru a folosi URLuri de genul: <code>site.com/clients/_param1_/projects/_param2_/</code>. Dacă vei avea <code>_param1_ = `projects`</code>, aceasta va fi o coliziune şi Page LHandles va da rezultate eronate.',
+
+		'Compatibility mode for URL Router. Enable this to use URLs like: <code>site.com/clients/_param1_/projects/_param2_/</b>. Without this mode, if you have <code>_param1_ = `projects`</code>, it will be a collision and Page LHandles will fail.' =>
+		'Mod de compatibilitate pentru URL Router. Activează pentru a folosi URL-uri de genul: <code>site.com/clients/_param1_/projects/_param2_/</code>. Fără acest mod, dacă aveți <code>_param1_ = `projects`</code>, aceasta va fi o coliziune şi Page LHandles va da rezultate eronate.',
 
 		'Page LHandles' =>
 		false,
