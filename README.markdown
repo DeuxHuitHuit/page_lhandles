@@ -1,15 +1,7 @@
 Page LHandles
 ==============
 
-Offers multilingual support for localised page handles in browser URL.
-
-* Version: 2.5
-* Build Date: 2012-05-11
-* Authors:
-	- [Vlad Ghita](http://www.xanderadvertising.com)
-* Requirements:
-	- Symphony 2.3
-	- [Frontend localisation 1.4](https://github.com/vlad-ghita/frontend_localisation)
+Offers support to localise Page titles and Handles.
 
 
 

@@ -7,6 +7,7 @@
 	require_once('lib/class.datasource.MultilingualNavigation.php');
 	require_once('lib/class.PLHDatasourceManager.php');
 	require_once('lib/class.PLHManagerURL.php');
+	require_once(EXTENSIONS.'/frontend_localisation/extension.driver.php');
 	require_once(EXTENSIONS.'/frontend_localisation/lib/class.FLang.php');
 
 
@@ -242,7 +243,7 @@
 		 * @param array $context - see delegate description
 		 */
 		public function dAppendPageContent($context){
-			$this->_appendAssets();
+			Extension_Frontend_Localisation::appendAssets();
 
 			$main_lang = FLang::getMainLang();
 			$all_langs = FLang::getAllLangs();
@@ -251,32 +252,30 @@
 			$fieldset = new XMLElement('fieldset', null, array('class' => 'settings'));
 			$fieldset->appendChild(new XMLElement('legend', __('Page LHandles')));
 
-			$group = new XMLElement('div', null, array('class' => 'field-multilingual'));
+			$container = new XMLElement('div', null, array('class' => 'field-multilingual'));
 
 
-			/* Tabs */
+			/*------------------------------------------------------------------------------------------------*/
+			/*  Tabs  */
+			/*------------------------------------------------------------------------------------------------*/
 
-			$ul = new XMLElement('ul', '', array('class' => 'tabs'));
-
+			$ul = new XMLElement('ul', null, array('class' => 'tabs'));
 			foreach( $langs as $lc ){
-				$li = new XMLElement(
-					'li',
-					$all_langs[$lc] ? $all_langs[$lc] : __('Unknown Lang : %s', array($lc)),
-					array('class' => $lc.($lc === $main_lang ? ' active' : ''))
-				);
-
+				$li = new XMLElement('li', $all_langs[$lc], array('class' => $lc));
 				$lc === $main_lang ? $ul->prependChild($li) : $ul->appendChild($li);
 			}
 
-			$group->appendChild($ul);
+			$container->appendChild($ul);
 
 
-			/* Content */
+			/*------------------------------------------------------------------------------------------------*/
+			/*  Panels  */
+			/*------------------------------------------------------------------------------------------------*/
 
 			foreach( $langs as $lc ){
 
 				// title
-				$group->appendChild(
+				$container->appendChild(
 					Widget::Label(
 						__('Localised Title'),
 						Widget::Input(
@@ -290,7 +289,7 @@
 				);
 
 				// handle
-				$group->appendChild(
+				$container->appendChild(
 					Widget::Label(
 						__('Localised URL Handle'),
 						Widget::Input(
@@ -305,7 +304,7 @@
 			}
 
 
-			$fieldset->appendChild($group);
+			$fieldset->appendChild($container);
 			$context['form']->prependChild($fieldset);
 		}
 
@@ -556,17 +555,6 @@
 			$fl_status = ExtensionManager::fetchStatus(array('handle' => 'frontend_localisation'));
 
 			return (boolean) ($fl_status[0] === EXTENSION_ENABLED);
-		}
-
-		private function _appendAssets(){
-			$this->assets_loaded = true;
-
-			$page = Administration::instance()->Page;
-
-			// multilingual stuff
-			$fl_assets = URL.'/extensions/frontend_localisation/assets/frontend_localisation.multilingual_tabs';
-			$page->addStylesheetToHead($fl_assets.'.css', 'screen', null, false);
-			$page->addScriptToHead($fl_assets.'_init.js', null, false);
 		}
 
 	}

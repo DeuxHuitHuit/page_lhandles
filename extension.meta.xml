@@ -25,10 +25,14 @@
 	</authors>
 
 	<dependencies>
-		<dependency version="1.5">https://github.com/vlad-ghita/frontend_localisation</dependency>
+		<dependency version="1.6">https://github.com/vlad-ghita/frontend_localisation</dependency>
 	</dependencies>
 
 	<releases>
+		<release version="2.6" date="2012-04-14"><![CDATA[
+			* Frontend Localisation 1.6 compatibility
+		]]></release>
+
 		<release version="2.5" date="2012-04-14"><![CDATA[
 			* Symphony 2.3 compatibility.
 		]]></release>
