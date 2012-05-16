@@ -19,6 +19,8 @@
 
 	class Extension_page_lhandles extends Extension
 	{
+		const DB_TABLE = 'tbl_pages';
+
 
 		/**
 		 * Supported operating modes.
@@ -64,7 +66,9 @@
 
 			Symphony::Configuration()->set('op_mode', $this->op_modes[0]['handle'], PLH_GROUP);
 
-			return (boolean)$this->__updateColumns(FLang::getLangs());
+			$this->__updateColumns(FLang::getLangs());
+
+			return true;
 		}
 
 		public function update($previous_version){
@@ -435,7 +439,10 @@
 
 		private function __updateColumns($langs, $consolidate = 'yes'){
 			try{
-				$show_columns = Symphony::Database()->fetch("SHOW COLUMNS FROM `tbl_pages` LIKE 'plh_t-%';");
+				$show_columns = Symphony::Database()->fetch(sprintf(
+					"SHOW COLUMNS FROM `%s` LIKE 'plh_t-%%';",
+					self::DB_TABLE
+				));
 			}
 			catch( Exception $e ){
 				die('Pages table from Database doesn\'t exist. Grab a <a href="http://github.com/vlad-ghita/page_Lhandles/">newer version</a>  of Page LHandles extension.');
@@ -449,8 +456,12 @@
 
 					// If not consolidate option AND column lang_code not in supported languages codes -> Drop Column
 					if( ($consolidate !== 'yes') && !in_array($lc, $langs) ){
-						Symphony::Database()->query("ALTER TABLE `tbl_pages` DROP COLUMN `plh_t-{$lc}`");
-						Symphony::Database()->query("ALTER TABLE `tbl_pages` DROP COLUMN `plh_h-{$lc}`");
+						Symphony::Database()->query(sprintf(
+							'ALTER TABLE `%1$s`
+								DROP COLUMN `plh_t-%2$s`,
+								DROP COLUMN `plh_h-%2$s`;',
+							self::DB_TABLE, $lc
+						));
 					} else{
 						$columns[] = $column['Field'];
 					}
@@ -462,10 +473,15 @@
 				// If column lang_code dosen't exist in the laguange add columns
 
 				if( !in_array('plh_t-'.$lc, $columns) ){
-					Symphony::Database()->query("ALTER TABLE `tbl_pages` ADD COLUMN `plh_t-{$lc}` varchar(255) default NULL");
-					Symphony::Database()->query("ALTER TABLE `tbl_pages` ADD COLUMN `plh_h-{$lc}` int(11) unsigned NULL");
+					Symphony::Database()->query(sprintf(
+						'ALTER TABLE `%1$s`
+							ADD COLUMN `plh_t-%2$s` varchar(255) default NULL,
+							ADD COLUMN `plh_h-%2$s` varchar(255) default NULL;',
+						self::DB_TABLE, $lc
+					));
 				}
 			}
+
 		}
 
 		/**
@@ -497,8 +513,8 @@
 			}
 
 			foreach( $pages_IDs as $page_id ){
-				$query = sprintf("SELECT %s FROM `tbl_pages` WHERE `id` = '%s'",
-					trim($query_fields, ','), $page_id
+				$query = sprintf("SELECT %s FROM `%s` WHERE `id` = '%s'",
+					trim($query_fields, ','), self::DB_TABLE, $page_id
 				);
 
 				$page_data = Symphony::Database()->fetch($query);
@@ -521,7 +537,10 @@
 				}
 
 				if( !empty($fields) ){
-					Symphony::Database()->query("UPDATE tbl_pages SET ".trim($fields, ',')." WHERE `id` = '{$page_id}';");
+					Symphony::Database()->query(sprintf(
+						"UPDATE `%s` SET %s WHERE `id` = '%s';",
+						self::DB_TABLE, trim($fields, ','), $page_id
+					));
 				}
 			}
 
