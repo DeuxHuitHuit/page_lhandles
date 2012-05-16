@@ -64,7 +64,7 @@
 
 			Symphony::Configuration()->set('op_mode', $this->op_modes[0]['handle'], PLH_GROUP);
 
-			return (boolean)$this->_addColumnsToPageTable();
+			return (boolean)$this->__updateColumns(FLang::getLangs());
 		}
 
 		public function update($previous_version){
@@ -109,24 +109,8 @@
 			// remove config settings
 			Symphony::Configuration()->remove(PLH_GROUP);
 
-			// remove columns from tbl_pages table
-			$query_fields = '';
-			$fields = Symphony::Database()->fetch('DESCRIBE `tbl_pages`');
-			$fields_count = count($fields);
-
-			for( $i = 0; $i < $fields_count; $i++ ){
-				$field_name = $fields[$i]['Field'];
-				$is_page_lhandle = strpos($field_name, 'plh');
-
-				if( $is_page_lhandle !== false )
-					$query_fields .= "\nDROP `$field_name`,";
-			}
-
-			if( !empty($query_fields) ){
-				$query = "ALTER TABLE `tbl_pages` ".trim($query_fields, ',');
-
-				return (boolean)Symphony::Database()->query($query);
-			}
+			// remove db settings
+			$this->__updateColumns(array(), 'no');
 
 			return true;
 		}
@@ -151,12 +135,6 @@
 
 		public function getSubscribedDelegates(){
 			return array(
-				array(
-					'page' => '/backend/',
-					'delegate' => 'InitaliseAdminPageHead',
-					'callback' => 'dInitaliseAdminPageHead'
-				),
-
 				array(
 					'page' => '/blueprints/pages/',
 					'delegate' => 'AppendPageContent',
@@ -221,7 +199,7 @@
 		public function dFrontendPrePageResolve($context){
 
 			if( $this->first_pass === true //1. to prevent an endless loop if called after the 404 is generated
-				&& $this->_validateDependencies() //2. make sure needed extensions are enabled
+				&& $this->__validateDependencies() //2. make sure needed extensions are enabled
 			){
 				$this->first_pass = false;
 
@@ -400,7 +378,7 @@
 		 */
 		public function dCustomActions(){
 			if( isset($_POST['action'][PLH_GROUP]['update']) ){
-				$this->_insertTestTitlesAndHandles();
+				$this->__insertTestTitlesAndHandles();
 			}
 		}
 
@@ -412,40 +390,9 @@
 		 * @return boolean
 		 */
 		public function dFLSavePreferences($context){
-			try{
-				$show_columns = Symphony::Database()->fetch("SHOW COLUMNS FROM `tbl_pages` LIKE 'plh_t-%';");
-			}
-			catch( Exception $e ){
-				die('Pages table from Database doesn\'t exist. Grab a <a href="http://github.com/vlad-ghita/page_Lhandles/">newer version</a>  of Page LHandles extension.');
-			}
+			$this->__updateColumns($context['new_langs'], $context['context']['settings'][PLH_GROUP]['consolidate']);
 
-			$columns = array();
-
-			if( $show_columns ){
-				foreach( $show_columns as $column ){
-					$lc = substr($column['Field'], strlen($column['Field']) - 2);
-
-					// If not consolidate option AND column lang_code not in supported languages codes -> Drop Column
-					if( ($_POST['settings'][PLH_GROUP]['consolidate'] !== 'yes') && !in_array($lc, $context['new_langs']) ){
-						Symphony::Database()->query("ALTER TABLE  `tbl_pages` DROP COLUMN `plh_t-{$lc}`");
-						Symphony::Database()->query("ALTER TABLE  `tbl_pages` DROP COLUMN `plh_h-{$lc}`");
-					} else{
-						$columns[] = $column['Field'];
-					}
-				}
-			}
-
-			// Add new fields
-			foreach( $context['new_langs'] as $lc ){
-				// If column lang_code dosen't exist in the laguange add columns
-
-				if( !in_array('plh_t-'.$lc, $columns) ){
-					Symphony::Database()->query("ALTER TABLE  `tbl_pages` ADD COLUMN `plh_t-{$lc}` varchar(255) default NULL");
-					Symphony::Database()->query("ALTER TABLE  `tbl_pages` ADD COLUMN `plh_h-{$lc}` int(11) unsigned NULL");
-				}
-			}
-
-			$this->_insertTestTitlesAndHandles($context['new_langs']);
+			$this->__insertTestTitlesAndHandles($context['new_langs']);
 
 			return true;
 		}
@@ -460,7 +407,7 @@
 		 * Issue a warning if dependencies are not met.
 		 */
 		public function dAppendPageAlert(){
-			if( !$this->_validateDependencies() ){
+			if( !$this->__validateDependencies() ){
 
 				Administration::instance()->Page->pageAlert(
 					__('<code>%1$s</code> depends on <code>%2$s</code>. Make sure you have this extension installed and enabled.', array(PLH_NAME, 'Frontend localisation')),
@@ -486,6 +433,41 @@
 
 
 
+		private function __updateColumns($langs, $consolidate = 'yes'){
+			try{
+				$show_columns = Symphony::Database()->fetch("SHOW COLUMNS FROM `tbl_pages` LIKE 'plh_t-%';");
+			}
+			catch( Exception $e ){
+				die('Pages table from Database doesn\'t exist. Grab a <a href="http://github.com/vlad-ghita/page_Lhandles/">newer version</a>  of Page LHandles extension.');
+			}
+
+			$columns = array();
+
+			if( $show_columns ){
+				foreach( $show_columns as $column ){
+					$lc = substr($column['Field'], strlen($column['Field']) - 2);
+
+					// If not consolidate option AND column lang_code not in supported languages codes -> Drop Column
+					if( ($consolidate !== 'yes') && !in_array($lc, $langs) ){
+						Symphony::Database()->query("ALTER TABLE `tbl_pages` DROP COLUMN `plh_t-{$lc}`");
+						Symphony::Database()->query("ALTER TABLE `tbl_pages` DROP COLUMN `plh_h-{$lc}`");
+					} else{
+						$columns[] = $column['Field'];
+					}
+				}
+			}
+
+			// Add new fields
+			foreach( $langs as $lc ){
+				// If column lang_code dosen't exist in the laguange add columns
+
+				if( !in_array('plh_t-'.$lc, $columns) ){
+					Symphony::Database()->query("ALTER TABLE `tbl_pages` ADD COLUMN `plh_t-{$lc}` varchar(255) default NULL");
+					Symphony::Database()->query("ALTER TABLE `tbl_pages` ADD COLUMN `plh_h-{$lc}` int(11) unsigned NULL");
+				}
+			}
+		}
+
 		/**
 		 * For all Pages, fill the new added columns with the page_data from $reference_language.
 		 *
@@ -493,7 +475,7 @@
 		 *
 		 * @return boolean
 		 */
-		private function _insertTestTitlesAndHandles($langs = array()){
+		private function __insertTestTitlesAndHandles($langs = array()){
 			if( empty($langs) ){
 				$langs = FLang::getLangs();
 
@@ -551,7 +533,7 @@
 		 *
 		 * @return boolean - true if dependencies are met, false otherwise
 		 */
-		private function _validateDependencies(){
+		private function __validateDependencies(){
 			$fl_status = ExtensionManager::fetchStatus(array('handle' => 'frontend_localisation'));
 
 			return (boolean) ($fl_status[0] === EXTENSION_ENABLED);
