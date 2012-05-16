@@ -445,7 +445,7 @@
 				));
 			}
 			catch( Exception $e ){
-				die('Pages table from Database doesn\'t exist. Grab a <a href="http://github.com/vlad-ghita/page_Lhandles/">newer version</a>  of Page LHandles extension.');
+				die('Pages table from Database doesn\'t exist. Grab a <a href="http://github.com/vlad-ghita/page_lhandles/">newer version</a>  of Page LHandles extension.');
 			}
 
 			$columns = array();
