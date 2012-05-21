@@ -66,7 +66,7 @@
 
 			Symphony::Configuration()->set('op_mode', $this->op_modes[0]['handle'], PLH_GROUP);
 
-			$this->__updateColumns(FLang::getLangs());
+			$this->_updateColumns(FLang::getLangs());
 
 			return true;
 		}
@@ -114,7 +114,7 @@
 			Symphony::Configuration()->remove(PLH_GROUP);
 
 			// remove db settings
-			$this->__updateColumns(array(), 'no');
+			$this->_updateColumns(array(), 'no');
 
 			return true;
 		}
@@ -203,7 +203,7 @@
 		public function dFrontendPrePageResolve($context){
 
 			if( $this->first_pass === true //1. to prevent an endless loop if called after the 404 is generated
-				&& $this->__validateDependencies() //2. make sure needed extensions are enabled
+				&& $this->_validateDependencies() //2. make sure needed extensions are enabled
 			){
 				$this->first_pass = false;
 
@@ -382,7 +382,7 @@
 		 */
 		public function dCustomActions(){
 			if( isset($_POST['action'][PLH_GROUP]['update']) ){
-				$this->__insertTestTitlesAndHandles();
+				$this->_insertTestTitlesAndHandles();
 			}
 		}
 
@@ -394,9 +394,9 @@
 		 * @return boolean
 		 */
 		public function dFLSavePreferences($context){
-			$this->__updateColumns($context['new_langs'], $context['context']['settings'][PLH_GROUP]['consolidate']);
+			$this->_updateColumns($context['new_langs'], $context['context']['settings'][PLH_GROUP]['consolidate']);
 
-			$this->__insertTestTitlesAndHandles($context['new_langs']);
+			$this->_insertTestTitlesAndHandles($context['new_langs']);
 
 			return true;
 		}
@@ -411,7 +411,7 @@
 		 * Issue a warning if dependencies are not met.
 		 */
 		public function dAppendPageAlert(){
-			if( !$this->__validateDependencies() ){
+			if( !$this->_validateDependencies() ){
 
 				Administration::instance()->Page->pageAlert(
 					__('<code>%1$s</code> depends on <code>%2$s</code>. Make sure you have this extension installed and enabled.', array(PLH_NAME, 'Frontend localisation')),
@@ -437,15 +437,16 @@
 
 
 
-		private function __updateColumns($langs, $consolidate = 'yes'){
+		/*------------------------------------------------------------------------------------------------*/
+		/*  In-house  */
+		/*------------------------------------------------------------------------------------------------*/
+
+		private function _updateColumns($langs, $consolidate = 'yes'){
 			try{
-				$show_columns = Symphony::Database()->fetch(sprintf(
-					"SHOW COLUMNS FROM `%s` LIKE 'plh_t-%%';",
-					self::DB_TABLE
-				));
+				$show_columns = Symphony::Database()->fetch(sprintf("SHOW COLUMNS FROM `%s` LIKE 'plh_t-%%';", self::DB_TABLE));
 			}
-			catch( Exception $e ){
-				die('Pages table from Database doesn\'t exist. Grab a <a href="http://github.com/vlad-ghita/page_lhandles/">newer version</a>  of Page LHandles extension.');
+			catch( DatabaseException $e ){
+				die('Pages table from Database doesn\'t exist. Grab a <a href="http://github.com/vlad-ghita/page_lhandles/">newer version</a> of Page LHandles extension.');
 			}
 
 			$columns = array();
@@ -456,12 +457,8 @@
 
 					// If not consolidate option AND column lang_code not in supported languages codes -> Drop Column
 					if( ($consolidate !== 'yes') && !in_array($lc, $langs) ){
-						Symphony::Database()->query(sprintf(
-							'ALTER TABLE `%1$s`
-								DROP COLUMN `plh_t-%2$s`,
-								DROP COLUMN `plh_h-%2$s`;',
-							self::DB_TABLE, $lc
-						));
+						$this->_query(sprintf('ALTER TABLE `%1$s` DROP COLUMN `plh_t-%2$s`;', self::DB_TABLE, $lc));
+						$this->_query(sprintf('ALTER TABLE `%1$s` DROP COLUMN `plh_h-%2$s`;', self::DB_TABLE, $lc));
 					} else{
 						$columns[] = $column['Field'];
 					}
@@ -473,15 +470,24 @@
 				// If column lang_code dosen't exist in the laguange add columns
 
 				if( !in_array('plh_t-'.$lc, $columns) ){
-					Symphony::Database()->query(sprintf(
-						'ALTER TABLE `%1$s`
-							ADD COLUMN `plh_t-%2$s` varchar(255) default NULL,
-							ADD COLUMN `plh_h-%2$s` varchar(255) default NULL;',
-						self::DB_TABLE, $lc
-					));
+					$this->_query(sprintf('ALTER TABLE `%1$s` ADD COLUMN `plh_t-%2$s` varchar(255) default NULL;', self::DB_TABLE, $lc));
+					$this->_query(sprintf('ALTER TABLE `%1$s` ADD COLUMN `plh_h-%2$s` varchar(255) default NULL;', self::DB_TABLE, $lc));
 				}
 			}
+		}
 
+		private function _query($query){
+			try{
+				Symphony::Database()->query($query);
+			}
+			catch( DatabaseException $dbe ){
+				return $dbe;
+			}
+			catch( Exception $e ){
+				return $e;
+			}
+
+			return true;
 		}
 
 		/**
@@ -491,7 +497,7 @@
 		 *
 		 * @return boolean
 		 */
-		private function __insertTestTitlesAndHandles($langs = array()){
+		private function _insertTestTitlesAndHandles($langs = array()){
 			if( empty($langs) ){
 				$langs = FLang::getLangs();
 
@@ -513,11 +519,10 @@
 			}
 
 			foreach( $pages_IDs as $page_id ){
-				$query = sprintf("SELECT %s FROM `%s` WHERE `id` = '%s'",
+				$page_data = Symphony::Database()->fetch(sprintf(
+					"SELECT %s FROM `%s` WHERE `id` = '%s'",
 					trim($query_fields, ','), self::DB_TABLE, $page_id
-				);
-
-				$page_data = Symphony::Database()->fetch($query);
+				));
 
 				$title = $page_data[0]["title"];
 				$handle = $page_data[0]["handle"];
@@ -528,16 +533,16 @@
 
 				foreach( $page_data[0] as $key => $value ){
 					if( empty($value) ){
-						$lang_code = substr($key, 6) !== $main_lang ? substr($key, 6) : '';
+						$lc = substr($key, 6) !== $main_lang ? substr($key, 6) : '';
 
-						$new_value = strpos($key, '_t-') === false ? $lang_code.$handle : strtoupper($lang_code).$title;
+						$new_value = strpos($key, '_t-') === false ? $lc.$handle : strtoupper($lc).$title;
 
-						$fields .= "\n `{$key}` = '{$new_value}',";
+						$fields .= " `{$key}` = '{$new_value}',";
 					}
 				}
 
 				if( !empty($fields) ){
-					Symphony::Database()->query(sprintf(
+					$this->_query(sprintf(
 						"UPDATE `%s` SET %s WHERE `id` = '%s';",
 						self::DB_TABLE, trim($fields, ','), $page_id
 					));
@@ -552,7 +557,7 @@
 		 *
 		 * @return boolean - true if dependencies are met, false otherwise
 		 */
-		private function __validateDependencies(){
+		private function _validateDependencies(){
 			$fl_status = ExtensionManager::fetchStatus(array('handle' => 'frontend_localisation'));
 
 			return (boolean) ($fl_status[0] === EXTENSION_ENABLED);

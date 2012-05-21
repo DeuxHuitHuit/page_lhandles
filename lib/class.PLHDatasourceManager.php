@@ -11,6 +11,9 @@
 	final class PLHDatasourceManager
 	{
 
+		private static $plh_template = "extends MultilingualNavigationDatasource{";
+		private static $sym_template = "extends NavigationDatasource{";
+
 		/**
 		 * Changes the source of navigation datasources.
 		 *
@@ -31,8 +34,8 @@
 
 						if( self::_isDsTypeNavigation($old_content) ){
 
-							if( method_exists(get_class(), "_setNavDsTo{$mode}") ){
-								$new_content = call_user_func(array(self, "_setNavDsTo{$mode}"), $old_content);
+							if( method_exists(get_class(), "setNavDsTo{$mode}") ){
+								$new_content = call_user_func(array(self, "setNavDsTo{$mode}"), $old_content);
 
 								General::writeFile($filename, $new_content);
 							}
@@ -56,8 +59,8 @@
 
 			if( self::_isDsTypeNavigation($contents) ){
 
-				if( method_exists(get_class(), "_setNavDsTo{$mode}") ){
-					return call_user_func(array(self, "_setNavDsTo{$mode}"), $contents);
+				if( method_exists(get_class(), "setNavDsTo{$mode}") ){
+					return call_user_func(array(self, "setNavDsTo{$mode}"), $contents);
 				}
 			}
 
@@ -67,7 +70,7 @@
 
 
 		private static function _isDsTypeNavigation($contents){
-			return (boolean)(preg_match("/return 'navigation';/", $contents) === 1);
+			return (boolean) (preg_match("/return 'navigation';/", $contents) === 1);
 		}
 
 		/**
@@ -79,25 +82,8 @@
 		 *
 		 * @return string - new datasource file contents.
 		 */
-		private static function _setNavDsToPLH($contents){
-			$was_edited = strpos($contents, "extends MultilingualNavigationDatasource{//");
-
-			if( $was_edited === false ){
-
-				$old_template = "extends NavigationDatasource{";
-				$pos = strpos($contents, $old_template);
-
-				if( $pos !== false ){
-					$new_template = "extends MultilingualNavigationDatasource{//";
-					return (string)substr_replace($contents, $new_template, $pos, 0);
-				}
-				else{
-					/* "extends NavigationDatasource" was not found */
-					die('PageLHandles : While trying to change the source of the navigation Datasource, I failed because I couldn\'t find the necessary string in DS please check it.');
-				}
-			}
-
-			return (string)$contents;
+		public static function setNavDsToPLH($contents){
+			return preg_replace("/".self::$sym_template."/", self::$plh_template, $contents);
 		}
 
 		/**
@@ -109,26 +95,8 @@
 		 *
 		 * @return string New datasource file contents.
 		 */
-		private static function _setNavDsToSYMPHONY($contents){
-			$was_edited = strpos($contents, "extends MultilingualNavigationDatasource{//");
-
-			if( $was_edited !== false ){
-
-				$plh_template = "extends MultilingualNavigationDatasource{//";
-				$pos = strpos($contents, $plh_template);
-
-				if( $pos !== false ){
-					return (string)str_replace($plh_template, '', $contents);
-				}
-				else{
-					/* "extends MultilingualNavigationDatasource" was not found
-					 * or
-					 * this DS was already changed
-					 */
-				}
-			}
-
-			return (string)$contents;
+		public static function setNavDsToSYMPHONY($contents){
+			return preg_replace("/".self::$plh_template."/", self::$sym_template, $contents);
 		}
 
 	}
