@@ -11,7 +11,7 @@
 				'name' => 'PLH: Page',
 				'author' => array(
 					'name' => 'Vlad Ghita',
-					'email' => 'vlad.github@gmail.com'
+					'email' => 'vlad_micutul@yahoo.com'
 				),
 				'version' => '1.1',
 				'release-date' => '2011-11-15',
@@ -58,7 +58,7 @@
 			));
 
 			foreach( $langs as $lc ){
-				$handle = $pages[$page_id]['plh_t-'.$lc];
+				$handle = $pages[$page_id]['plh_h-'.$lc];
 
 				$itemXML = new XMLElement(
 					'item',

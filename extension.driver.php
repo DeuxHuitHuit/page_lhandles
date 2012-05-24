@@ -120,7 +120,10 @@
 		}
 
 		public function enable(){
-			PLHDatasourceManager::editAllNavDssTo('PLH');
+			try{
+				PLHDatasourceManager::editAllNavDssTo('PLH');
+			}
+			catch( Exception $e ){}
 
 			return true;
 		}
