@@ -212,7 +212,7 @@
 
 				$url = MySQL::cleanValue($context['page']);
 
-				$context['page'] = PLHManagerURL::lang2sym($url);
+				$context['page'] = PLHManagerURL::lang2sym($url, Flang::getLangCode());
 			}
 		}
 
