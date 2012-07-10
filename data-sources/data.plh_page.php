@@ -33,9 +33,10 @@
 				$fields[] = "plh_h-{$lc}";
 			}
 
-			$result->appendChild(
-				$this->_addPageXML(FLPageManager::instance()->listAll($fields), $this->_env['param']['current-page-id'], $langs)
-			);
+			$r = null;
+			$this->_addPageXML(FLPageManager::instance()->listAll($fields), $this->_env['param']['current-page-id'], $langs, $r);
+
+			$result->appendChild($r);
 
 			return $result;
 		}
@@ -48,10 +49,11 @@
 		 * @param array $pages - contains all pages data
 		 * @param $page_id     - current page id
 		 * @param $langs       - all supported language codes
+		 * @param $r           - resulting XML
 		 *
 		 * @return XMLElement - a pages XML ouput
 		 */
-		private function _addPageXML($pages, $page_id, $langs){
+		private function _addPageXML($pages, $page_id, $langs, &$r = null){
 			$pageXML = new XMLElement('page', null, array(
 				'handle' => $pages[$page_id]['handle'],
 				'id' => $page_id
@@ -72,16 +74,16 @@
 				$pageXML->prependChild($itemXML);
 			}
 
-			// if it has a parent, generate it, append current page and return parent
-			if( !empty($pages[$page_id]['parent']) ){
-				$parentXML = $this->_addPageXML($pages, $pages[$page_id]['parent'], $langs);
-				$parentXML->appendChild($pageXML);
-
-				return $parentXML;
+			if( $r !== null ){
+				$pageXML->appendChild($r);
 			}
 
-			// return this page
-			return $pageXML;
+			// if it has a parent, generate it, append current page and return parent
+			if( !empty($pages[$page_id]['parent']) ){
+				$this->_addPageXML($pages, $pages[$page_id]['parent'], $langs, $pageXML);
+			}
+
+			$r = $pageXML;
 		}
 
 	}
