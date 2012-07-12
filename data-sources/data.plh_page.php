@@ -60,14 +60,12 @@
 			));
 
 			foreach( $langs as $lc ){
-				$handle = $pages[$page_id]['plh_h-'.$lc];
-
 				$itemXML = new XMLElement(
 					'item',
-					General::sanitize($handle),
+					General::sanitize($pages[$page_id]['plh_t-'.$lc]),
 					array(
 						'lang' => $lc,
-						'handle' => $handle
+						'handle' => $pages[$page_id]['plh_h-'.$lc]
 					)
 				);
 
