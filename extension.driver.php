@@ -65,6 +65,7 @@
 			PLHDatasourceManager::editAllNavDssTo('PLH');
 
 			Symphony::Configuration()->set('op_mode', $this->op_modes[0]['handle'], PLH_GROUP);
+			Symphony::Configuration()->write();
 
 			$this->_updateColumns(FLang::getLangs());
 
