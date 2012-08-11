@@ -121,10 +121,9 @@
 		}
 
 		public function enable(){
-			try{
+			if( Symphony::ExtensionManager()instanceof ExtensionManager ){
 				PLHDatasourceManager::editAllNavDssTo('PLH');
 			}
-			catch( Exception $e ){}
 
 			return true;
 		}
