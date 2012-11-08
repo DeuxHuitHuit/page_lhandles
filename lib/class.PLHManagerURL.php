@@ -70,7 +70,6 @@
 		 */
 		private static function _setLangCode(&$lang_code){
 			if( empty($lang_code) || (FLang::validateLangCode($lang_code) === false ) ){
-
 				$lang_code = FLang::getMainLang();
 			}
 		}
@@ -145,7 +144,7 @@
 				}
 			}
 
-			return (string)$path.'/'.$url_query.$url_hash;
+			return (string) trim($path.'/'.$url_query.$url_hash, '/');
 		}
 
 		/**
@@ -162,11 +161,10 @@
 		 */
 		private static function _processRelax($old_url, $ref_handle, $target_handle){
 			$path = '';
+			$last_parent = null;
 
 			foreach( $old_url as $value ){
 				if( !empty($value) ){
-					$last_parent = null;
-
 					$query = sprintf(
 						"SELECT `id`, `%s`, `parent` FROM `tbl_pages` WHERE `%s` = '%s' LIMIT 1",
 						$target_handle, $ref_handle, $value
