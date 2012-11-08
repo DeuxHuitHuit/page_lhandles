@@ -166,8 +166,11 @@
 			foreach( $old_url as $value ){
 				if( !empty($value) ){
 					$query = sprintf(
-						"SELECT `id`, `%s`, `parent` FROM `tbl_pages` WHERE `%s` = '%s' LIMIT 1",
-						$target_handle, $ref_handle, $value
+						"SELECT `id`, `%s`, `parent` FROM `tbl_pages` WHERE `%s` = '%s' AND `parent` %s LIMIT 1",
+						$target_handle,
+						$ref_handle,
+						$value,
+						$last_parent != null ? sprintf("= %s", $last_parent) : "IS NULL"
 					);
 
 					$bit = self::_getPageHandle($query, $last_parent, $target_handle);
