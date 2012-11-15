@@ -134,6 +134,8 @@
 			// resolve other pages
 			else{
 				$op_mode = Symphony::Configuration()->get('op_mode', PLH_GROUP);
+				// Assure we have a op_mode set
+				$op_mode = empty($op_mode) ? 'strict' : $op_mode;
 				$method = '_process'.ucfirst(strtolower($op_mode));
 
 				if( method_exists(get_class(), $method) ){
