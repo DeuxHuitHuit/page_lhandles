@@ -102,6 +102,7 @@
 
 			if( version_compare($previous_version, '2.4', '<') ){
 				Symphony::Configuration()->set('op_mode', $this->op_modes[0]['handle'], PLH_GROUP);
+				Symphony::Configuration()->write();
 			}
 
 			return true;
