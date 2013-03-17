@@ -11,8 +11,8 @@
 	final class PLHDatasourceManager
 	{
 
-		private static $plh_template = "extends MultilingualNavigationDatasource{";
-		private static $sym_template = "extends NavigationDatasource{";
+		private static $plh_template = "extends MultilingualNavigationDatasource";
+		private static $sym_template = "extends NavigationDatasource";
 
 		/**
 		 * Changes the source of navigation datasources.
