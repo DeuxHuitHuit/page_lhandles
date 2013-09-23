@@ -50,7 +50,7 @@
 				array(
 					'handle' => 'relax',
 					'name' => __('Relax'),
-					'desc' => __('Compatibility mode for URL Router. Enable this to use URLs like: <code>site.com/clients/_param1_/projects/_param2_/</b>. Without this mode, if you have <code>_param1_ = `projects`</code>, it will be a collision and Page LHandles will fail.')
+					'desc' => __('Compatibility mode for URL Router. Enable this to use URLs like: <code>site.com/clients/_param1_/projects/_param2_/</code>. Without this mode, if you have <code>_param1_ = `projects`</code>, it will be a collision and Page LHandles will fail.')
 				)
 			);
 		}
