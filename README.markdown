@@ -52,7 +52,6 @@ New XML supplies handle and title for the current page according to current-lang
 2. Go to Blueprints -> Pages. Create a new page or edit an existing one.
 3. Fill the available localisation fields. Every Localised URL Handle filled will become accessible from the browser. The empty ones will redirect to 404 (Page Not Found).
 4. Add the "PLH Page" Datasource to your page. Go to `?debug` and feel the difference.
-5. To include the utility in your stylesheets copy `/utilities/plh-toolkit.xsl` to `/workspace/utilities` and include it in your XSLT stylesheets.
 
 
 
