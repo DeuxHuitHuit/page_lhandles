@@ -10,7 +10,6 @@ Offers support to localise Page titles and Handles.
 * Offers support for translating Page handles in current supported languages (from Frontend Localisation).
 * Adds a button in `System -> Preferences` to automatically fill empty localisation `title` and `handle` inputs for Pages.
 * Offers a DS which outputs the current-page handle and title in all supported languages.
-* Provides a utility for easier URL manipulation.
 * Overrides the navigation template Datasources to output the extra information.
 * URL Router compatible. URLs like `www.site.com/clients/_param1_/projects/_param2_/` are possible if `Operating mode` is set to `Relax`. See Preferences page.
 
