@@ -326,9 +326,9 @@
 			$main_lang = FLang::getMainLang();
 			$all_langs = FLang::getAllLangs();
 
-			$div = new XMLElement('div', NULL, array('id' => 'file-actions', 'class' => 'label'));
+			$div = new XMLElement('div', null, array('id' => 'file-actions', 'class' => 'label'));
 
-			$span = new XMLElement('span', NULL, array('class' => 'frame'));
+			$span = new XMLElement('span', null, array('class' => 'frame'));
 			$span->appendChild(new XMLElement(
 				'button',
 				__('Fill test Names and Handles for Pages'),

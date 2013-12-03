@@ -1,40 +1,46 @@
 <?php
 
-	require_once(TOOLKIT.'/class.datasource.php');
-	require_once(EXTENSIONS.'/frontend_localisation/lib/class.FLPageManager.php');
+	require_once(TOOLKIT . '/class.datasource.php');
 
-	Class datasourceplh_page extends Datasource
-	{
+	Class datasourceplh_page extends Datasource {
 
-		public function about(){
+		public function about() {
 			return array(
-				'name' => 'PLH: Page',
-				'author' => array(
-					'name' => 'Vlad Ghita',
+				'name'         => 'PLH: Page',
+				'author'       => array(
+					'name'  => 'Vlad Ghita',
 					'email' => 'vlad_micutul@yahoo.com'
 				),
-				'version' => '1.1',
+				'version'      => '1.1',
 				'release-date' => '2011-11-15',
-				'description' => 'From Page LHandles extension. Retrieves the current pages\' and it\'s parents localised titles and handles in all supported languages.');
+				'description'  => 'From Page LHandles extension. Retrieves the current pages\' and it\'s parents localised titles and handles in all supported languages.'
+			);
 		}
 
-		public function allowEditorToParse(){
+		public function allowEditorToParse() {
 			return false;
 		}
 
-		public function grab(&$param_pool = NULL){
+		public function grab(&$param_pool = null) {
 			$result = new XMLElement('plh-page');
 
-			$langs = FLang::getLangs();
-			$fields = array();
+			$langs  = FLang::getLangs();
+			$fields = array(
+				'id',
+				'handle'
+			);
 
-			foreach( $langs as $lc ){
-				$fields[] = "plh_t-{$lc}";
-				$fields[] = "plh_h-{$lc}";
+			foreach ($langs as $lc) {
+				$fields[] = "`plh_t-{$lc}`";
+				$fields[] = "`plh_h-{$lc}`";
 			}
 
-			$r = null;
-			$this->_addPageXML(FLPageManager::instance()->listAll($fields), $this->_env['param']['current-page-id'], $langs, $r);
+			$pages = array();
+			foreach (PageManager::fetch(null, $fields) as $page) {
+				$pages[$page['id']] = $page;
+			}
+
+			$this->_addPageXML($pages, $this->_env['param']['current-page-id'], $langs, $r);
 
 			$result->appendChild($r);
 
@@ -46,42 +52,41 @@
 		/**
 		 * Add parent pages including current to XML output.
 		 *
-		 * @param array $pages - contains all pages data
-		 * @param $page_id     - current page id
-		 * @param $langs       - all supported language codes
-		 * @param $r           - resulting XML
+		 * @param array $pages       - contains all pages data
+		 * @param       $page_id     - current page id
+		 * @param       $langs       - all supported language codes
+		 * @param       $r           - resulting XML
 		 *
 		 * @return XMLElement - a pages XML ouput
 		 */
-		private function _addPageXML($pages, $page_id, $langs, &$r = null){
+		private function _addPageXML($pages, $page_id, $langs, &$r = null) {
 			$pageXML = new XMLElement('page', null, array(
 				'handle' => $pages[$page_id]['handle'],
-				'id' => $page_id
+				'id'     => $page_id
 			));
 
-			foreach( $langs as $lc ){
+			foreach ($langs as $lc) {
 				$itemXML = new XMLElement(
 					'item',
-					General::sanitize($pages[$page_id]['plh_t-'.$lc]),
+					General::sanitize($pages[$page_id]["plh_t-$lc"]),
 					array(
-						'lang' => $lc,
-						'handle' => $pages[$page_id]['plh_h-'.$lc]
+						'lang'   => $lc,
+						'handle' => $pages[$page_id]["plh_h-$lc"]
 					)
 				);
 
 				$pageXML->prependChild($itemXML);
 			}
 
-			if( $r !== null ){
+			if ($r !== null) {
 				$pageXML->appendChild($r);
 			}
 
 			// if it has a parent, generate it, append current page and return parent
-			if( !empty($pages[$page_id]['parent']) ){
+			if (!empty($pages[$page_id]['parent'])) {
 				$this->_addPageXML($pages, $pages[$page_id]['parent'], $langs, $pageXML);
 			}
 
 			$r = $pageXML;
 		}
-
 	}
