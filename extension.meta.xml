@@ -25,10 +25,14 @@
 	</authors>
 
 	<dependencies>
-		<dependency version="1.6">https://github.com/vlad-ghita/frontend_localisation</dependency>
+		<dependency version="2.5">https://github.com/vlad-ghita/frontend_localisation</dependency>
 	</dependencies>
 
 	<releases>
+		<release version="2.7" date="2013-12-03" min="2.3.4"><![CDATA[
+			* Updated for Frontend Localisation 2.5 compatibility.
+		]]></release>
+
 		<release version="2.6.1" date="2012-04-15" min="2.3"><![CDATA[
 			* Improved Datasource editing.
 			* Safer queries in driver.
