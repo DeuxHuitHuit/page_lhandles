@@ -29,6 +29,10 @@
 	</dependencies>
 
 	<releases>
+		<release version="2.8" date="2013-12-06" min="2.3.4"><![CDATA[
+			* Fixed `PLH : Page` datasource output.
+		]]></release>
+
 		<release version="2.7" date="2013-12-03" min="2.3.4"><![CDATA[
 			* Updated for Frontend Localisation 2.5 compatibility.
 		]]></release>
