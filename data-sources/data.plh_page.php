@@ -27,7 +27,8 @@
 			$langs  = FLang::getLangs();
 			$fields = array(
 				'id',
-				'handle'
+				'handle',
+				'parent'
 			);
 
 			foreach ($langs as $lc) {
@@ -40,9 +41,7 @@
 				$pages[$page['id']] = $page;
 			}
 
-			$this->_addPageXML($pages, $this->_env['param']['current-page-id'], $langs, $r);
-
-			$result->appendChild($r);
+			$this->appendPage($pages, $this->_env['param']['current-page-id'], $langs, $result);
 
 			return $result;
 		}
@@ -52,41 +51,35 @@
 		/**
 		 * Add parent pages including current to XML output.
 		 *
-		 * @param array $pages       - contains all pages data
-		 * @param       $page_id     - current page id
-		 * @param       $langs       - all supported language codes
-		 * @param       $r           - resulting XML
+		 * @param array      $pages   - contains all pages data
+		 * @param int        $page_id - current page id
+		 * @param array      $langs   - all supported language codes
+		 * @param XMLElement $result  - resulting XML
 		 *
 		 * @return XMLElement - a pages XML ouput
 		 */
-		private function _addPageXML($pages, $page_id, $langs, &$r = null) {
-			$pageXML = new XMLElement('page', null, array(
-				'handle' => $pages[$page_id]['handle'],
-				'id'     => $page_id
-			));
+		private function appendPage(array $pages, $page_id, array $langs, XMLElement $result) {
+			$page = $pages[$page_id];
+
+			if ($page['parent'] !== null) {
+				$result = $this->appendPage($pages, $page['parent'], $langs, $result);
+			}
+
+			$page_xml = new XMLElement('page');
+			$page_xml->setAttribute('handle', $page['handle']);
+			$page_xml->setAttribute('id', $page_id);
 
 			foreach ($langs as $lc) {
-				$itemXML = new XMLElement(
-					'item',
-					General::sanitize($pages[$page_id]["plh_t-$lc"]),
-					array(
-						'lang'   => $lc,
-						'handle' => $pages[$page_id]["plh_h-$lc"]
-					)
-				);
+				$item_xml = new XMLElement('item');
+				$item_xml->setValue(General::sanitize($page["plh_t-$lc"]));
+				$item_xml->setAttribute('lang', $lc);
+				$item_xml->setAttribute('handle', $page["plh_h-$lc"]);
 
-				$pageXML->prependChild($itemXML);
+				$page_xml->prependChild($item_xml);
 			}
 
-			if ($r !== null) {
-				$pageXML->appendChild($r);
-			}
+			$result->appendChild($page_xml);
 
-			// if it has a parent, generate it, append current page and return parent
-			if (!empty($pages[$page_id]['parent'])) {
-				$this->_addPageXML($pages, $pages[$page_id]['parent'], $langs, $pageXML);
-			}
-
-			$r = $pageXML;
+			return $page_xml;
 		}
 	}
