@@ -276,7 +276,9 @@
 							'text',
 							array('length', '30')
 						),
-						'tab-panel tab-'.$lc
+						'tab-panel tab-'.$lc.' tab-title',
+						null,
+						array('style' => 'margin-bottom: 0;border-bottom: none;')
 					)
 				);
 
@@ -290,7 +292,7 @@
 							'text',
 							array('length', '30')
 						),
-						'tab-panel tab-'.$lc
+						'tab-panel tab-'.$lc.' tab-handle'
 					)
 				);
 			}
