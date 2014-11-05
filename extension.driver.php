@@ -186,9 +186,15 @@
 				),
 
 				array(
-					'page' => '/blueprints/datasources/',
-					'delegate' => 'DatasourcePreEdit',
-					'callback' => 'dDatasourceNavigation'
+					'page' => '/blueprints/pages/',
+					'delegate' => 'PagePreCreate',
+					'callback' => 'dPagePre'
+				),
+
+				array(
+					'page' => '/blueprints/pages/',
+					'delegate' => 'PagePreEdit',
+					'callback' => 'dPagePre'
 				),
 			);
 		}
@@ -294,7 +300,21 @@
 			$context['form']->prependChild($fieldset);
 		}
 
-
+		/**
+		 * Makes sure the handles are created
+		 *
+		 * @param array $context - see delegate description
+		 */
+		public function dPagePre($context){
+			$fields = $context['fields'];
+			$langs = FLang::getLangs();
+			foreach ($langs as $lc) {
+				if (empty($fields['plh_h-' . $lc])) {
+					$fields['plh_h-' . $lc] = Lang::createHandle($fields['plh_t-' . $lc]);
+				}
+			}
+			$context['fields'] = $fields;
+		}
 
 		/*------------------------------------------------------------------------------------------------*/
 		/*  Preferences  */
