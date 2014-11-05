@@ -13,6 +13,7 @@
 			$oPage = new XMLElement('page');
 			$oPage->setAttribute('handle', $page['handle']);
 			$oPage->setAttribute('id', $page['id']);
+			// keep current first
 			$oPage->appendChild(new XMLElement(
 				'item',
 				General::sanitize($page['plh_t-'.$lang_code]),
@@ -21,6 +22,20 @@
 					'handle' => $page['plh_h-'.$lang_code],
 				)
 			));
+			
+			// add others
+			foreach( FLang::getLangs() as $lc ){
+				if($lang_code != $lc) {
+					$oPage->appendChild(new XMLElement(
+						'item',
+						General::sanitize($page['plh_t-'.$lc]),
+						array(
+							'lang' => $lc,
+							'handle' => $page['plh_h-'.$lc],
+						)
+					));
+				}
+			}
 
 			if(in_array($page['id'], array_keys($page_types))) {
 				$xTypes = new XMLElement('types');
