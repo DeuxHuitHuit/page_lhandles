@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<extension id="page_lhandles" status="released" xmlns="http://symphony-cms.com/schemas/extension/1.0">
-
+<extension id="page_lhandles" status="released" xmlns="http://getsymphony.com/schemas/extension/1.0">
 	<name>Page LHandles</name>
-
 	<description>Offers multilingual support for localised page handles in browser URL.</description>
-
 	<repo type="github">https://github.com/vlad-ghita/page_lhandles</repo>
-
-	<url type="discuss">http://symphony-cms.com/discuss/thread/61887/</url>
-
+	<url type="discuss">http://www.getsymphony.com/discuss/thread/61887/</url>
 	<types>
 		<type>Interface</type>
 		<type>Multilingual</type>
 		<type>Workflow</type>
 	</types>
-
 	<authors>
 		<author>
 			<name github="vlad-ghita" symphony="vladG">Vlad Ghita</name>
@@ -23,53 +16,45 @@
 			<website>http://www.xanderadvertising.com</website>
 		</author>
 	</authors>
-
 	<dependencies>
 		<dependency version="2.5">https://github.com/vlad-ghita/frontend_localisation</dependency>
 	</dependencies>
-
 	<releases>
+		<release version="2.9.1" date="2016-03-07" min="2.3.4" max="2.x.x"><![CDATA[
+			* Updated compatibility info
+		]]></release>
 		<release version="2.9" date="2014-11-04" min="2.3.4" max="2.5.x"><![CDATA[
 			* Symphony 2.5 compatibility.
 			* Multilingual Data Source: Output every page handles in every languages. Keep current first.
 			* Automatically create handles when field is empty
 			* UI: Remove white space between title and handle
 		]]></release>
-
 		<release version="2.8" date="2013-12-06" min="2.3.4" max="2.5.x"><![CDATA[
 			* Fixed `PLH : Page` datasource output.
 		]]></release>
-
 		<release version="2.7" date="2013-12-03" min="2.3.4"><![CDATA[
 			* Updated for Frontend Localisation 2.5 compatibility.
 		]]></release>
-
 		<release version="2.6.1" date="2012-04-15" min="2.3"><![CDATA[
 			* Improved Datasource editing.
 			* Safer queries in driver.
 		]]></release>
-
 		<release version="2.6" date="2012-04-15" min="2.3"><![CDATA[
 			* Frontend Localisation 1.6 compatibility
 		]]></release>
-
 		<release version="2.5" date="2012-04-14" min="2.3"><![CDATA[
 			* Symphony 2.3 compatibility.
 		]]></release>
-
 		<release version="2.4" date="2012-02-08"><![CDATA[
 			* Added compatibility for URL Router.
 			* Introduces $op_mode: `Strict` = Recommended & Default. `Relax` = URL Router compatibility.
 		]]></release>
-
 		<release version="2.3" date="2011-12-28"><![CDATA[
 			* Added more safety check to URL parsing.
 			* Improved `plh-utility.xsl` internals.
 		]]></release>
-
 		<release version="2.2" date="2011-12-22" min="2.2.x"><![CDATA[
 			* Compatibility release for Frontend Localisation 1.0
 		]]></release>
 	</releases>
-
 </extension>
