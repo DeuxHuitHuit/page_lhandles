@@ -72,8 +72,8 @@
 			return true;
 		}
 
-		public function update($previous_version){
-			if( version_compare($previous_version, '2.0', '<') ){
+		public function update($previousVersion = false){
+			if( version_compare($previousVersion, '2.0', '<') ){
 				$query_change = '';
 
 				$fields = Symphony::Database()->fetch('DESCRIBE `tbl_pages`');
@@ -100,7 +100,7 @@
 				}
 			}
 
-			if( version_compare($previous_version, '2.4', '<') ){
+			if( version_compare($previousVersion, '2.4', '<') ){
 				Symphony::Configuration()->set('op_mode', $this->op_modes[0]['handle'], PLH_GROUP);
 				Symphony::Configuration()->write();
 			}
