@@ -7,7 +7,7 @@
 
 	Class MultilingualNavigationDatasource extends NavigationDatasource {
 
-		public function __buildPageXML($page, $page_types, $qf) {
+		public function buildMultilingualPageXML($page, $page_types, $qf) {
 			$lang_code = FLang::getLangCode();
 
 			$oPage = new XMLElement('page');
@@ -47,7 +47,7 @@
 
 			if($page['children'] != '0') {
 				if($children = PageManager::fetch(false, array($qf.'id, handle, title'), array(sprintf('`parent` = %d', $page['id'])))) {
-					foreach($children as $c) $oPage->appendChild($this->__buildPageXML($c, $page_types, $qf));
+					foreach($children as $c) $oPage->appendChild($this->buildMultilingualPageXML($c, $page_types, $qf));
 				}
 			}
 
@@ -105,7 +105,7 @@
 				$page_types = PageManager::fetchAllPagesPageTypes();
 
 				foreach($pages as $page) {
-					$result->appendChild($this->__buildPageXML($page, $page_types, $qf));
+					$result->appendChild($this->buildMultilingualPageXML($page, $page_types, $qf));
 				}
 			}
 
