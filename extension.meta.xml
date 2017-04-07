@@ -11,6 +11,10 @@
 	</types>
 	<authors>
 		<author>
+			<name github="DeuxHuitHuit" symphony="nitriques" twitter="DeuxHuitHuit">Deux Huit Huit</name>
+			<website>https://deuxhuithuit.com</website>
+		</author>
+		<author>
 			<name github="vlad-ghita" symphony="vladG">Vlad Ghita</name>
 			<email>vlad.github@gmail.com</email>
 			<website>http://www.xanderadvertising.com</website>
@@ -20,6 +24,9 @@
 		<dependency version="2.5">https://github.com/vlad-ghita/frontend_localisation</dependency>
 	</dependencies>
 	<releases>
+		<release version="2.10.0" date="2017-04-07" min="2.3" max="2.x.x"><![CDATA[
+			* Adds PHP 7 support
+		]]></release>
 		<release version="2.9.1" date="2016-03-07" min="2.3.4" max="2.x.x"><![CDATA[
 			* Updated compatibility info
 		]]></release>
