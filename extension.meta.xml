@@ -24,6 +24,9 @@
 		<dependency version="2.5">https://github.com/vlad-ghita/frontend_localisation</dependency>
 	</dependencies>
 	<releases>
+		<!--release version="2.11.0" date="2017-05-17" min="2.3" max="2.x.x"><![CDATA[
+			* Properly upgrade Nav data sources
+		]]></release-->
 		<release version="2.10.1" date="2017-04-12" min="2.3" max="2.x.x"><![CDATA[
 			* Fix for PHP 7 support
 		]]></release>

@@ -2,20 +2,14 @@
 
 	if( !defined('__IN_SYMPHONY__') ) die('<h2>Error</h2><p>You cannot directly access this file</p>');
 
-
-
-	require_once('lib/class.datasource.MultilingualNavigation.php');
-	require_once('lib/class.PLHDatasourceManager.php');
-	require_once('lib/class.PLHManagerURL.php');
+	require_once(EXTENSIONS.'/page_lhandles/lib/class.datasource.MultilingualNavigation.php');
+	require_once(EXTENSIONS.'/page_lhandles/lib/class.PLHDatasourceManager.php');
+	require_once(EXTENSIONS.'/page_lhandles/lib/class.PLHManagerURL.php');
 	require_once(EXTENSIONS.'/frontend_localisation/extension.driver.php');
 	require_once(EXTENSIONS.'/frontend_localisation/lib/class.FLang.php');
 
-
-
 	define_safe(PLH_NAME, 'Page LHandles');
 	define_safe(PLH_GROUP, 'page_lhandles');
-
-
 
 	class Extension_page_lhandles extends Extension
 	{
@@ -61,9 +55,7 @@
 		/*  Installation  */
 		/*------------------------------------------------------------------------------------------------*/
 
-		public function install(){
-			PLHDatasourceManager::editAllNavDssTo('PLH');
-
+		public function install() {
 			Symphony::Configuration()->set('op_mode', $this->op_modes[0]['handle'], PLH_GROUP);
 			Symphony::Configuration()->write();
 
@@ -105,6 +97,12 @@
 				Symphony::Configuration()->write();
 			}
 
+			if( version_compare($previousVersion, '2.11.0', '<') ){
+				// Fix old grabs
+				// and require parent class in the DS
+				PLHDatasourceManager::editAllNavDssTo('RequireParent');
+			}
+
 			return true;
 		}
 
@@ -122,7 +120,7 @@
 		}
 
 		public function enable(){
-			if( Symphony::ExtensionManager()instanceof ExtensionManager ){
+			if( Symphony::ExtensionManager() instanceof ExtensionManager ){
 				PLHDatasourceManager::editAllNavDssTo('PLH');
 			}
 
