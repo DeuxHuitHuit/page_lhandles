@@ -184,6 +184,12 @@
 				),
 
 				array(
+					'page' => '/blueprints/datasources/',
+					'delegate' => 'DatasourcePreEdit',
+					'callback' => 'dDatasourceNavigation'
+				),
+
+				array(
 					'page' => '/blueprints/pages/',
 					'delegate' => 'PagePreCreate',
 					'callback' => 'dPagePre'
