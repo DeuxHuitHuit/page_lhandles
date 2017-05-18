@@ -16,15 +16,16 @@ Offers support to localise Page titles and Handles.
 Old XML for a navigation Datasource:
 
     <page handle="_HandleHere_" id="_IDhere_">
-	    <name>_TitleHere_</name>
-	    ...
+        <name>_TitleHere_</name>
+        ...
     </page>
 
 New XML supplies handle and title for the current page according to current-language:
 
     <page handle="_SymphonyHandleHere_" id="_IDhere_">
-	    <item lang="_CurrentLanguageHere_" handle="_LocalisedHandleHere_">_LocalisedTitleHere_</item>
-	    ...
+        <name>_TitleHere_</name>
+        <item lang="_CurrentLanguageHere_" handle="_LocalisedHandleHere_">_LocalisedTitleHere_</item>
+        ...
     </page>
 
 #### Note ####
