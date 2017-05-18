@@ -2,11 +2,7 @@
 
 	if( !defined('__IN_SYMPHONY__') ) die('<h2>Error</h2><p>You cannot directly access this file</p>');
 
-
-
 	require_once(EXTENSIONS.'/frontend_localisation/lib/class.FLang.php');
-
-
 
 	final class PLHManagerURL
 	{
