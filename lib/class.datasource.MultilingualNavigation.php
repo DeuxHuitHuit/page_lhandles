@@ -3,9 +3,7 @@
 	require_once(TOOLKIT . '/class.datasource.php');
 	require_once(TOOLKIT . '/data-sources/class.datasource.navigation.php');
 
-
-
-	Class MultilingualNavigationDatasource extends NavigationDatasource {
+	class MultilingualNavigationDatasource extends NavigationDatasource {
 
 		public function buildMultilingualPageXML($page, $page_types, $qf) {
 			$lang_code = FLang::getLangCode();
@@ -13,6 +11,7 @@
 			$oPage = new XMLElement('page');
 			$oPage->setAttribute('handle', $page['handle']);
 			$oPage->setAttribute('id', $page['id']);
+			$oPage->appendChild(new XMLElement('name', General::sanitize($page['title'])));
 			// keep current first
 			$oPage->appendChild(new XMLElement(
 				'item',
