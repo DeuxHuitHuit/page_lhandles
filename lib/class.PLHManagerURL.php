@@ -18,7 +18,7 @@ final class PLHManagerURL
      */
     public static function sym2lang($url, $lang_code = null)
     {
-        self::processStrict($lang_code);
+        self::setLangCode($lang_code);
 
         // if no language is set, return current URL
         if (empty($lang_code)) {
@@ -43,7 +43,7 @@ final class PLHManagerURL
      */
     public static function lang2sym($url, $lang_code = null)
     {
-        self::processStrict($lang_code);
+        self::setLangCode($lang_code);
 
         // if no language is set, return current URL
         if (empty($lang_code)) {
@@ -60,6 +60,20 @@ final class PLHManagerURL
     /*------------------------------------------------------------------------------------------------*/
     /*  In-house  */
     /*------------------------------------------------------------------------------------------------*/
+
+    /**
+     * Sets a valid language code
+     *
+     * @static
+     *
+     * @param &$lang_code
+     */
+    private static function setLangCode(&$lang_code)
+    {
+        if (empty($lang_code) || (FLang::validateLangCode($lang_code) === false)) {
+            $lang_code = FLang::getMainLang();
+        }
+    }
 
     /**
      * Process given URL. Finds target_handles from reference_handles.
@@ -180,6 +194,42 @@ final class PLHManagerURL
                 else {
                     $path .= '/'.$value;
                 }
+            }
+        }
+
+        return $path;
+    }
+
+    /**
+     * Processes the URL with relax settings. Used for URL Router compatibility
+     * Doesn't respect Symphony Page parents structure.
+     *
+     * @param array  $old_url
+     * @param string $ref_handle
+     * @param string $target_handle
+     *
+     * @static
+     *
+     * @return string - the new path
+     */
+    private static function processRelax($old_url, $ref_handle, $target_handle)
+    {
+        $path = '';
+        $last_parent = null;
+
+        foreach ($old_url as $value) {
+            if (!empty($value)) {
+                $query = sprintf(
+                    "SELECT `id`, `%s`, `parent` FROM `tbl_pages` WHERE `%s` = '%s' AND `parent` %s LIMIT 1",
+                    $target_handle,
+                    $ref_handle,
+                    $value,
+                    $last_parent != null ? sprintf("= %s", $last_parent) : "IS NULL"
+                );
+
+                $bit = self::getPageHandle($query, $last_parent, $target_handle);
+
+                $path .= '/'.($bit === false ? $value : $bit);
             }
         }
 

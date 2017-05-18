@@ -70,7 +70,7 @@ final class PLHDatasourceManager
         return $contents;
     }
 
-    private static function manager($contents)
+    private static function isDsTypeNavigation($contents)
     {
         return (boolean) (preg_match("/return 'navigation';/", $contents) === 1);
     }
