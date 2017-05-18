@@ -24,6 +24,9 @@
 		<dependency version="2.5">frontend_localisation</dependency>
 	</dependencies>
 	<releases>
+		<release version="2.11.1" date="2017-05-18" min="2.3" max="2.x.x"><![CDATA[
+			* Fix regression where localized url did not worked any more
+		]]></release>
 		<release version="2.11.0" date="2017-05-17" min="2.3" max="2.x.x"><![CDATA[
 			* Properly upgrade Nav data sources
 		]]></release>
