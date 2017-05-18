@@ -22,7 +22,7 @@ class datasourceplh_page extends Datasource
         return false;
     }
 
-    public function grab(&$param_pool = null)
+    public function execute(array &$param_pool = null)
     {
         $result = new XMLElement('plh-page');
 
