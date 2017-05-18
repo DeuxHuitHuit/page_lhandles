@@ -21,7 +21,7 @@
 		</author>
 	</authors>
 	<dependencies>
-		<dependency version="2.5">https://github.com/vlad-ghita/frontend_localisation</dependency>
+		<dependency version="2.5">frontend_localisation</dependency>
 	</dependencies>
 	<releases>
 		<release version="2.11.0" date="2017-05-17" min="2.3" max="2.x.x"><![CDATA[
