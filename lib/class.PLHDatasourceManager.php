@@ -35,7 +35,7 @@ final class PLHDatasourceManager
 
                     if (self::isDsTypeNavigation($old_content)) {
                         if (method_exists(get_class(), "setNavDsTo{$mode}")) {
-                            $new_content = call_user_func(array(self, "setNavDsTo{$mode}"), $old_content);
+                            $new_content = call_user_func(array('self', "setNavDsTo{$mode}"), $old_content);
                             $new_content = self::setNavDsToExecute($new_content);
 
                             General::writeFile($filename, $new_content);
@@ -63,7 +63,7 @@ final class PLHDatasourceManager
     {
         if (self::isDsTypeNavigation($contents)) {
             if (method_exists(get_class(), "setNavDsTo{$mode}")) {
-                return call_user_func(array(self, "setNavDsTo{$mode}"), $contents);
+                return call_user_func(array('self', "setNavDsTo{$mode}"), $contents);
             }
         }
 

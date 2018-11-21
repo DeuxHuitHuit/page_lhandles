@@ -141,7 +141,7 @@ final class PLHManagerURL
             $method = 'process'.ucfirst(strtolower($op_mode));
 
             if (method_exists(get_class(), $method)) {
-                $path = call_user_func(array(self, $method), $old_url, $ref_handle, $target_handle);
+                $path = call_user_func(array('self', $method), $old_url, $ref_handle, $target_handle);
             }
             else {
                 $path = trim($url, '/');

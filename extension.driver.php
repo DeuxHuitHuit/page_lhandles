@@ -8,8 +8,8 @@ require_once(EXTENSIONS.'/page_lhandles/lib/class.PLHManagerURL.php');
 require_once(EXTENSIONS.'/frontend_localisation/extension.driver.php');
 require_once(EXTENSIONS.'/frontend_localisation/lib/class.FLang.php');
 
-define_safe(PLH_NAME, 'Page LHandles');
-define_safe(PLH_GROUP, 'page_lhandles');
+define_safe('PLH_NAME', 'Page LHandles');
+define_safe('PLH_GROUP', 'page_lhandles');
 
 class Extension_page_lhandles extends Extension
 {
