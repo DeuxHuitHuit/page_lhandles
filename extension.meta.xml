@@ -26,7 +26,7 @@
 	<releases>
 		<release version="2.11.2" date="2019-02-26" min="2.3" max="2.x.x"><![CDATA[
 			* Fix SQL clause for proper soriting in MySQL 5.7
-		]]></release
+		]]></release>
 		<release version="2.11.1" date="2017-05-18" min="2.3" max="2.x.x"><![CDATA[
 			* Fix regression where localized url did not worked any more
 		]]></release>
