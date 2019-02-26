@@ -77,7 +77,7 @@ class MultilingualNavigationDatasource extends NavigationDatasource
 
         // Build the Query appending the Parent and/or Type WHERE clauses
         $query = sprintf("
-                SELECT DISTINCT {$qf}p.id, p.title, p.handle, (SELECT COUNT(id) FROM `tbl_pages` WHERE parent = p.id) AS children
+                SELECT DISTINCT {$qf}p.id, p.title, p.handle,  p.sortorder, (SELECT COUNT(id) FROM `tbl_pages` WHERE parent = p.id) AS children
                 FROM `tbl_pages` AS p
                 LEFT JOIN `tbl_pages_types` AS pt ON (p.id = pt.page_id)
                 WHERE 1 = 1
