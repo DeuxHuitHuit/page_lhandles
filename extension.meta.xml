@@ -24,6 +24,9 @@
 		<dependency version="2.5">frontend_localisation</dependency>
 	</dependencies>
 	<releases>
+		<release version="2.11.3" date="2019-04-08" min="2.3" max="2.x.x"><![CDATA[
+			* Wrap constants in string
+		]]></release>
 		<release version="2.11.2" date="2019-02-26" min="2.3" max="2.x.x"><![CDATA[
 			* Fix SQL clause for proper soriting in MySQL 5.7
 		]]></release>
